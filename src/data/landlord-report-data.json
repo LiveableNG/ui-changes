@@ -1,0 +1,268 @@
+{
+  "reportInfo": {
+    "date": "2024-11-21",
+    "reportId": "RPT-2024-11-21-001",
+    "client": {
+      "name": "Mrs Adamu Bube",
+      "id": "CLT-001",
+      "contact": {
+        "email": "adamu.bube@email.com",
+        "phone": "+234 XXX XXXX XXX"
+      }
+    },
+    "company": {
+      "name": "Jimoh And Partners",
+      "address": "123 Victoria Island, Lagos",
+      "contact": {
+        "email": "info@jimohandpartners.com",
+        "phone": "+234 XXX XXXX XXX"
+      }
+    },
+    "summary": {
+      "totalProperties": 10,
+      "totalUnits": 45,
+      "totalTenants": 42,
+      "occupancyRate": 93.33,
+      "totalRevenue": {
+        "ngn": 22900000,
+        "usd": 54200000,
+        "gbp": 12500000
+      },
+      "totalExpenses": {
+        "ngn": 1250000,
+        "usd": 145600,
+        "gbp": 85000
+      },
+      "maintenanceIssues": {
+        "critical": 8,
+        "needsRepair": 15,
+        "totalPending": 23
+      }
+    }
+  },
+  "properties": [
+    {
+      "id": "PROP-001",
+      "name": "David's Estate",
+      "type": "Residential Complex",
+      "address": {
+        "street": "7 Fisher Street",
+        "area": "Dopemu",
+        "city": "Lagos Agege",
+        "state": "Lagos",
+        "country": "Nigeria",
+        "coordinates": {
+          "latitude": 6.4567,
+          "longitude": 3.3456
+        }
+      },
+      "summary": {
+        "totalUnits": 4,
+        "occupiedUnits": 4,
+        "vacantUnits": 0,
+        "totalRevenue": {
+          "ngn": 9350000,
+          "usd": 2000000
+        }
+      },
+      "units": [
+        {
+          "id": "UNIT-001",
+          "name": "Suite 100",
+          "type": "Apartment",
+          "floor": 1,
+          "size": {
+            "value": 120,
+            "unit": "sqm"
+          },
+          "bedrooms": 3,
+          "bathrooms": 2,
+          "tenant": {
+            "name": "John Doe",
+            "id": "TNT-001",
+            "contact": {
+              "email": "john.doe@email.com",
+              "phone": "+234 XXX XXXX XXX"
+            },
+            "occupancyStart": "2024-08-15",
+            "occupancyEnd": "2025-08-14"
+          },
+          "rent": {
+            "amount": {
+              "value": 1500000,
+              "currency": "₦"
+            },
+            "paymentFrequency": "yearly",
+            "lastPayment": {
+              "date": "2024-08-15",
+              "amount": 1500000,
+              "currency": "₦",
+              "reference": "PAY-001"
+            },
+            "nextPayment": {
+              "dueDate": "2025-08-14",
+              "amount": 1500000,
+              "currency": "₦"
+            },
+            "status": "paid"
+          },
+          "utilities": {
+            "electricity": {
+              "meterNumber": "EL-123456",
+              "provider": "EKEDC",
+              "lastReading": {
+                "date": "2024-11-20",
+                "value": 45678
+              }
+            },
+            "water": {
+              "meterNumber": "WT-123456",
+              "provider": "Lagos Water Corp",
+              "lastReading": {
+                "date": "2024-11-20",
+                "value": 12345
+              }
+            }
+          }
+        }
+      ],
+      "expenses": [
+        {
+          "id": "EXP-001",
+          "category": "Power",
+          "subcategory": "Fuel",
+          "amount": {
+            "value": 5600,
+            "currency": "$"
+          },
+          "date": "2024-11-15",
+          "complaint": "Purchase of 50L fuel",
+          "vendor": {
+            "name": "Total Filling Station",
+            "id": "VND-001"
+          },
+          "status": "completed",
+          "receipt": "RCP-001",
+          "approvedBy": "Manager Name",
+          "paymentMethod": "Cash",
+          "recurring": false
+        }
+      ],
+      "maintenance": {
+        "schedule": {
+          "daily": [
+            {
+              "task": "Cleaning",
+              "assignedTo": "Cleaning Staff",
+              "time": "08:00"
+            }
+          ],
+          "weekly": [
+            {
+              "task": "Pool Maintenance",
+              "assignedTo": "Pool Company",
+              "day": "Monday"
+            }
+          ],
+          "monthly": [
+            {
+              "task": "Generator Service",
+              "assignedTo": "Engineering Team",
+              "week": "First"
+            }
+          ]
+        },
+        "inspection": [
+          {
+            "id": "INSP-001",
+            "date": "2024-11-20",
+            "inspector": "Technical Team Lead",
+            "unit": "Suite 100",
+            "item": "Air Conditioner",
+            "itemDetails": {
+              "make": "Samsung",
+              "model": "AR12345",
+              "installationDate": "2023-01-15",
+              "warrantyEnd": "2025-01-15"
+            },
+            "condition": "Needs Repair",
+            "priority": "Medium",
+            "category": "HVAC",
+            "remark": "Gas needs to be refilled",
+            "images": [
+              {
+                "url": "/api/placeholder/300/200",
+                "caption": "AC Unit External View",
+                "timestamp": "2024-11-20T10:30:00Z"
+              },
+              {
+                "url": "/api/placeholder/300/200",
+                "caption": "AC Unit Internal View",
+                "timestamp": "2024-11-20T10:31:00Z"
+              }
+            ],
+            "recommendedAction": "Schedule gas refill",
+            "estimatedCost": {
+              "value": 15000,
+              "currency": "₦"
+            },
+            "followUp": {
+              "scheduledDate": "2024-11-25",
+              "assignedTo": "HVAC Technician",
+              "status": "Scheduled"
+            },
+            "history": [
+              {
+                "date": "2024-10-20",
+                "action": "Previous Maintenance",
+                "cost": {
+                  "value": 12000,
+                  "currency": "₦"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "facilities": [
+        {
+          "name": "Swimming Pool",
+          "status": "Operational",
+          "lastMaintenance": "2024-11-01",
+          "nextMaintenance": "2024-12-01"
+        },
+        {
+          "name": "Gym",
+          "status": "Operational",
+          "lastMaintenance": "2024-11-15",
+          "nextMaintenance": "2024-12-15"
+        }
+      ],
+      "documents": [
+        {
+          "type": "Property Deed",
+          "number": "DEED-001",
+          "dateIssued": "2020-01-01",
+          "expiryDate": null,
+          "status": "Valid"
+        },
+        {
+          "type": "Insurance",
+          "number": "INS-001",
+          "dateIssued": "2024-01-01",
+          "expiryDate": "2024-12-31",
+          "status": "Active"
+        }
+      ],
+      "staff": [
+        {
+          "id": "STF-001",
+          "name": "Security Officer",
+          "role": "Security",
+          "shift": "Day",
+          "contact": "+234 XXX XXXX XXX"
+        }
+      ]
+    }
+  ]
+}

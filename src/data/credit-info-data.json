@@ -1,0 +1,3666 @@
+// CRC Credit insights history
+
+{
+    "score": {
+        "totalNoOfDelinquentFacilities": "0",
+        "lastReportedDate": "13-MAR-2024",
+        "totalNoOfLoans": "1",
+        "totalNoOfInstitutions": "1",
+        "totalNoOfActiveLoans": "1",
+        "totalBorrowed": "1,784,520",
+        "totalOutstanding": "0",
+        "totalOverdue": "0",
+        "maxNoOfDays": "0",
+        "totalNoOfClosedLoans": 0,
+        "crcReportOrderNumber": "W-0149214583/2024"
+    },
+    "scorePremium": {},
+    "_id": "6728905d9ca298e5d5a009ab",
+    "bvn": "12345678901",
+    "customerId": "1043935",
+    "businessId": "62bebe340eae110012c80623",
+    "name": "JOHN DOE ",
+    "phone": "08011111111",
+    "gender": "Male",
+    "dateOfBirth": "19/04/1988",
+    "address": "Lagos",
+    "email": "",
+    "searchedDate": "2024-11-21T10:01:50.014Z"
+},
+{
+    "score": {
+        "totalNoOfDelinquentFacilities": "0",
+        "lastReportedDate": "13-MAR-2024",
+        "totalNoOfLoans": "1",
+        "totalNoOfInstitutions": "1",
+        "totalNoOfActiveLoans": "1",
+        "totalBorrowed": "1,784,520",
+        "totalOutstanding": "0",
+        "totalOverdue": "0",
+        "maxNoOfDays": "0",
+        "totalNoOfClosedLoans": 0,
+        "crcReportOrderNumber": "W-0149214583/2024"
+    },
+    "scorePremium": {
+        "totalNoOfDelinquentFacilities": 0,
+        "lastReportedDate": "21/Nov/2024",
+        "totalNoOfLoans": 6,
+        "totalNoOfInstitutions": 3,
+        "totalBorrowed": 2264020,
+        "totalOutstanding": 0,
+        "totalOverdue": 0,
+        "maxNoOfDays": null,
+        "totalNoOfPerformingLoans": 6,
+        "totalMonthlyInstallment": null,
+        "totalNoOfClosedLoans": 4,
+        "totalNoOfActiveLoans": 2,
+        "creditEnquiries": [
+            {
+                "loanType": "Overdraft",
+                "date": "21-Nov-2024",
+                "institutionType": "Micro Lenders"
+            }
+        ],
+        "crcReportOrderNumber": "W-0149215542/2024",
+        "loanPerformance": [
+            {
+                "loanProvider": "CARBON FINANCE AND INVESTMENT LIMITED",
+                "loanAmount": "NGN   199,500",
+                "accountNumber": "",
+                "outstandingBalance": "0",
+                "status": "Closed",
+                "performanceStatus": "Performing",
+                "lastUpdatedAt": "",
+                "overdueAmount": "0",
+                "type": "",
+                "loanCount": 3,
+                "noOfPerformingLoans": 3,
+                "noOfNonPerformingLoans": 0
+            },
+            {
+                "loanProvider": "MYCREDIT INVESTMENTS LIMITED",
+                "loanAmount": "NGN   280,000",
+                "accountNumber": "",
+                "outstandingBalance": "0",
+                "status": "Closed",
+                "performanceStatus": "Performing",
+                "lastUpdatedAt": "",
+                "overdueAmount": "0",
+                "type": "",
+                "loanCount": 2,
+                "noOfPerformingLoans": 2,
+                "noOfNonPerformingLoans": 0
+            },
+            {
+                "loanProvider": "STERLING BANK PLC",
+                "loanAmount": "NGN   1,784,520",
+                "accountNumber": "",
+                "outstandingBalance": "0",
+                "status": "Closed",
+                "performanceStatus": "Performing",
+                "lastUpdatedAt": "",
+                "overdueAmount": "0",
+                "type": "",
+                "loanCount": 1,
+                "noOfPerformingLoans": 1,
+                "noOfNonPerformingLoans": 0
+            }
+        ],
+        "highestLoanAmount": 200000,
+        "totalNoOfOverdueAccounts": null,
+        "loanHistory": [
+            {
+                "loanProvider": "MYCREDIT INVESTMENTS LIMITED",
+                "accountNumber": "3645505",
+                "type": "Term Loan",
+                "disbursedDate": "30-Apr-2021",
+                "maturityDate": "29-Jul-2021",
+                "loanAmount": "200000",
+                "installmentAmount": "",
+                "overdueAmount": "0",
+                "amountWrittenOff": "",
+                "currency": "NGN",
+                "lastPaymentDate": "29-Jun-2021",
+                "loanDuration": "",
+                "dateReported": "30-Jun-2021",
+                "performanceStatus": "Performing",
+                "rankings": "1-0",
+                "reason": "Open",
+                "outstandingBalance": "0",
+                "loanStatus": "A",
+                "numberOfOverdueDays": "0",
+                "collateral": "Partially Secured",
+                "paymentHistory": {
+                    "MONTH1": {
+                        "month": "Jun-21",
+                        "daysOverdue": "OK"
+                    },
+                    "MONTH10": {
+                        "month": "Sep-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH11": {
+                        "month": "Aug-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH12": {
+                        "month": "Jul-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH13": {
+                        "month": "Jun-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH14": {
+                        "month": "May-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH15": {
+                        "month": "Apr-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH16": {
+                        "month": "Mar-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH17": {
+                        "month": "Feb-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH18": {
+                        "month": "Jan-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH19": {
+                        "month": "Dec-19",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH2": {
+                        "month": "May-21",
+                        "daysOverdue": "OK"
+                    },
+                    "MONTH20": {
+                        "month": "Nov-19",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH21": {
+                        "month": "Oct-19",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH22": {
+                        "month": "Sep-19",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH23": {
+                        "month": "Aug-19",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH24": {
+                        "month": "Jul-19",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH3": {
+                        "month": "Apr-21",
+                        "daysOverdue": "OK"
+                    },
+                    "MONTH4": {
+                        "month": "Mar-21",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH5": {
+                        "month": "Feb-21",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH6": {
+                        "month": "Jan-21",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH7": {
+                        "month": "Dec-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH8": {
+                        "month": "Nov-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH9": {
+                        "month": "Oct-20",
+                        "daysOverdue": "ND"
+                    }
+                }
+            },
+            {
+                "loanProvider": "MYCREDIT INVESTMENTS LIMITED",
+                "accountNumber": "3144415",
+                "type": "Term Loan",
+                "disbursedDate": "31-Jan-2021",
+                "maturityDate": "03-May-2021",
+                "loanAmount": "80000",
+                "installmentAmount": "",
+                "overdueAmount": "0",
+                "amountWrittenOff": "",
+                "currency": "NGN",
+                "lastPaymentDate": "",
+                "loanDuration": "",
+                "dateReported": "31-May-2021",
+                "performanceStatus": "Performing",
+                "rankings": "1-0",
+                "reason": "Open",
+                "outstandingBalance": "0",
+                "loanStatus": "A",
+                "numberOfOverdueDays": "0",
+                "collateral": "Partially Secured",
+                "paymentHistory": {
+                    "MONTH1": {
+                        "month": "May-21",
+                        "daysOverdue": "OK"
+                    },
+                    "MONTH10": {
+                        "month": "Aug-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH11": {
+                        "month": "Jul-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH12": {
+                        "month": "Jun-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH13": {
+                        "month": "May-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH14": {
+                        "month": "Apr-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH15": {
+                        "month": "Mar-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH16": {
+                        "month": "Feb-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH17": {
+                        "month": "Jan-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH18": {
+                        "month": "Dec-19",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH19": {
+                        "month": "Nov-19",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH2": {
+                        "month": "Apr-21",
+                        "daysOverdue": "OK"
+                    },
+                    "MONTH20": {
+                        "month": "Oct-19",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH21": {
+                        "month": "Sep-19",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH22": {
+                        "month": "Aug-19",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH23": {
+                        "month": "Jul-19",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH24": {
+                        "month": "Jun-19",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH3": {
+                        "month": "Mar-21",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH4": {
+                        "month": "Feb-21",
+                        "daysOverdue": "OK"
+                    },
+                    "MONTH5": {
+                        "month": "Jan-21",
+                        "daysOverdue": "OK"
+                    },
+                    "MONTH6": {
+                        "month": "Dec-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH7": {
+                        "month": "Nov-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH8": {
+                        "month": "Oct-20",
+                        "daysOverdue": "ND"
+                    },
+                    "MONTH9": {
+                        "month": "Sep-20",
+                        "daysOverdue": "ND"
+                    }
+                }
+            }
+        ],
+        "employmentHistory": [
+            {
+                "employerName": null,
+                "position": null,
+                "address": null,
+                "dateReported": "13-mar-2024"
+            }
+        ]
+    },
+    "_id": "6728905d9ca298e5d5a009ab",
+    "bvn": "12345678901",
+    "customerId": "1043935",
+    "businessId": "62bebe340eae110012c80623",
+    "name": "JOHN DOE ",
+    "phone": "08011111111",
+    "gender": "Male",
+    "dateOfBirth": "19/04/1988",
+    "address": "Lagos",
+    "email": "",
+    "searchedDate": "2024-11-21T10:05:15.086Z"
+}
+
+
+// PREMIUM Credit insights history
+{
+    "score": {
+        "score": {
+            "totalNoOfLoans": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": 7
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 5
+                }
+            ],
+            "totalNoOfInstitutions": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": 4
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 3
+                }
+            ],
+            "totalNoOfActiveLoans": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 1
+                }
+            ],
+            "totalBorrowed": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": 2111176
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 1999020.28
+                }
+            ],
+            "totalOutstanding": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 0
+                }
+            ],
+            "highestLoanAmount": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": 1784520
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 1784520.28
+                }
+            ],
+            "totalOverdue": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 0
+                }
+            ],
+            "totalNoOfClosedLoans": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": 7
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 4
+                }
+            ],
+            "totalNoOfPerformingLoans": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": 7
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 5
+                }
+            ],
+            "totalNoOfDelinquentFacilities": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 0
+                }
+            ],
+            "totalMonthlyInstallment": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 121350
+                }
+            ],
+            "totalNoOfOverdueAccounts": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 0
+                }
+            ],
+            "maxNoOfDays": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL"
+                }
+            ],
+            "loanHistory": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": [
+                        {
+                            "loanProvider": "Personal Trust Microfinance Bank Limited",
+                            "loanProviderAddress": "32, IKORODU ROAD, JIBOWU\t\t\r\n JIBOWU Lagos",
+                            "accountNumber": "0010687472",
+                            "type": "Secured Loan",
+                            "loanAmount": 0,
+                            "installmentAmount": null,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": null,
+                            "loanDuration": "14",
+                            "dateReported": "2024-06-14T06:13:19.503",
+                            "disbursedDate": "2024-05-24T00:00:00",
+                            "maturityDate": "2024-06-30T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNN0NNNNNNNNNNNNNNNNN",
+                            "lastUpdatedAt": "2024-07-09T18:27:04.127"
+                        },
+                        {
+                            "loanProvider": "Zenith Bank Plc",
+                            "loanProviderAddress": "Zenith Heights\r\nplot 87 Ajose Adeogun Street Victoria Island Lagos",
+                            "accountNumber": "1222139844",
+                            "type": "Overdraft",
+                            "loanAmount": 21656,
+                            "installmentAmount": 0,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": "2023-04-26T00:00:00",
+                            "loanDuration": "360",
+                            "dateReported": "2023-04-16T09:58:18.123",
+                            "disbursedDate": "2022-03-07T00:00:00",
+                            "maturityDate": "2023-07-31T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "                          ",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNNNNNNNNNNNNNNN00NNN",
+                            "lastUpdatedAt": "2023-08-24T10:21:31.123"
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                            "accountNumber": "3645505",
+                            "type": "Term Loan",
+                            "loanAmount": 200000,
+                            "installmentAmount": 95990,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": "2021-06-29T00:00:00",
+                            "loanDuration": "0",
+                            "dateReported": "2021-09-11T04:41:37.163",
+                            "disbursedDate": "2021-04-30T00:00:00",
+                            "maturityDate": "2021-06-29T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "lastUpdatedAt": "2021-10-12T21:05:28.787"
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                            "accountNumber": "3144415",
+                            "type": "Term Loan",
+                            "loanAmount": 80000,
+                            "installmentAmount": 34400,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": "2021-04-30T00:00:00",
+                            "loanDuration": "0",
+                            "dateReported": "2021-09-11T04:41:37.163",
+                            "disbursedDate": "2021-01-31T00:00:00",
+                            "maturityDate": "2021-04-30T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "lastUpdatedAt": "2021-09-11T04:41:37.163"
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                            "accountNumber": "955574",
+                            "type": "Term Loan",
+                            "loanAmount": 15000,
+                            "installmentAmount": 18750,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": "2019-12-06T00:00:00",
+                            "loanDuration": "0",
+                            "dateReported": "2021-09-11T04:41:37.163",
+                            "disbursedDate": "2019-11-05T00:00:00",
+                            "maturityDate": "2019-12-06T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "lastUpdatedAt": "2021-09-11T04:41:37.163"
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "loanProviderAddress": "Sterling Towers\r\n20 Marina Lagos Island Lagos",
+                            "accountNumber": "0074679293",
+                            "type": "Secured Loan",
+                            "loanAmount": 1784520,
+                            "installmentAmount": 0,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": "2020-10-31T00:00:00",
+                            "loanDuration": "354",
+                            "dateReported": "2019-11-19T20:31:49.773",
+                            "disbursedDate": "2019-10-10T00:00:00",
+                            "maturityDate": "2020-10-31T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "lastUpdatedAt": "2020-11-26T14:04:28.51"
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                            "accountNumber": "527656",
+                            "type": "Term Loan",
+                            "loanAmount": 10000,
+                            "installmentAmount": 13000,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": "2019-09-24T00:00:00",
+                            "loanDuration": "0",
+                            "dateReported": "2021-09-11T04:41:37.163",
+                            "disbursedDate": "2019-08-23T00:00:00",
+                            "maturityDate": "2019-09-24T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "lastUpdatedAt": "2021-09-11T04:41:37.163"
+                        }
+                    ]
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": [
+                        {
+                            "loanProvider": "Carbon Microfinance Bank Limited",
+                            "accountNumber": "303828541471",
+                            "type": "Personal fixed term loan",
+                            "currency": "NGN",
+                            "loanAmount": "146,500.00",
+                            "outstandingBalance": "0.00",
+                            "installmentAmount": "36,625.00",
+                            "repaymentFrequency": "Not Available",
+                            "overdueAmount": "0.00",
+                            "lastPaymentDate": null,
+                            "loanDuration": "Not Available",
+                            "disbursedDate": "11/07/2019",
+                            "expiryDate": "10/11/2019",
+                            "performanceStatus": "Performing",
+                            "accountStatus": "Closed",
+                            "paymentHistory": {
+                                "M24": "#",
+                                "M23": "#",
+                                "M22": "#",
+                                "M21": "#",
+                                "M20": "#",
+                                "M19": "#",
+                                "M18": "#",
+                                "M17": "#",
+                                "M16": "#",
+                                "M15": "#",
+                                "M14": "#",
+                                "M13": "#",
+                                "M12": "#",
+                                "M11": "#",
+                                "M10": "#",
+                                "M09": "#",
+                                "M08": "#",
+                                "M07": "#",
+                                "M06": "#",
+                                "M05": "#",
+                                "M04": "#",
+                                "M03": "#",
+                                "M02": "#",
+                                "M01": "#"
+                            },
+                            "dateReported": ""
+                        },
+                        {
+                            "loanProvider": "Carbon Microfinance Bank Limited",
+                            "accountNumber": "304722135191",
+                            "type": "Personal fixed term loan",
+                            "currency": "NGN",
+                            "loanAmount": "33,500.00",
+                            "outstandingBalance": "0.00",
+                            "installmentAmount": "43,550.00",
+                            "repaymentFrequency": "Not Available",
+                            "overdueAmount": "0.00",
+                            "lastPaymentDate": null,
+                            "loanDuration": "Not Available",
+                            "disbursedDate": "12/11/2019",
+                            "expiryDate": "12/12/2019",
+                            "performanceStatus": "Performing",
+                            "accountStatus": "Closed",
+                            "paymentHistory": {
+                                "M24": "#",
+                                "M23": "#",
+                                "M22": "#",
+                                "M21": "#",
+                                "M20": "#",
+                                "M19": "#",
+                                "M18": "#",
+                                "M17": "#",
+                                "M16": "#",
+                                "M15": "#",
+                                "M14": "#",
+                                "M13": "#",
+                                "M12": "#",
+                                "M11": "#",
+                                "M10": "#",
+                                "M09": "#",
+                                "M08": "#",
+                                "M07": "#",
+                                "M06": "#",
+                                "M05": "#",
+                                "M04": "#",
+                                "M03": "#",
+                                "M02": "#",
+                                "M01": "#"
+                            },
+                            "dateReported": ""
+                        },
+                        {
+                            "loanProvider": "Carbon Microfinance Bank Limited",
+                            "accountNumber": "307971478466",
+                            "type": "Personal fixed term loan",
+                            "currency": "NGN",
+                            "loanAmount": "19,500.00",
+                            "outstandingBalance": "0.00",
+                            "installmentAmount": "22,425.00",
+                            "repaymentFrequency": "Not Available",
+                            "overdueAmount": "0.00",
+                            "lastPaymentDate": null,
+                            "loanDuration": "Not Available",
+                            "disbursedDate": "30/04/2021",
+                            "expiryDate": "15/05/2021",
+                            "performanceStatus": "Performing",
+                            "accountStatus": "Closed",
+                            "paymentHistory": {
+                                "M24": "#",
+                                "M23": "0",
+                                "M22": "#",
+                                "M21": "#",
+                                "M20": "#",
+                                "M19": "#",
+                                "M18": "#",
+                                "M17": "#",
+                                "M16": "#",
+                                "M15": "#",
+                                "M14": "#",
+                                "M13": "#",
+                                "M12": "#",
+                                "M11": "#",
+                                "M10": "#",
+                                "M09": "#",
+                                "M08": "#",
+                                "M07": "#",
+                                "M06": "#",
+                                "M05": "#",
+                                "M04": "#",
+                                "M03": "#",
+                                "M02": "#",
+                                "M01": "#"
+                            },
+                            "dateReported": ""
+                        },
+                        {
+                            "loanProvider": "MyCredit Invest",
+                            "accountNumber": "1671269",
+                            "type": null,
+                            "currency": "NGN",
+                            "loanAmount": "15,000.00",
+                            "outstandingBalance": "0.00",
+                            "installmentAmount": "18,750.00",
+                            "repaymentFrequency": "Not Available",
+                            "overdueAmount": "0.00",
+                            "lastPaymentDate": null,
+                            "loanDuration": "Not Available",
+                            "disbursedDate": "05/11/2019",
+                            "expiryDate": "05/12/2019",
+                            "performanceStatus": "Performing",
+                            "accountStatus": "Open",
+                            "paymentHistory": {
+                                "M24": "#",
+                                "M23": "#",
+                                "M22": "#",
+                                "M21": "#",
+                                "M20": "#",
+                                "M19": "#",
+                                "M18": "#",
+                                "M17": "#",
+                                "M16": "#",
+                                "M15": "#",
+                                "M14": "#",
+                                "M13": "#",
+                                "M12": "#",
+                                "M11": "#",
+                                "M10": "#",
+                                "M09": "#",
+                                "M08": "#",
+                                "M07": "#",
+                                "M06": "#",
+                                "M05": "#",
+                                "M04": "#",
+                                "M03": "#",
+                                "M02": "#",
+                                "M01": "#"
+                            },
+                            "dateReported": ""
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "accountNumber": "0074679293",
+                            "type": "Personal Secured  Loan",
+                            "currency": "NGN",
+                            "loanAmount": "1,784,520.28",
+                            "outstandingBalance": "0.00",
+                            "installmentAmount": "0.00",
+                            "repaymentFrequency": "Not Available",
+                            "overdueAmount": "0.00",
+                            "lastPaymentDate": null,
+                            "loanDuration": "354 Day(s)",
+                            "disbursedDate": "10/10/2019",
+                            "expiryDate": "28/09/2020",
+                            "performanceStatus": "Performing",
+                            "accountStatus": "Closed",
+                            "paymentHistory": {
+                                "M24": "#",
+                                "M23": "#",
+                                "M22": "#",
+                                "M21": "#",
+                                "M20": "#",
+                                "M19": "#",
+                                "M18": "#",
+                                "M17": "#",
+                                "M16": "#",
+                                "M15": "#",
+                                "M14": "#",
+                                "M13": "#",
+                                "M12": "#",
+                                "M11": "#",
+                                "M10": "#",
+                                "M09": "#",
+                                "M08": "#",
+                                "M07": "#",
+                                "M06": "#",
+                                "M05": "#",
+                                "M04": "#",
+                                "M03": "#",
+                                "M02": "#",
+                                "M01": "#"
+                            },
+                            "dateReported": ""
+                        }
+                    ]
+                }
+            ],
+            "loanPerformance": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": [
+                        {
+                            "loanProvider": "Personal Trust Microfinance Bank Limited",
+                            "accountNumber": "0010687472",
+                            "loanAmount": 0,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Secured Loan",
+                            "loanDuration": "14",
+                            "repaymentFrequency": "014",
+                            "repaymentBehavior": "None",
+                            "paymentProfile": "NNNNNN0NNNNNNNNNNNNNNNNN",
+                            "dateAccountOpened": "2024-05-24T00:00:00",
+                            "lastUpdatedAt": "2024-07-09T18:27:04.127",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 0
+                        },
+                        {
+                            "loanProvider": "Zenith Bank Plc",
+                            "accountNumber": "1222139844",
+                            "loanAmount": 21656,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Overdraft",
+                            "loanDuration": "360",
+                            "repaymentFrequency": "                          ",
+                            "repaymentBehavior": "None",
+                            "paymentProfile": "NNNNNNNNNNNNNNNNNNN00NNN",
+                            "dateAccountOpened": "2022-03-07T00:00:00",
+                            "lastUpdatedAt": "2023-08-24T10:21:31.123",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 0
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "accountNumber": "3645505",
+                            "loanAmount": 200000,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Term Loan",
+                            "loanDuration": "0",
+                            "repaymentFrequency": "003",
+                            "repaymentBehavior": "None",
+                            "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "dateAccountOpened": "2021-04-30T00:00:00",
+                            "lastUpdatedAt": "2021-10-12T21:05:28.787",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 95990
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "accountNumber": "3144415",
+                            "loanAmount": 80000,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Term Loan",
+                            "loanDuration": "0",
+                            "repaymentFrequency": "003",
+                            "repaymentBehavior": "None",
+                            "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "dateAccountOpened": "2021-01-31T00:00:00",
+                            "lastUpdatedAt": "2021-09-11T04:41:37.163",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 34400
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "accountNumber": "955574",
+                            "loanAmount": 15000,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Term Loan",
+                            "loanDuration": "0",
+                            "repaymentFrequency": "003",
+                            "repaymentBehavior": "None",
+                            "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "dateAccountOpened": "2019-11-05T00:00:00",
+                            "lastUpdatedAt": "2021-09-11T04:41:37.163",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 18750
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "accountNumber": "0074679293",
+                            "loanAmount": 1784520,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Secured Loan",
+                            "loanDuration": "354",
+                            "repaymentFrequency": "3",
+                            "repaymentBehavior": "Delinquent (over 60 days) - 1 time",
+                            "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "dateAccountOpened": "2019-10-10T00:00:00",
+                            "lastUpdatedAt": "2020-11-26T14:04:28.51",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 0
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "accountNumber": "527656",
+                            "loanAmount": 10000,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Term Loan",
+                            "loanDuration": "0",
+                            "repaymentFrequency": "003",
+                            "repaymentBehavior": "None",
+                            "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "dateAccountOpened": "2019-08-23T00:00:00",
+                            "lastUpdatedAt": "2021-09-11T04:41:37.163",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 13000
+                        }
+                    ]
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": [
+                        {
+                            "accountNumber": "307971478466",
+                            "loanProvider": "Sterling Bank Plc",
+                            "loanAmount": 1784520.28,
+                            "outstandingBalance": 0,
+                            "overdueAmount": 0,
+                            "noOfPerforming": 1,
+                            "noOfNonPerforming": 0,
+                            "loanCount": 1,
+                            "performanceStatus": "Performing",
+                            "status": "Closed"
+                        },
+                        {
+                            "accountNumber": "307971478466",
+                            "loanProvider": "MyCredit Invest",
+                            "loanAmount": 15000,
+                            "outstandingBalance": 0,
+                            "overdueAmount": 0,
+                            "noOfPerforming": 1,
+                            "noOfNonPerforming": 0,
+                            "loanCount": 1,
+                            "performanceStatus": "Performing",
+                            "status": "Closed"
+                        },
+                        {
+                            "accountNumber": "307971478466",
+                            "loanProvider": "Carbon Microfinance Bank Limited",
+                            "loanAmount": 199500,
+                            "outstandingBalance": 0,
+                            "overdueAmount": 0,
+                            "noOfPerforming": 3,
+                            "noOfNonPerforming": 0,
+                            "loanCount": 3,
+                            "performanceStatus": "Performing",
+                            "status": "Closed"
+                        }
+                    ]
+                }
+            ],
+            "creditEnquiries": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": [
+                        {
+                            "loanProvider": "Lifegate Microfinance Bank Limited",
+                            "reason": "KYCCheck",
+                            "date": "2024-11-04T00:00:00",
+                            "contactPhone": "08129078564"
+                        },
+                        {
+                            "loanProvider": "Blue Ridge Microfinance Bank Limited",
+                            "reason": "Search",
+                            "date": "2023-11-03T00:00:00",
+                            "contactPhone": "N/A"
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "reason": "General credit inquiry",
+                            "date": "2022-10-12T00:00:00",
+                            "contactPhone": "014484481"
+                        },
+                        {
+                            "loanProvider": "Zenith Bank Plc",
+                            "reason": "General credit inquiry",
+                            "date": "2022-03-28T00:00:00",
+                            "contactPhone": "012610249"
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "reason": "General credit inquiry",
+                            "date": "2020-10-20T00:00:00",
+                            "contactPhone": "014484481"
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "reason": "General credit inquiry",
+                            "date": "2020-10-14T00:00:00",
+                            "contactPhone": "014484481"
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "reason": "General credit inquiry",
+                            "date": "2020-10-12T00:00:00",
+                            "contactPhone": "014484481"
+                        },
+                        {
+                            "loanProvider": "Stanbic IBTC Bank Plc",
+                            "reason": "General credit inquiry",
+                            "date": "2020-02-20T00:00:00",
+                            "contactPhone": "0126203802"
+                        }
+                    ]
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": [
+                        {
+                            "loanProvider": null,
+                            "date": null
+                        }
+                    ]
+                }
+            ],
+            "employmentHistory": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": []
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": [
+                        {
+                            "employerName": "",
+                            "occupation": "",
+                            "dateReported": ""
+                        }
+                    ]
+                }
+            ],
+            "creditors": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": [
+                        {
+                            "Subscriber_ID": "737941736628525722",
+                            "Name": "MyCredit Investments Limited",
+                            "Phone": "017001276",
+                            "Address": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t  Magodo Lagos"
+                        },
+                        {
+                            "Subscriber_ID": "738749735365844875",
+                            "Name": "Personal Trust Microfinance Bank Limited",
+                            "Phone": "09055998221",
+                            "Address": "32, IKORODU ROAD, JIBOWU\t\t  JIBOWU Lagos"
+                        },
+                        {
+                            "Subscriber_ID": "733232733232034497",
+                            "Name": "Sterling Bank Plc",
+                            "Phone": "014484481",
+                            "Address": "Sterling Towers 20 Marina Lagos Island Lagos"
+                        },
+                        {
+                            "Subscriber_ID": "732699732699949972",
+                            "Name": "Zenith Bank Plc",
+                            "Phone": "012610249",
+                            "Address": "Zenith Heights plot 87 Ajose Adeogun Street Victoria Island Lagos"
+                        }
+                    ]
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": []
+                }
+            ],
+            "creditEnquiriesSummary": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": {
+                        "Last3MonthCount": "2",
+                        "Last12MonthCount": "4",
+                        "Last36MonthCount": "6"
+                    }
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": []
+                }
+            ],
+            "lastReportedDate": [
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": null
+                }
+            ],
+            "bureauStatus": {
+                "creditRegistry": "success",
+                "firstCentral": "success"
+            }
+        },
+        "lastUpdatedAt": "2024-11-04T09:14:05.404Z"
+    },
+    "_id": "6728905d9ca298e5d5a009ab",
+    "bvn": "12345678901",
+    "customerId": "1043935",
+    "businessId": "62bebe340eae110012c80623",
+    "name": "JOHN DOE ",
+    "phone": "08011111111",
+    "gender": "Male",
+    "dateOfBirth": "19/04/1988",
+    "address": "Lagos",
+    "email": "",
+    "searchedDate": "2024-11-21T10:05:15.086Z"
+}
+
+// ADVANCED Credit insights history
+{
+    "score": {
+        "lastUpdatedAt": "2024-11-21T10:10:43.035Z",
+        "score": {
+            "totalNoOfLoans": [
+                {
+                    "source": "CRC",
+                    "value": 6
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 5
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": 7
+                }
+            ],
+            "totalNoOfInstitutions": [
+                {
+                    "source": "CRC",
+                    "value": 3
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 3
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": 4
+                }
+            ],
+            "totalNoOfActiveLoans": [
+                {
+                    "source": "CRC",
+                    "value": 2
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 1
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                }
+            ],
+            "totalNoOfClosedLoans": [
+                {
+                    "source": "CRC",
+                    "value": 4
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 4
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": 7
+                }
+            ],
+            "totalNoOfDelinquentFacilities": [
+                {
+                    "source": "CRC",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 0
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                }
+            ],
+            "totalBorrowed": [
+                {
+                    "source": "CRC",
+                    "value": 2264020
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 1999020.28
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": 2111176
+                }
+            ],
+            "totalOutstanding": [
+                {
+                    "source": "CRC",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 0
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                }
+            ],
+            "highestLoanAmount": [
+                {
+                    "source": "CRC",
+                    "value": 200000
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 1784520.28
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": 1784520
+                }
+            ],
+            "totalOverdue": [
+                {
+                    "source": "CRC",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 0
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                }
+            ],
+            "maxNoOfDays": [
+                {
+                    "source": "CRC",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": null
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                }
+            ],
+            "totalNoOfPerformingLoans": [
+                {
+                    "source": "CRC",
+                    "value": 6
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 5
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": 7
+                }
+            ],
+            "totalMonthlyInstallment": [
+                {
+                    "source": "CRC",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 121350
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                }
+            ],
+            "totalNoOfOverdueAccounts": [
+                {
+                    "source": "CRC",
+                    "value": null
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": 0
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                }
+            ],
+            "loanPerformance": [
+                {
+                    "source": "CRC",
+                    "value": [
+                        {
+                            "loanProvider": "CARBON FINANCE AND INVESTMENT LIMITED",
+                            "loanAmount": "NGN   199,500",
+                            "accountNumber": "",
+                            "outstandingBalance": "0",
+                            "status": "Closed",
+                            "performanceStatus": "Performing",
+                            "lastUpdatedAt": "",
+                            "overdueAmount": "0",
+                            "type": "",
+                            "loanCount": 3,
+                            "noOfPerformingLoans": 3,
+                            "noOfNonPerformingLoans": 0
+                        },
+                        {
+                            "loanProvider": "MYCREDIT INVESTMENTS LIMITED",
+                            "loanAmount": "NGN   280,000",
+                            "accountNumber": "",
+                            "outstandingBalance": "0",
+                            "status": "Closed",
+                            "performanceStatus": "Performing",
+                            "lastUpdatedAt": "",
+                            "overdueAmount": "0",
+                            "type": "",
+                            "loanCount": 2,
+                            "noOfPerformingLoans": 2,
+                            "noOfNonPerformingLoans": 0
+                        },
+                        {
+                            "loanProvider": "STERLING BANK PLC",
+                            "loanAmount": "NGN   1,784,520",
+                            "accountNumber": "",
+                            "outstandingBalance": "0",
+                            "status": "Closed",
+                            "performanceStatus": "Performing",
+                            "lastUpdatedAt": "",
+                            "overdueAmount": "0",
+                            "type": "",
+                            "loanCount": 1,
+                            "noOfPerformingLoans": 1,
+                            "noOfNonPerformingLoans": 0
+                        }
+                    ]
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": [
+                        {
+                            "accountNumber": "307971478466",
+                            "loanProvider": "Sterling Bank Plc",
+                            "loanAmount": 1784520.28,
+                            "outstandingBalance": 0,
+                            "overdueAmount": 0,
+                            "noOfPerforming": 1,
+                            "noOfNonPerforming": 0,
+                            "loanCount": 1,
+                            "performanceStatus": "Performing",
+                            "status": "Closed"
+                        },
+                        {
+                            "accountNumber": "307971478466",
+                            "loanProvider": "MyCredit Invest",
+                            "loanAmount": 15000,
+                            "outstandingBalance": 0,
+                            "overdueAmount": 0,
+                            "noOfPerforming": 1,
+                            "noOfNonPerforming": 0,
+                            "loanCount": 1,
+                            "performanceStatus": "Performing",
+                            "status": "Closed"
+                        },
+                        {
+                            "accountNumber": "307971478466",
+                            "loanProvider": "Carbon Microfinance Bank Limited",
+                            "loanAmount": 199500,
+                            "outstandingBalance": 0,
+                            "overdueAmount": 0,
+                            "noOfPerforming": 3,
+                            "noOfNonPerforming": 0,
+                            "loanCount": 3,
+                            "performanceStatus": "Performing",
+                            "status": "Closed"
+                        }
+                    ]
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": [
+                        {
+                            "loanProvider": "Personal Trust Microfinance Bank Limited",
+                            "accountNumber": "0010687472",
+                            "loanAmount": 0,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Secured Loan",
+                            "loanDuration": "14",
+                            "repaymentFrequency": "014",
+                            "repaymentBehavior": "None",
+                            "paymentProfile": "NNNNNN0NNNNNNNNNNNNNNNNN",
+                            "dateAccountOpened": "2024-05-24T00:00:00",
+                            "lastUpdatedAt": "2024-07-09T18:27:04.127",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 0
+                        },
+                        {
+                            "loanProvider": "Zenith Bank Plc",
+                            "accountNumber": "1222139844",
+                            "loanAmount": 21656,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Overdraft",
+                            "loanDuration": "360",
+                            "repaymentFrequency": "                          ",
+                            "repaymentBehavior": "None",
+                            "paymentProfile": "NNNNNNNNNNNNNNNNNNN00NNN",
+                            "dateAccountOpened": "2022-03-07T00:00:00",
+                            "lastUpdatedAt": "2023-08-24T10:21:31.123",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 0
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "accountNumber": "3645505",
+                            "loanAmount": 200000,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Term Loan",
+                            "loanDuration": "0",
+                            "repaymentFrequency": "003",
+                            "repaymentBehavior": "None",
+                            "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "dateAccountOpened": "2021-04-30T00:00:00",
+                            "lastUpdatedAt": "2021-10-12T21:05:28.787",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 95990
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "accountNumber": "3144415",
+                            "loanAmount": 80000,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Term Loan",
+                            "loanDuration": "0",
+                            "repaymentFrequency": "003",
+                            "repaymentBehavior": "None",
+                            "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "dateAccountOpened": "2021-01-31T00:00:00",
+                            "lastUpdatedAt": "2021-09-11T04:41:37.163",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 34400
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "accountNumber": "955574",
+                            "loanAmount": 15000,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Term Loan",
+                            "loanDuration": "0",
+                            "repaymentFrequency": "003",
+                            "repaymentBehavior": "None",
+                            "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "dateAccountOpened": "2019-11-05T00:00:00",
+                            "lastUpdatedAt": "2021-09-11T04:41:37.163",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 18750
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "accountNumber": "0074679293",
+                            "loanAmount": 1784520,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Secured Loan",
+                            "loanDuration": "354",
+                            "repaymentFrequency": "3",
+                            "repaymentBehavior": "Delinquent (over 60 days) - 1 time",
+                            "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "dateAccountOpened": "2019-10-10T00:00:00",
+                            "lastUpdatedAt": "2020-11-26T14:04:28.51",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 0
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "accountNumber": "527656",
+                            "loanAmount": 10000,
+                            "outstandingBalance": 0,
+                            "status": "Closed",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "overdueAmount": 0,
+                            "type": "Term Loan",
+                            "loanDuration": "0",
+                            "repaymentFrequency": "003",
+                            "repaymentBehavior": "None",
+                            "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "dateAccountOpened": "2019-08-23T00:00:00",
+                            "lastUpdatedAt": "2021-09-11T04:41:37.163",
+                            "loanCount": 1,
+                            "monthlyInstallmentAmt": 13000
+                        }
+                    ]
+                }
+            ],
+            "loanHistory": [
+                {
+                    "source": "CRC",
+                    "value": [
+                        {
+                            "loanProvider": "MYCREDIT INVESTMENTS LIMITED",
+                            "accountNumber": "3645505",
+                            "type": "Term Loan",
+                            "disbursedDate": "30-Apr-2021",
+                            "maturityDate": "29-Jul-2021",
+                            "loanAmount": "200000",
+                            "installmentAmount": "",
+                            "overdueAmount": "0",
+                            "amountWrittenOff": "",
+                            "currency": "NGN",
+                            "lastPaymentDate": "29-Jun-2021",
+                            "loanDuration": "",
+                            "dateReported": "30-Jun-2021",
+                            "performanceStatus": "Performing",
+                            "rankings": "1-0",
+                            "reason": "Open",
+                            "outstandingBalance": "0",
+                            "loanStatus": "A",
+                            "numberOfOverdueDays": "0",
+                            "collateral": "Partially Secured",
+                            "paymentHistory": {
+                                "MONTH1": {
+                                    "month": "Jun-21",
+                                    "daysOverdue": "OK"
+                                },
+                                "MONTH10": {
+                                    "month": "Sep-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH11": {
+                                    "month": "Aug-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH12": {
+                                    "month": "Jul-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH13": {
+                                    "month": "Jun-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH14": {
+                                    "month": "May-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH15": {
+                                    "month": "Apr-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH16": {
+                                    "month": "Mar-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH17": {
+                                    "month": "Feb-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH18": {
+                                    "month": "Jan-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH19": {
+                                    "month": "Dec-19",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH2": {
+                                    "month": "May-21",
+                                    "daysOverdue": "OK"
+                                },
+                                "MONTH20": {
+                                    "month": "Nov-19",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH21": {
+                                    "month": "Oct-19",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH22": {
+                                    "month": "Sep-19",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH23": {
+                                    "month": "Aug-19",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH24": {
+                                    "month": "Jul-19",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH3": {
+                                    "month": "Apr-21",
+                                    "daysOverdue": "OK"
+                                },
+                                "MONTH4": {
+                                    "month": "Mar-21",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH5": {
+                                    "month": "Feb-21",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH6": {
+                                    "month": "Jan-21",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH7": {
+                                    "month": "Dec-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH8": {
+                                    "month": "Nov-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH9": {
+                                    "month": "Oct-20",
+                                    "daysOverdue": "ND"
+                                }
+                            }
+                        },
+                        {
+                            "loanProvider": "MYCREDIT INVESTMENTS LIMITED",
+                            "accountNumber": "3144415",
+                            "type": "Term Loan",
+                            "disbursedDate": "31-Jan-2021",
+                            "maturityDate": "03-May-2021",
+                            "loanAmount": "80000",
+                            "installmentAmount": "",
+                            "overdueAmount": "0",
+                            "amountWrittenOff": "",
+                            "currency": "NGN",
+                            "lastPaymentDate": "",
+                            "loanDuration": "",
+                            "dateReported": "31-May-2021",
+                            "performanceStatus": "Performing",
+                            "rankings": "1-0",
+                            "reason": "Open",
+                            "outstandingBalance": "0",
+                            "loanStatus": "A",
+                            "numberOfOverdueDays": "0",
+                            "collateral": "Partially Secured",
+                            "paymentHistory": {
+                                "MONTH1": {
+                                    "month": "May-21",
+                                    "daysOverdue": "OK"
+                                },
+                                "MONTH10": {
+                                    "month": "Aug-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH11": {
+                                    "month": "Jul-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH12": {
+                                    "month": "Jun-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH13": {
+                                    "month": "May-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH14": {
+                                    "month": "Apr-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH15": {
+                                    "month": "Mar-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH16": {
+                                    "month": "Feb-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH17": {
+                                    "month": "Jan-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH18": {
+                                    "month": "Dec-19",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH19": {
+                                    "month": "Nov-19",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH2": {
+                                    "month": "Apr-21",
+                                    "daysOverdue": "OK"
+                                },
+                                "MONTH20": {
+                                    "month": "Oct-19",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH21": {
+                                    "month": "Sep-19",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH22": {
+                                    "month": "Aug-19",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH23": {
+                                    "month": "Jul-19",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH24": {
+                                    "month": "Jun-19",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH3": {
+                                    "month": "Mar-21",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH4": {
+                                    "month": "Feb-21",
+                                    "daysOverdue": "OK"
+                                },
+                                "MONTH5": {
+                                    "month": "Jan-21",
+                                    "daysOverdue": "OK"
+                                },
+                                "MONTH6": {
+                                    "month": "Dec-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH7": {
+                                    "month": "Nov-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH8": {
+                                    "month": "Oct-20",
+                                    "daysOverdue": "ND"
+                                },
+                                "MONTH9": {
+                                    "month": "Sep-20",
+                                    "daysOverdue": "ND"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": [
+                        {
+                            "loanProvider": "Carbon Microfinance Bank Limited",
+                            "accountNumber": "303828541471",
+                            "type": "Personal fixed term loan",
+                            "currency": "NGN",
+                            "loanAmount": "146,500.00",
+                            "outstandingBalance": "0.00",
+                            "installmentAmount": "36,625.00",
+                            "repaymentFrequency": "Not Available",
+                            "overdueAmount": "0.00",
+                            "lastPaymentDate": null,
+                            "loanDuration": "Not Available",
+                            "disbursedDate": "11/07/2019",
+                            "expiryDate": "10/11/2019",
+                            "performanceStatus": "Performing",
+                            "accountStatus": "Closed",
+                            "paymentHistory": {
+                                "M24": "#",
+                                "M23": "#",
+                                "M22": "#",
+                                "M21": "#",
+                                "M20": "#",
+                                "M19": "#",
+                                "M18": "#",
+                                "M17": "#",
+                                "M16": "#",
+                                "M15": "#",
+                                "M14": "#",
+                                "M13": "#",
+                                "M12": "#",
+                                "M11": "#",
+                                "M10": "#",
+                                "M09": "#",
+                                "M08": "#",
+                                "M07": "#",
+                                "M06": "#",
+                                "M05": "#",
+                                "M04": "#",
+                                "M03": "#",
+                                "M02": "#",
+                                "M01": "#"
+                            },
+                            "dateReported": ""
+                        },
+                        {
+                            "loanProvider": "Carbon Microfinance Bank Limited",
+                            "accountNumber": "304722135191",
+                            "type": "Personal fixed term loan",
+                            "currency": "NGN",
+                            "loanAmount": "33,500.00",
+                            "outstandingBalance": "0.00",
+                            "installmentAmount": "43,550.00",
+                            "repaymentFrequency": "Not Available",
+                            "overdueAmount": "0.00",
+                            "lastPaymentDate": null,
+                            "loanDuration": "Not Available",
+                            "disbursedDate": "12/11/2019",
+                            "expiryDate": "12/12/2019",
+                            "performanceStatus": "Performing",
+                            "accountStatus": "Closed",
+                            "paymentHistory": {
+                                "M24": "#",
+                                "M23": "#",
+                                "M22": "#",
+                                "M21": "#",
+                                "M20": "#",
+                                "M19": "#",
+                                "M18": "#",
+                                "M17": "#",
+                                "M16": "#",
+                                "M15": "#",
+                                "M14": "#",
+                                "M13": "#",
+                                "M12": "#",
+                                "M11": "#",
+                                "M10": "#",
+                                "M09": "#",
+                                "M08": "#",
+                                "M07": "#",
+                                "M06": "#",
+                                "M05": "#",
+                                "M04": "#",
+                                "M03": "#",
+                                "M02": "#",
+                                "M01": "#"
+                            },
+                            "dateReported": ""
+                        },
+                        {
+                            "loanProvider": "Carbon Microfinance Bank Limited",
+                            "accountNumber": "307971478466",
+                            "type": "Personal fixed term loan",
+                            "currency": "NGN",
+                            "loanAmount": "19,500.00",
+                            "outstandingBalance": "0.00",
+                            "installmentAmount": "22,425.00",
+                            "repaymentFrequency": "Not Available",
+                            "overdueAmount": "0.00",
+                            "lastPaymentDate": null,
+                            "loanDuration": "Not Available",
+                            "disbursedDate": "30/04/2021",
+                            "expiryDate": "15/05/2021",
+                            "performanceStatus": "Performing",
+                            "accountStatus": "Closed",
+                            "paymentHistory": {
+                                "M24": "#",
+                                "M23": "0",
+                                "M22": "#",
+                                "M21": "#",
+                                "M20": "#",
+                                "M19": "#",
+                                "M18": "#",
+                                "M17": "#",
+                                "M16": "#",
+                                "M15": "#",
+                                "M14": "#",
+                                "M13": "#",
+                                "M12": "#",
+                                "M11": "#",
+                                "M10": "#",
+                                "M09": "#",
+                                "M08": "#",
+                                "M07": "#",
+                                "M06": "#",
+                                "M05": "#",
+                                "M04": "#",
+                                "M03": "#",
+                                "M02": "#",
+                                "M01": "#"
+                            },
+                            "dateReported": ""
+                        },
+                        {
+                            "loanProvider": "MyCredit Invest",
+                            "accountNumber": "1671269",
+                            "type": null,
+                            "currency": "NGN",
+                            "loanAmount": "15,000.00",
+                            "outstandingBalance": "0.00",
+                            "installmentAmount": "18,750.00",
+                            "repaymentFrequency": "Not Available",
+                            "overdueAmount": "0.00",
+                            "lastPaymentDate": null,
+                            "loanDuration": "Not Available",
+                            "disbursedDate": "05/11/2019",
+                            "expiryDate": "05/12/2019",
+                            "performanceStatus": "Performing",
+                            "accountStatus": "Open",
+                            "paymentHistory": {
+                                "M24": "#",
+                                "M23": "#",
+                                "M22": "#",
+                                "M21": "#",
+                                "M20": "#",
+                                "M19": "#",
+                                "M18": "#",
+                                "M17": "#",
+                                "M16": "#",
+                                "M15": "#",
+                                "M14": "#",
+                                "M13": "#",
+                                "M12": "#",
+                                "M11": "#",
+                                "M10": "#",
+                                "M09": "#",
+                                "M08": "#",
+                                "M07": "#",
+                                "M06": "#",
+                                "M05": "#",
+                                "M04": "#",
+                                "M03": "#",
+                                "M02": "#",
+                                "M01": "#"
+                            },
+                            "dateReported": ""
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "accountNumber": "0074679293",
+                            "type": "Personal Secured  Loan",
+                            "currency": "NGN",
+                            "loanAmount": "1,784,520.28",
+                            "outstandingBalance": "0.00",
+                            "installmentAmount": "0.00",
+                            "repaymentFrequency": "Not Available",
+                            "overdueAmount": "0.00",
+                            "lastPaymentDate": null,
+                            "loanDuration": "354 Day(s)",
+                            "disbursedDate": "10/10/2019",
+                            "expiryDate": "28/09/2020",
+                            "performanceStatus": "Performing",
+                            "accountStatus": "Closed",
+                            "paymentHistory": {
+                                "M24": "#",
+                                "M23": "#",
+                                "M22": "#",
+                                "M21": "#",
+                                "M20": "#",
+                                "M19": "#",
+                                "M18": "#",
+                                "M17": "#",
+                                "M16": "#",
+                                "M15": "#",
+                                "M14": "#",
+                                "M13": "#",
+                                "M12": "#",
+                                "M11": "#",
+                                "M10": "#",
+                                "M09": "#",
+                                "M08": "#",
+                                "M07": "#",
+                                "M06": "#",
+                                "M05": "#",
+                                "M04": "#",
+                                "M03": "#",
+                                "M02": "#",
+                                "M01": "#"
+                            },
+                            "dateReported": ""
+                        }
+                    ]
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": [
+                        {
+                            "loanProvider": "Personal Trust Microfinance Bank Limited",
+                            "loanProviderAddress": "32, IKORODU ROAD, JIBOWU\t\t\r\n JIBOWU Lagos",
+                            "accountNumber": "0010687472",
+                            "type": "Secured Loan",
+                            "loanAmount": 0,
+                            "installmentAmount": null,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": null,
+                            "loanDuration": "14",
+                            "dateReported": "2024-06-14T06:13:19.503",
+                            "disbursedDate": "2024-05-24T00:00:00",
+                            "maturityDate": "2024-06-30T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNN0NNNNNNNNNNNNNNNNN",
+                            "lastUpdatedAt": "2024-07-09T18:27:04.127"
+                        },
+                        {
+                            "loanProvider": "Zenith Bank Plc",
+                            "loanProviderAddress": "Zenith Heights\r\nplot 87 Ajose Adeogun Street Victoria Island Lagos",
+                            "accountNumber": "1222139844",
+                            "type": "Overdraft",
+                            "loanAmount": 21656,
+                            "installmentAmount": 0,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": "2023-04-26T00:00:00",
+                            "loanDuration": "360",
+                            "dateReported": "2023-04-16T09:58:18.123",
+                            "disbursedDate": "2022-03-07T00:00:00",
+                            "maturityDate": "2023-07-31T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "                          ",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNNNNNNNNNNNNNNN00NNN",
+                            "lastUpdatedAt": "2023-08-24T10:21:31.123"
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                            "accountNumber": "3645505",
+                            "type": "Term Loan",
+                            "loanAmount": 200000,
+                            "installmentAmount": 95990,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": "2021-06-29T00:00:00",
+                            "loanDuration": "0",
+                            "dateReported": "2021-09-11T04:41:37.163",
+                            "disbursedDate": "2021-04-30T00:00:00",
+                            "maturityDate": "2021-06-29T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "lastUpdatedAt": "2021-10-12T21:05:28.787"
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                            "accountNumber": "3144415",
+                            "type": "Term Loan",
+                            "loanAmount": 80000,
+                            "installmentAmount": 34400,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": "2021-04-30T00:00:00",
+                            "loanDuration": "0",
+                            "dateReported": "2021-09-11T04:41:37.163",
+                            "disbursedDate": "2021-01-31T00:00:00",
+                            "maturityDate": "2021-04-30T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "lastUpdatedAt": "2021-09-11T04:41:37.163"
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                            "accountNumber": "955574",
+                            "type": "Term Loan",
+                            "loanAmount": 15000,
+                            "installmentAmount": 18750,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": "2019-12-06T00:00:00",
+                            "loanDuration": "0",
+                            "dateReported": "2021-09-11T04:41:37.163",
+                            "disbursedDate": "2019-11-05T00:00:00",
+                            "maturityDate": "2019-12-06T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "lastUpdatedAt": "2021-09-11T04:41:37.163"
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "loanProviderAddress": "Sterling Towers\r\n20 Marina Lagos Island Lagos",
+                            "accountNumber": "0074679293",
+                            "type": "Secured Loan",
+                            "loanAmount": 1784520,
+                            "installmentAmount": 0,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": "2020-10-31T00:00:00",
+                            "loanDuration": "354",
+                            "dateReported": "2019-11-19T20:31:49.773",
+                            "disbursedDate": "2019-10-10T00:00:00",
+                            "maturityDate": "2020-10-31T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "lastUpdatedAt": "2020-11-26T14:04:28.51"
+                        },
+                        {
+                            "loanProvider": "MyCredit Investments Limited",
+                            "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                            "accountNumber": "527656",
+                            "type": "Term Loan",
+                            "loanAmount": 10000,
+                            "installmentAmount": 13000,
+                            "overdueAmount": 0,
+                            "lastPaymentDate": "2019-09-24T00:00:00",
+                            "loanDuration": "0",
+                            "dateReported": "2021-09-11T04:41:37.163",
+                            "disbursedDate": "2019-08-23T00:00:00",
+                            "maturityDate": "2019-09-24T00:00:00",
+                            "performanceStatus": "Paid Off (Closed)",
+                            "status": "Closed",
+                            "outstandingBalance": 0,
+                            "collateral": "",
+                            "collateralValue": 0,
+                            "guarantor": "",
+                            "purpose": "NA",
+                            "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                            "lastUpdatedAt": "2021-09-11T04:41:37.163"
+                        }
+                    ]
+                }
+            ],
+            "creditors": [
+                {
+                    "source": "CRC",
+                    "value": []
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": []
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": [
+                        {
+                            "Subscriber_ID": "737941736628525722",
+                            "Name": "MyCredit Investments Limited",
+                            "Phone": "017001276",
+                            "Address": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t  Magodo Lagos"
+                        },
+                        {
+                            "Subscriber_ID": "738749735365844875",
+                            "Name": "Personal Trust Microfinance Bank Limited",
+                            "Phone": "09055998221",
+                            "Address": "32, IKORODU ROAD, JIBOWU\t\t  JIBOWU Lagos"
+                        },
+                        {
+                            "Subscriber_ID": "733232733232034497",
+                            "Name": "Sterling Bank Plc",
+                            "Phone": "014484481",
+                            "Address": "Sterling Towers 20 Marina Lagos Island Lagos"
+                        },
+                        {
+                            "Subscriber_ID": "732699732699949972",
+                            "Name": "Zenith Bank Plc",
+                            "Phone": "012610249",
+                            "Address": "Zenith Heights plot 87 Ajose Adeogun Street Victoria Island Lagos"
+                        }
+                    ]
+                }
+            ],
+            "employmentHistory": [
+                {
+                    "source": "CRC",
+                    "value": [
+                        {
+                            "employerName": null,
+                            "position": null,
+                            "address": null,
+                            "dateReported": "13-mar-2024"
+                        }
+                    ]
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": [
+                        {
+                            "employerName": "",
+                            "occupation": "",
+                            "dateReported": ""
+                        }
+                    ]
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": []
+                }
+            ],
+            "creditEnquiries": [
+                {
+                    "source": "CRC",
+                    "value": [
+                        {
+                            "loanType": "Overdraft",
+                            "date": "21-Nov-2024",
+                            "institutionType": "Micro Lenders"
+                        }
+                    ]
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": [
+                        {
+                            "loanProvider": null,
+                            "date": null
+                        }
+                    ]
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": [
+                        {
+                            "loanProvider": "Lifegate Microfinance Bank Limited",
+                            "reason": "KYCCheck",
+                            "date": "2024-11-21T00:00:00",
+                            "contactPhone": "08129078564"
+                        },
+                        {
+                            "loanProvider": "Lifegate Microfinance Bank Limited",
+                            "reason": "KYCCheck",
+                            "date": "2024-11-04T00:00:00",
+                            "contactPhone": "08129078564"
+                        },
+                        {
+                            "loanProvider": "Blue Ridge Microfinance Bank Limited",
+                            "reason": "Search",
+                            "date": "2023-11-03T00:00:00",
+                            "contactPhone": "N/A"
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "reason": "General credit inquiry",
+                            "date": "2022-10-12T00:00:00",
+                            "contactPhone": "014484481"
+                        },
+                        {
+                            "loanProvider": "Zenith Bank Plc",
+                            "reason": "General credit inquiry",
+                            "date": "2022-03-28T00:00:00",
+                            "contactPhone": "012610249"
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "reason": "General credit inquiry",
+                            "date": "2020-10-20T00:00:00",
+                            "contactPhone": "014484481"
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "reason": "General credit inquiry",
+                            "date": "2020-10-14T00:00:00",
+                            "contactPhone": "014484481"
+                        },
+                        {
+                            "loanProvider": "Sterling Bank Plc",
+                            "reason": "General credit inquiry",
+                            "date": "2020-10-12T00:00:00",
+                            "contactPhone": "014484481"
+                        },
+                        {
+                            "loanProvider": "Stanbic IBTC Bank Plc",
+                            "reason": "General credit inquiry",
+                            "date": "2020-02-20T00:00:00",
+                            "contactPhone": "0126203802"
+                        }
+                    ]
+                }
+            ],
+            "creditEnquiriesSummary": [
+                {
+                    "source": "CRC",
+                    "value": []
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": []
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": {
+                        "Last3MonthCount": "2",
+                        "Last12MonthCount": "4",
+                        "Last36MonthCount": "6"
+                    }
+                }
+            ],
+            "bureauStatus": {
+                "crc": "success",
+                "firstCentral": "success",
+                "creditRegistry": "success"
+            },
+            "lastReportedDate": [
+                {
+                    "source": "CRC",
+                    "value": "21/Nov/2024"
+                },
+                {
+                    "source": "FIRST_CENTRAL",
+                    "value": null
+                },
+                {
+                    "source": "CREDIT_REGISTRY",
+                    "value": null
+                }
+            ]
+        }
+    },
+    "_id": "6728905d9ca298e5d5a009ab",
+    "bvn": "12345678901",
+    "customerId": "1043935",
+    "businessId": "62bebe340eae110012c80623",
+    "name": "JOHN DOE ",
+    "phone": "08011111111",
+    "gender": "Male",
+    "dateOfBirth": "19/04/1988",
+    "address": "Lagos",
+    "email": "",
+    "searchedDate": "2024-11-21T10:10:43.035Z"
+}
+
+// CREDIT-REGISTRY Credit insights history
+{
+    "score": {
+        "totalNoOfLoans": 7,
+        "totalNoOfInstitutions": 4,
+        "totalNoOfActiveLoans": 0,
+        "totalNoOfClosedLoans": 7,
+        "totalNoOfPerformingLoans": 7,
+        "totalNoOfDelinquentFacilities": 0,
+        "highestLoanAmount": 1784520,
+        "totalMonthlyInstallment": 0,
+        "totalBorrowed": 2111176,
+        "totalOutstanding": 0,
+        "totalOverdue": 0,
+        "maxNoOfDays": 0,
+        "creditors": false,
+        "creditEnquiries": false,
+        "creditEnquiriesSummary": false,
+        "loanPerformance": false,
+        "loanHistory": false
+    },
+    "scorePremium": {
+        "totalNoOfLoans": 7,
+        "totalNoOfInstitutions": 4,
+        "totalNoOfActiveLoans": 0,
+        "totalNoOfClosedLoans": 7,
+        "totalNoOfPerformingLoans": 7,
+        "totalNoOfDelinquentFacilities": 0,
+        "highestLoanAmount": 1784520,
+        "totalMonthlyInstallment": 0,
+        "totalBorrowed": 2111176,
+        "totalOutstanding": 0,
+        "totalOverdue": 0,
+        "maxNoOfDays": 0,
+        "creditors": [
+            {
+                "Subscriber_ID": "737941736628525722",
+                "Name": "MyCredit Investments Limited",
+                "Phone": "017001276",
+                "Address": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t  Magodo Lagos"
+            },
+            {
+                "Subscriber_ID": "738749735365844875",
+                "Name": "Personal Trust Microfinance Bank Limited",
+                "Phone": "09055998221",
+                "Address": "32, IKORODU ROAD, JIBOWU\t\t  JIBOWU Lagos"
+            },
+            {
+                "Subscriber_ID": "733232733232034497",
+                "Name": "Sterling Bank Plc",
+                "Phone": "014484481",
+                "Address": "Sterling Towers 20 Marina Lagos Island Lagos"
+            },
+            {
+                "Subscriber_ID": "732699732699949972",
+                "Name": "Zenith Bank Plc",
+                "Phone": "012610249",
+                "Address": "Zenith Heights plot 87 Ajose Adeogun Street Victoria Island Lagos"
+            }
+        ],
+        "creditEnquiries": [
+            {
+                "loanProvider": "Lifegate Microfinance Bank Limited",
+                "reason": "KYCCheck",
+                "date": "2024-11-21T00:00:00",
+                "contactPhone": "08129078564"
+            },
+            {
+                "loanProvider": "Lifegate Microfinance Bank Limited",
+                "reason": "KYCCheck",
+                "date": "2024-11-04T00:00:00",
+                "contactPhone": "08129078564"
+            },
+            {
+                "loanProvider": "Blue Ridge Microfinance Bank Limited",
+                "reason": "Search",
+                "date": "2023-11-03T00:00:00",
+                "contactPhone": "N/A"
+            },
+            {
+                "loanProvider": "Sterling Bank Plc",
+                "reason": "General credit inquiry",
+                "date": "2022-10-12T00:00:00",
+                "contactPhone": "014484481"
+            },
+            {
+                "loanProvider": "Zenith Bank Plc",
+                "reason": "General credit inquiry",
+                "date": "2022-03-28T00:00:00",
+                "contactPhone": "012610249"
+            },
+            {
+                "loanProvider": "Sterling Bank Plc",
+                "reason": "General credit inquiry",
+                "date": "2020-10-20T00:00:00",
+                "contactPhone": "014484481"
+            },
+            {
+                "loanProvider": "Sterling Bank Plc",
+                "reason": "General credit inquiry",
+                "date": "2020-10-14T00:00:00",
+                "contactPhone": "014484481"
+            },
+            {
+                "loanProvider": "Sterling Bank Plc",
+                "reason": "General credit inquiry",
+                "date": "2020-10-12T00:00:00",
+                "contactPhone": "014484481"
+            },
+            {
+                "loanProvider": "Stanbic IBTC Bank Plc",
+                "reason": "General credit inquiry",
+                "date": "2020-02-20T00:00:00",
+                "contactPhone": "0126203802"
+            }
+        ],
+        "creditEnquiriesSummary": {
+            "Last3MonthCount": "2",
+            "Last12MonthCount": "4",
+            "Last36MonthCount": "6"
+        },
+        "loanPerformance": [
+            {
+                "loanProvider": "Personal Trust Microfinance Bank Limited",
+                "accountNumber": "0010687472",
+                "loanAmount": 0,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Secured Loan",
+                "loanDuration": "14",
+                "repaymentFrequency": "014",
+                "repaymentBehavior": "None",
+                "paymentProfile": "NNNNNN0NNNNNNNNNNNNNNNNN",
+                "dateAccountOpened": "2024-05-24T00:00:00",
+                "lastUpdatedAt": "2024-07-09T18:27:04.127",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 0
+            },
+            {
+                "loanProvider": "Zenith Bank Plc",
+                "accountNumber": "1222139844",
+                "loanAmount": 21656,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Overdraft",
+                "loanDuration": "360",
+                "repaymentFrequency": "                          ",
+                "repaymentBehavior": "None",
+                "paymentProfile": "NNNNNNNNNNNNNNNNNNN00NNN",
+                "dateAccountOpened": "2022-03-07T00:00:00",
+                "lastUpdatedAt": "2023-08-24T10:21:31.123",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 0
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "accountNumber": "3645505",
+                "loanAmount": 200000,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Term Loan",
+                "loanDuration": "0",
+                "repaymentFrequency": "003",
+                "repaymentBehavior": "None",
+                "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "dateAccountOpened": "2021-04-30T00:00:00",
+                "lastUpdatedAt": "2021-10-12T21:05:28.787",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 95990
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "accountNumber": "3144415",
+                "loanAmount": 80000,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Term Loan",
+                "loanDuration": "0",
+                "repaymentFrequency": "003",
+                "repaymentBehavior": "None",
+                "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "dateAccountOpened": "2021-01-31T00:00:00",
+                "lastUpdatedAt": "2021-09-11T04:41:37.163",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 34400
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "accountNumber": "955574",
+                "loanAmount": 15000,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Term Loan",
+                "loanDuration": "0",
+                "repaymentFrequency": "003",
+                "repaymentBehavior": "None",
+                "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "dateAccountOpened": "2019-11-05T00:00:00",
+                "lastUpdatedAt": "2021-09-11T04:41:37.163",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 18750
+            },
+            {
+                "loanProvider": "Sterling Bank Plc",
+                "accountNumber": "0074679293",
+                "loanAmount": 1784520,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Secured Loan",
+                "loanDuration": "354",
+                "repaymentFrequency": "3",
+                "repaymentBehavior": "Delinquent (over 60 days) - 1 time",
+                "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "dateAccountOpened": "2019-10-10T00:00:00",
+                "lastUpdatedAt": "2020-11-26T14:04:28.51",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 0
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "accountNumber": "527656",
+                "loanAmount": 10000,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Term Loan",
+                "loanDuration": "0",
+                "repaymentFrequency": "003",
+                "repaymentBehavior": "None",
+                "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "dateAccountOpened": "2019-08-23T00:00:00",
+                "lastUpdatedAt": "2021-09-11T04:41:37.163",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 13000
+            }
+        ],
+        "loanHistory": [
+            {
+                "loanProvider": "Personal Trust Microfinance Bank Limited",
+                "loanProviderAddress": "32, IKORODU ROAD, JIBOWU\t\t\r\n JIBOWU Lagos",
+                "accountNumber": "0010687472",
+                "type": "Secured Loan",
+                "loanAmount": 0,
+                "installmentAmount": null,
+                "overdueAmount": 0,
+                "lastPaymentDate": null,
+                "loanDuration": "14",
+                "dateReported": "2024-06-14T06:13:19.503",
+                "disbursedDate": "2024-05-24T00:00:00",
+                "maturityDate": "2024-06-30T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNN0NNNNNNNNNNNNNNNNN",
+                "lastUpdatedAt": "2024-07-09T18:27:04.127"
+            },
+            {
+                "loanProvider": "Zenith Bank Plc",
+                "loanProviderAddress": "Zenith Heights\r\nplot 87 Ajose Adeogun Street Victoria Island Lagos",
+                "accountNumber": "1222139844",
+                "type": "Overdraft",
+                "loanAmount": 21656,
+                "installmentAmount": 0,
+                "overdueAmount": 0,
+                "lastPaymentDate": "2023-04-26T00:00:00",
+                "loanDuration": "360",
+                "dateReported": "2023-04-16T09:58:18.123",
+                "disbursedDate": "2022-03-07T00:00:00",
+                "maturityDate": "2023-07-31T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "                          ",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNNNNNNNNNNNNNNN00NNN",
+                "lastUpdatedAt": "2023-08-24T10:21:31.123"
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                "accountNumber": "3645505",
+                "type": "Term Loan",
+                "loanAmount": 200000,
+                "installmentAmount": 95990,
+                "overdueAmount": 0,
+                "lastPaymentDate": "2021-06-29T00:00:00",
+                "loanDuration": "0",
+                "dateReported": "2021-09-11T04:41:37.163",
+                "disbursedDate": "2021-04-30T00:00:00",
+                "maturityDate": "2021-06-29T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "lastUpdatedAt": "2021-10-12T21:05:28.787"
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                "accountNumber": "3144415",
+                "type": "Term Loan",
+                "loanAmount": 80000,
+                "installmentAmount": 34400,
+                "overdueAmount": 0,
+                "lastPaymentDate": "2021-04-30T00:00:00",
+                "loanDuration": "0",
+                "dateReported": "2021-09-11T04:41:37.163",
+                "disbursedDate": "2021-01-31T00:00:00",
+                "maturityDate": "2021-04-30T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "lastUpdatedAt": "2021-09-11T04:41:37.163"
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                "accountNumber": "955574",
+                "type": "Term Loan",
+                "loanAmount": 15000,
+                "installmentAmount": 18750,
+                "overdueAmount": 0,
+                "lastPaymentDate": "2019-12-06T00:00:00",
+                "loanDuration": "0",
+                "dateReported": "2021-09-11T04:41:37.163",
+                "disbursedDate": "2019-11-05T00:00:00",
+                "maturityDate": "2019-12-06T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "lastUpdatedAt": "2021-09-11T04:41:37.163"
+            },
+            {
+                "loanProvider": "Sterling Bank Plc",
+                "loanProviderAddress": "Sterling Towers\r\n20 Marina Lagos Island Lagos",
+                "accountNumber": "0074679293",
+                "type": "Secured Loan",
+                "loanAmount": 1784520,
+                "installmentAmount": 0,
+                "overdueAmount": 0,
+                "lastPaymentDate": "2020-10-31T00:00:00",
+                "loanDuration": "354",
+                "dateReported": "2019-11-19T20:31:49.773",
+                "disbursedDate": "2019-10-10T00:00:00",
+                "maturityDate": "2020-10-31T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "lastUpdatedAt": "2020-11-26T14:04:28.51"
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                "accountNumber": "527656",
+                "type": "Term Loan",
+                "loanAmount": 10000,
+                "installmentAmount": 13000,
+                "overdueAmount": 0,
+                "lastPaymentDate": "2019-09-24T00:00:00",
+                "loanDuration": "0",
+                "dateReported": "2021-09-11T04:41:37.163",
+                "disbursedDate": "2019-08-23T00:00:00",
+                "maturityDate": "2019-09-24T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "lastUpdatedAt": "2021-09-11T04:41:37.163"
+            }
+        ]
+    },
+    "_id": "6728905d9ca298e5d5a009ab",
+    "bvn": "12345678901",
+    "customerId": "1043935",
+    "businessId": "62bebe340eae110012c80623",
+    "name": "JOHN DOE ",
+    "phone": "08011111111",
+    "gender": "Male",
+    "dateOfBirth": "19/04/1988",
+    "address": "Lagos",
+    "email": "",
+    "searchedDate": "2024-11-21T09:59:31.135Z"
+},
+{
+    "score": {
+        "totalNoOfLoans": 7,
+        "totalNoOfInstitutions": 4,
+        "totalNoOfActiveLoans": 0,
+        "totalNoOfClosedLoans": 7,
+        "totalNoOfPerformingLoans": 7,
+        "totalNoOfDelinquentFacilities": 0,
+        "highestLoanAmount": 1784520,
+        "totalMonthlyInstallment": 0,
+        "totalBorrowed": 2111176,
+        "totalOutstanding": 0,
+        "totalOverdue": 0,
+        "maxNoOfDays": 0,
+        "creditors": false,
+        "creditEnquiries": false,
+        "creditEnquiriesSummary": false,
+        "loanPerformance": false,
+        "loanHistory": false
+    },
+    "scorePremium": {
+        "totalNoOfLoans": 7,
+        "totalNoOfInstitutions": 4,
+        "totalNoOfActiveLoans": 0,
+        "totalNoOfClosedLoans": 7,
+        "totalNoOfPerformingLoans": 7,
+        "totalNoOfDelinquentFacilities": 0,
+        "highestLoanAmount": 1784520,
+        "totalMonthlyInstallment": 0,
+        "totalBorrowed": 2111176,
+        "totalOutstanding": 0,
+        "totalOverdue": 0,
+        "maxNoOfDays": 0,
+        "creditors": [
+            {
+                "Subscriber_ID": "737941736628525722",
+                "Name": "MyCredit Investments Limited",
+                "Phone": "017001276",
+                "Address": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t  Magodo Lagos"
+            },
+            {
+                "Subscriber_ID": "738749735365844875",
+                "Name": "Personal Trust Microfinance Bank Limited",
+                "Phone": "09055998221",
+                "Address": "32, IKORODU ROAD, JIBOWU\t\t  JIBOWU Lagos"
+            },
+            {
+                "Subscriber_ID": "733232733232034497",
+                "Name": "Sterling Bank Plc",
+                "Phone": "014484481",
+                "Address": "Sterling Towers 20 Marina Lagos Island Lagos"
+            },
+            {
+                "Subscriber_ID": "732699732699949972",
+                "Name": "Zenith Bank Plc",
+                "Phone": "012610249",
+                "Address": "Zenith Heights plot 87 Ajose Adeogun Street Victoria Island Lagos"
+            }
+        ],
+        "creditEnquiries": [
+            {
+                "loanProvider": "Lifegate Microfinance Bank Limited",
+                "reason": "KYCCheck",
+                "date": "2024-11-21T00:00:00",
+                "contactPhone": "08129078564"
+            },
+            {
+                "loanProvider": "Lifegate Microfinance Bank Limited",
+                "reason": "KYCCheck",
+                "date": "2024-11-04T00:00:00",
+                "contactPhone": "08129078564"
+            },
+            {
+                "loanProvider": "Blue Ridge Microfinance Bank Limited",
+                "reason": "Search",
+                "date": "2023-11-03T00:00:00",
+                "contactPhone": "N/A"
+            },
+            {
+                "loanProvider": "Sterling Bank Plc",
+                "reason": "General credit inquiry",
+                "date": "2022-10-12T00:00:00",
+                "contactPhone": "014484481"
+            },
+            {
+                "loanProvider": "Zenith Bank Plc",
+                "reason": "General credit inquiry",
+                "date": "2022-03-28T00:00:00",
+                "contactPhone": "012610249"
+            },
+            {
+                "loanProvider": "Sterling Bank Plc",
+                "reason": "General credit inquiry",
+                "date": "2020-10-20T00:00:00",
+                "contactPhone": "014484481"
+            },
+            {
+                "loanProvider": "Sterling Bank Plc",
+                "reason": "General credit inquiry",
+                "date": "2020-10-14T00:00:00",
+                "contactPhone": "014484481"
+            },
+            {
+                "loanProvider": "Sterling Bank Plc",
+                "reason": "General credit inquiry",
+                "date": "2020-10-12T00:00:00",
+                "contactPhone": "014484481"
+            },
+            {
+                "loanProvider": "Stanbic IBTC Bank Plc",
+                "reason": "General credit inquiry",
+                "date": "2020-02-20T00:00:00",
+                "contactPhone": "0126203802"
+            }
+        ],
+        "creditEnquiriesSummary": {
+            "Last3MonthCount": "2",
+            "Last12MonthCount": "4",
+            "Last36MonthCount": "6"
+        },
+        "loanPerformance": [
+            {
+                "loanProvider": "Personal Trust Microfinance Bank Limited",
+                "accountNumber": "0010687472",
+                "loanAmount": 0,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Secured Loan",
+                "loanDuration": "14",
+                "repaymentFrequency": "014",
+                "repaymentBehavior": "None",
+                "paymentProfile": "NNNNNN0NNNNNNNNNNNNNNNNN",
+                "dateAccountOpened": "2024-05-24T00:00:00",
+                "lastUpdatedAt": "2024-07-09T18:27:04.127",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 0
+            },
+            {
+                "loanProvider": "Zenith Bank Plc",
+                "accountNumber": "1222139844",
+                "loanAmount": 21656,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Overdraft",
+                "loanDuration": "360",
+                "repaymentFrequency": "                          ",
+                "repaymentBehavior": "None",
+                "paymentProfile": "NNNNNNNNNNNNNNNNNNN00NNN",
+                "dateAccountOpened": "2022-03-07T00:00:00",
+                "lastUpdatedAt": "2023-08-24T10:21:31.123",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 0
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "accountNumber": "3645505",
+                "loanAmount": 200000,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Term Loan",
+                "loanDuration": "0",
+                "repaymentFrequency": "003",
+                "repaymentBehavior": "None",
+                "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "dateAccountOpened": "2021-04-30T00:00:00",
+                "lastUpdatedAt": "2021-10-12T21:05:28.787",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 95990
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "accountNumber": "3144415",
+                "loanAmount": 80000,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Term Loan",
+                "loanDuration": "0",
+                "repaymentFrequency": "003",
+                "repaymentBehavior": "None",
+                "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "dateAccountOpened": "2021-01-31T00:00:00",
+                "lastUpdatedAt": "2021-09-11T04:41:37.163",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 34400
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "accountNumber": "955574",
+                "loanAmount": 15000,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Term Loan",
+                "loanDuration": "0",
+                "repaymentFrequency": "003",
+                "repaymentBehavior": "None",
+                "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "dateAccountOpened": "2019-11-05T00:00:00",
+                "lastUpdatedAt": "2021-09-11T04:41:37.163",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 18750
+            },
+            {
+                "loanProvider": "Sterling Bank Plc",
+                "accountNumber": "0074679293",
+                "loanAmount": 1784520,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Secured Loan",
+                "loanDuration": "354",
+                "repaymentFrequency": "3",
+                "repaymentBehavior": "Delinquent (over 60 days) - 1 time",
+                "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "dateAccountOpened": "2019-10-10T00:00:00",
+                "lastUpdatedAt": "2020-11-26T14:04:28.51",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 0
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "accountNumber": "527656",
+                "loanAmount": 10000,
+                "outstandingBalance": 0,
+                "status": "Closed",
+                "performanceStatus": "Paid Off (Closed)",
+                "overdueAmount": 0,
+                "type": "Term Loan",
+                "loanDuration": "0",
+                "repaymentFrequency": "003",
+                "repaymentBehavior": "None",
+                "paymentProfile": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "dateAccountOpened": "2019-08-23T00:00:00",
+                "lastUpdatedAt": "2021-09-11T04:41:37.163",
+                "loanCount": 1,
+                "monthlyInstallmentAmt": 13000
+            }
+        ],
+        "loanHistory": [
+            {
+                "loanProvider": "Personal Trust Microfinance Bank Limited",
+                "loanProviderAddress": "32, IKORODU ROAD, JIBOWU\t\t\r\n JIBOWU Lagos",
+                "accountNumber": "0010687472",
+                "type": "Secured Loan",
+                "loanAmount": 0,
+                "installmentAmount": null,
+                "overdueAmount": 0,
+                "lastPaymentDate": null,
+                "loanDuration": "14",
+                "dateReported": "2024-06-14T06:13:19.503",
+                "disbursedDate": "2024-05-24T00:00:00",
+                "maturityDate": "2024-06-30T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNN0NNNNNNNNNNNNNNNNN",
+                "lastUpdatedAt": "2024-07-09T18:27:04.127"
+            },
+            {
+                "loanProvider": "Zenith Bank Plc",
+                "loanProviderAddress": "Zenith Heights\r\nplot 87 Ajose Adeogun Street Victoria Island Lagos",
+                "accountNumber": "1222139844",
+                "type": "Overdraft",
+                "loanAmount": 21656,
+                "installmentAmount": 0,
+                "overdueAmount": 0,
+                "lastPaymentDate": "2023-04-26T00:00:00",
+                "loanDuration": "360",
+                "dateReported": "2023-04-16T09:58:18.123",
+                "disbursedDate": "2022-03-07T00:00:00",
+                "maturityDate": "2023-07-31T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "                          ",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNNNNNNNNNNNNNNN00NNN",
+                "lastUpdatedAt": "2023-08-24T10:21:31.123"
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                "accountNumber": "3645505",
+                "type": "Term Loan",
+                "loanAmount": 200000,
+                "installmentAmount": 95990,
+                "overdueAmount": 0,
+                "lastPaymentDate": "2021-06-29T00:00:00",
+                "loanDuration": "0",
+                "dateReported": "2021-09-11T04:41:37.163",
+                "disbursedDate": "2021-04-30T00:00:00",
+                "maturityDate": "2021-06-29T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "lastUpdatedAt": "2021-10-12T21:05:28.787"
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                "accountNumber": "3144415",
+                "type": "Term Loan",
+                "loanAmount": 80000,
+                "installmentAmount": 34400,
+                "overdueAmount": 0,
+                "lastPaymentDate": "2021-04-30T00:00:00",
+                "loanDuration": "0",
+                "dateReported": "2021-09-11T04:41:37.163",
+                "disbursedDate": "2021-01-31T00:00:00",
+                "maturityDate": "2021-04-30T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "lastUpdatedAt": "2021-09-11T04:41:37.163"
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                "accountNumber": "955574",
+                "type": "Term Loan",
+                "loanAmount": 15000,
+                "installmentAmount": 18750,
+                "overdueAmount": 0,
+                "lastPaymentDate": "2019-12-06T00:00:00",
+                "loanDuration": "0",
+                "dateReported": "2021-09-11T04:41:37.163",
+                "disbursedDate": "2019-11-05T00:00:00",
+                "maturityDate": "2019-12-06T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "lastUpdatedAt": "2021-09-11T04:41:37.163"
+            },
+            {
+                "loanProvider": "Sterling Bank Plc",
+                "loanProviderAddress": "Sterling Towers\r\n20 Marina Lagos Island Lagos",
+                "accountNumber": "0074679293",
+                "type": "Secured Loan",
+                "loanAmount": 1784520,
+                "installmentAmount": 0,
+                "overdueAmount": 0,
+                "lastPaymentDate": "2020-10-31T00:00:00",
+                "loanDuration": "354",
+                "dateReported": "2019-11-19T20:31:49.773",
+                "disbursedDate": "2019-10-10T00:00:00",
+                "maturityDate": "2020-10-31T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "lastUpdatedAt": "2020-11-26T14:04:28.51"
+            },
+            {
+                "loanProvider": "MyCredit Investments Limited",
+                "loanProviderAddress": "5, Collins Onabule Crescent, Diamond Estate, Magodo, \t\t\r\n Magodo Lagos",
+                "accountNumber": "527656",
+                "type": "Term Loan",
+                "loanAmount": 10000,
+                "installmentAmount": 13000,
+                "overdueAmount": 0,
+                "lastPaymentDate": "2019-09-24T00:00:00",
+                "loanDuration": "0",
+                "dateReported": "2021-09-11T04:41:37.163",
+                "disbursedDate": "2019-08-23T00:00:00",
+                "maturityDate": "2019-09-24T00:00:00",
+                "performanceStatus": "Paid Off (Closed)",
+                "status": "Closed",
+                "outstandingBalance": 0,
+                "collateral": "",
+                "collateralValue": 0,
+                "guarantor": "",
+                "purpose": "NA",
+                "paymentHistory": "NNNNNNNNNNNNNNNNNNNNNNNN",
+                "lastUpdatedAt": "2021-09-11T04:41:37.163"
+            }
+        ]
+    },
+    "_id": "6728905d9ca298e5d5a009ab",
+    "bvn": "12345678901",
+    "customerId": "1043935",
+    "businessId": "62bebe340eae110012c80623",
+    "name": "JOHN DOE ",
+    "phone": "08011111111",
+    "gender": "Male",
+    "dateOfBirth": "19/04/1988",
+    "address": "Lagos",
+    "email": "",
+    "searchedDate": "2024-11-21T10:00:28.791Z"
+}
+
+// FIRST CENTRAL
+{
+    "score": {},
+    "scorePremium": {
+        "totalNoOfDelinquentFacilities": 0,
+        "totalNoOfLoans": 5,
+        "totalNoOfActiveLoans": 1,
+        "totalNoOfClosedLoans": 4,
+        "totalNoOfInstitutions": 3,
+        "totalOverdue": 0,
+        "totalBorrowed": 1999020.28,
+        "highestLoanAmount": 1784520.28,
+        "totalOutstanding": 0,
+        "totalMonthlyInstallment": 121350,
+        "totalNoOfOverdueAccounts": 0,
+        "totalNoOfPerformingLoans": 5,
+        "firstCentralEnquiryResultID": null,
+        "firstCentralEnquiryEngineID": null,
+        "loanPerformance": [
+            {
+                "accountNumber": "307971478466",
+                "loanProvider": "Sterling Bank Plc",
+                "loanAmount": 1784520.28,
+                "outstandingBalance": 0,
+                "overdueAmount": 0,
+                "noOfPerforming": 1,
+                "noOfNonPerforming": 0,
+                "loanCount": 1,
+                "performanceStatus": "Performing",
+                "status": "Closed"
+            },
+            {
+                "accountNumber": "307971478466",
+                "loanProvider": "MyCredit Invest",
+                "loanAmount": 15000,
+                "outstandingBalance": 0,
+                "overdueAmount": 0,
+                "noOfPerforming": 1,
+                "noOfNonPerforming": 0,
+                "loanCount": 1,
+                "performanceStatus": "Performing",
+                "status": "Closed"
+            },
+            {
+                "accountNumber": "307971478466",
+                "loanProvider": "Carbon Microfinance Bank Limited",
+                "loanAmount": 199500,
+                "outstandingBalance": 0,
+                "overdueAmount": 0,
+                "noOfPerforming": 3,
+                "noOfNonPerforming": 0,
+                "loanCount": 3,
+                "performanceStatus": "Performing",
+                "status": "Closed"
+            }
+        ],
+        "creditEnquiries": [
+            {
+                "loanProvider": null,
+                "date": null
+            }
+        ],
+        "loanHistory": [
+            {
+                "loanProvider": "Carbon Microfinance Bank Limited",
+                "accountNumber": "303828541471",
+                "type": "Personal fixed term loan",
+                "currency": "NGN",
+                "loanAmount": "146,500.00",
+                "outstandingBalance": "0.00",
+                "installmentAmount": "36,625.00",
+                "repaymentFrequency": "Not Available",
+                "overdueAmount": "0.00",
+                "lastPaymentDate": null,
+                "loanDuration": "Not Available",
+                "disbursedDate": "11/07/2019",
+                "expiryDate": "10/11/2019",
+                "performanceStatus": "Performing",
+                "accountStatus": "Closed",
+                "paymentHistory": {
+                    "M24": "#",
+                    "M23": "#",
+                    "M22": "#",
+                    "M21": "#",
+                    "M20": "#",
+                    "M19": "#",
+                    "M18": "#",
+                    "M17": "#",
+                    "M16": "#",
+                    "M15": "#",
+                    "M14": "#",
+                    "M13": "#",
+                    "M12": "#",
+                    "M11": "#",
+                    "M10": "#",
+                    "M09": "#",
+                    "M08": "#",
+                    "M07": "#",
+                    "M06": "#",
+                    "M05": "#",
+                    "M04": "#",
+                    "M03": "#",
+                    "M02": "#",
+                    "M01": "#"
+                },
+                "dateReported": ""
+            },
+            {
+                "loanProvider": "Carbon Microfinance Bank Limited",
+                "accountNumber": "304722135191",
+                "type": "Personal fixed term loan",
+                "currency": "NGN",
+                "loanAmount": "33,500.00",
+                "outstandingBalance": "0.00",
+                "installmentAmount": "43,550.00",
+                "repaymentFrequency": "Not Available",
+                "overdueAmount": "0.00",
+                "lastPaymentDate": null,
+                "loanDuration": "Not Available",
+                "disbursedDate": "12/11/2019",
+                "expiryDate": "12/12/2019",
+                "performanceStatus": "Performing",
+                "accountStatus": "Closed",
+                "paymentHistory": {
+                    "M24": "#",
+                    "M23": "#",
+                    "M22": "#",
+                    "M21": "#",
+                    "M20": "#",
+                    "M19": "#",
+                    "M18": "#",
+                    "M17": "#",
+                    "M16": "#",
+                    "M15": "#",
+                    "M14": "#",
+                    "M13": "#",
+                    "M12": "#",
+                    "M11": "#",
+                    "M10": "#",
+                    "M09": "#",
+                    "M08": "#",
+                    "M07": "#",
+                    "M06": "#",
+                    "M05": "#",
+                    "M04": "#",
+                    "M03": "#",
+                    "M02": "#",
+                    "M01": "#"
+                },
+                "dateReported": ""
+            },
+            {
+                "loanProvider": "Carbon Microfinance Bank Limited",
+                "accountNumber": "307971478466",
+                "type": "Personal fixed term loan",
+                "currency": "NGN",
+                "loanAmount": "19,500.00",
+                "outstandingBalance": "0.00",
+                "installmentAmount": "22,425.00",
+                "repaymentFrequency": "Not Available",
+                "overdueAmount": "0.00",
+                "lastPaymentDate": null,
+                "loanDuration": "Not Available",
+                "disbursedDate": "30/04/2021",
+                "expiryDate": "15/05/2021",
+                "performanceStatus": "Performing",
+                "accountStatus": "Closed",
+                "paymentHistory": {
+                    "M24": "#",
+                    "M23": "0",
+                    "M22": "#",
+                    "M21": "#",
+                    "M20": "#",
+                    "M19": "#",
+                    "M18": "#",
+                    "M17": "#",
+                    "M16": "#",
+                    "M15": "#",
+                    "M14": "#",
+                    "M13": "#",
+                    "M12": "#",
+                    "M11": "#",
+                    "M10": "#",
+                    "M09": "#",
+                    "M08": "#",
+                    "M07": "#",
+                    "M06": "#",
+                    "M05": "#",
+                    "M04": "#",
+                    "M03": "#",
+                    "M02": "#",
+                    "M01": "#"
+                },
+                "dateReported": ""
+            },
+            {
+                "loanProvider": "MyCredit Invest",
+                "accountNumber": "1671269",
+                "type": null,
+                "currency": "NGN",
+                "loanAmount": "15,000.00",
+                "outstandingBalance": "0.00",
+                "installmentAmount": "18,750.00",
+                "repaymentFrequency": "Not Available",
+                "overdueAmount": "0.00",
+                "lastPaymentDate": null,
+                "loanDuration": "Not Available",
+                "disbursedDate": "05/11/2019",
+                "expiryDate": "05/12/2019",
+                "performanceStatus": "Performing",
+                "accountStatus": "Open",
+                "paymentHistory": {
+                    "M24": "#",
+                    "M23": "#",
+                    "M22": "#",
+                    "M21": "#",
+                    "M20": "#",
+                    "M19": "#",
+                    "M18": "#",
+                    "M17": "#",
+                    "M16": "#",
+                    "M15": "#",
+                    "M14": "#",
+                    "M13": "#",
+                    "M12": "#",
+                    "M11": "#",
+                    "M10": "#",
+                    "M09": "#",
+                    "M08": "#",
+                    "M07": "#",
+                    "M06": "#",
+                    "M05": "#",
+                    "M04": "#",
+                    "M03": "#",
+                    "M02": "#",
+                    "M01": "#"
+                },
+                "dateReported": ""
+            },
+            {
+                "loanProvider": "Sterling Bank Plc",
+                "accountNumber": "0074679293",
+                "type": "Personal Secured  Loan",
+                "currency": "NGN",
+                "loanAmount": "1,784,520.28",
+                "outstandingBalance": "0.00",
+                "installmentAmount": "0.00",
+                "repaymentFrequency": "Not Available",
+                "overdueAmount": "0.00",
+                "lastPaymentDate": null,
+                "loanDuration": "354 Day(s)",
+                "disbursedDate": "10/10/2019",
+                "expiryDate": "28/09/2020",
+                "performanceStatus": "Performing",
+                "accountStatus": "Closed",
+                "paymentHistory": {
+                    "M24": "#",
+                    "M23": "#",
+                    "M22": "#",
+                    "M21": "#",
+                    "M20": "#",
+                    "M19": "#",
+                    "M18": "#",
+                    "M17": "#",
+                    "M16": "#",
+                    "M15": "#",
+                    "M14": "#",
+                    "M13": "#",
+                    "M12": "#",
+                    "M11": "#",
+                    "M10": "#",
+                    "M09": "#",
+                    "M08": "#",
+                    "M07": "#",
+                    "M06": "#",
+                    "M05": "#",
+                    "M04": "#",
+                    "M03": "#",
+                    "M02": "#",
+                    "M01": "#"
+                },
+                "dateReported": ""
+            }
+        ],
+        "employmentHistory": [
+            {
+                "employerName": "",
+                "occupation": "",
+                "dateReported": ""
+            }
+        ]
+    },
+    "_id": "6728905d9ca298e5d5a009ab",
+    "bvn": "12345678901",
+    "customerId": "1043935",
+    "businessId": "62bebe340eae110012c80623",
+    "name": "JOHN DOE ",
+    "phone": "08011111111",
+    "gender": "Male",
+    "dateOfBirth": "19/04/1988",
+    "address": "Lagos",
+    "email": "",
+    "searchedDate": "2024-11-21T10:10:43.035Z"
+}
+{
+    "_id": "6728905d9ca298e5d5a009ab",
+    "bvn": "12345678901",
+    "customerId": "1043935",
+    "businessId": "62bebe340eae110012c80623",
+    "name": "JOHN DOE ",
+    "phone": "08011111111",
+    "gender": "Male",
+    "dateOfBirth": "19/04/1988",
+    "address": "Lagos",
+    "email": "",
+    "searchedDate": "2024-11-21T10:13:17.965Z",
+    "score": {
+        "totalNoOfDelinquentFacilities": 0,
+        "totalNoOfLoans": 5,
+        "totalNoOfActiveLoans": 1,
+        "totalNoOfClosedLoans": 4,
+        "maxNoOfDays": null,
+        "totalNoOfInstitutions": 3,
+        "totalOverdue": 0,
+        "totalBorrowed": 1999020.28,
+        "highestLoanAmount": 1784520.28,
+        "totalOutstanding": 0,
+        "totalMonthlyInstallment": 121350,
+        "totalNoOfOverdueAccounts": 0,
+        "totalNoOfPerformingLoans": 5,
+        "firstCentralEnquiryResultID": null,
+        "firstCentralEnquiryEngineID": null,
+        "loanPerformance": false,
+        "creditEnquiries": false,
+        "loanHistory": false,
+        "employmentHistory": false
+    }
+}

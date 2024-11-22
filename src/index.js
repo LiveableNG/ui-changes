@@ -3,11 +3,17 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import FormBuilder from './FormBuilder';
+import './index.css';
+import CreditChekReportViewer from './CreditChekReportViewer';
+import PropertyReport from './LandlordReportUI';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    {/* <FormBuilder /> */}
+    {/* <CreditChekReportViewer /> */}
+    <PropertyReport />
   </React.StrictMode>
 );
 

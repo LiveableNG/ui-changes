@@ -1,30 +1,42 @@
 import React, { useState } from 'react';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, XCircle, X, Info } from 'lucide-react';
 
 const CreditChekReportViewer = () => {
     const [jsonData, setJsonData] = useState(null);
     const [error, setError] = useState('');
     const [jsonText, setJsonText] = useState('');
+    const [showErrorDialog, setShowErrorDialog] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const hasMultiple = jsonData?.score?.score?.totalNoOfLoans?.length > 0;
+    // Updated logic to check for multiple sources
+    const hasMultiple = jsonData?.score?.totalNoOfLoans?.length > 0;
+    const creditData = jsonData?.score || {};
 
-    const creditData = Object.keys(jsonData?.scorePremium || {}).length > 0
-        ? jsonData.scorePremium
-        : hasMultiple ? jsonData.score.score : jsonData?.score || {};
-
-
-    const tabs = hasMultiple ? creditData?.totalNoOfLoans?.map(item => item.source) : [];
-    const [activeTab, setActiveTab] = useState(tabs[0] || 'CRC');
+    // Get unique sources from the score data
+    const tabs = creditData?.totalNoOfLoans?.map(item => item.source) || [];
+    const [activeTab, setActiveTab] = useState(tabs[0] || 'CREDIT_REGISTRY');
 
     const handleJsonInput = (text) => {
         setJsonText(text);
         try {
             const parsed = JSON.parse(text);
-            if (Array.isArray(parsed)) {
-                const mainReport = parsed.find(report => report.scorePremium && Object.keys(report.scorePremium).length > 0) || parsed[0];
+            
+            // Check if there's an error in the response
+            if (parsed.error === true) {
+                setErrorMessage(parsed.message || 'An error occurred');
+                setShowErrorDialog(true);
+                setJsonData(null);
+                return;
+            }
+
+            // Extract data from the response structure
+            const reportData = parsed.data;
+            
+            if (Array.isArray(reportData)) {
+                const mainReport = reportData.find(report => report.scorePremium && Object.keys(report.scorePremium).length > 0) || reportData[0];
                 setJsonData(mainReport);
             } else {
-                setJsonData(parsed);
+                setJsonData(reportData);
             }
             setError('');
         } catch (err) {
@@ -48,9 +60,41 @@ const CreditChekReportViewer = () => {
         })}`;
     };
 
+    // Error Dialog Component using only Tailwind
+    const ErrorDialog = () => showErrorDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg w-full max-w-md mx-4">
+                <div className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-2 text-orange-600">
+                            <Info className="h-5 w-5" />
+                            <h2 className="text-lg font-semibold">Information</h2>
+                        </div>
+                        <button 
+                            onClick={() => setShowErrorDialog(false)}
+                            className="text-gray-400 hover:text-gray-600"
+                        >
+                            <X className="h-5 w-5" />
+                        </button>
+                    </div>
+                    <div className="text-gray-600 mb-6">{errorMessage}</div>
+                    <div className="flex justify-end">
+                        <button
+                            onClick={() => setShowErrorDialog(false)}
+                            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
     if (!jsonData) {
         return (
             <div className="min-h-screen bg-gray-50 p-6">
+                <ErrorDialog />
                 <div className="max-w-4xl mx-auto">
                     <div className="bg-white rounded-xl shadow-sm p-6">
                         <h1 className="text-xl font-semibold text-gray-900 mb-4">Credit Report Generator</h1>
@@ -89,8 +133,10 @@ const CreditChekReportViewer = () => {
         address: jsonData?.address || 'N/A'
     };
 
+    // Updated getValueForSource function to handle the new data structure
     const getValueForSource = (metric, source) => {
-        return creditData[metric]?.find(item => item.source === source)?.value ?? 'N/A';
+        const metricData = creditData[metric]?.find(item => item.source === source);
+        return metricData?.value ?? 'N/A';
     };
 
     const renderStats = (source) => {
@@ -118,6 +164,7 @@ const CreditChekReportViewer = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 p-6">
+            <ErrorDialog />
             <div className="max-w-6xl mx-auto space-y-6">
                 <div className="bg-white rounded-xl shadow-sm p-6">
                     <div className="flex justify-between items-center mb-6">
@@ -151,7 +198,6 @@ const CreditChekReportViewer = () => {
                     </div>
                 </div>
 
-                {/* Summary */}
                 {
                     hasMultiple ?
                         <>
@@ -219,7 +265,6 @@ const CreditChekReportViewer = () => {
                                             <thead className="bg-gray-50">
                                                 <tr>
                                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Loan Provider</th>
-                                                    {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Loan Type</th> */}
                                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
                                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Balance</th>
                                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
@@ -231,7 +276,6 @@ const CreditChekReportViewer = () => {
                                                     getValueForSource('loanPerformance', activeTab).map((loan, index) => (
                                                         <tr key={index}>
                                                             <td className="px-6 py-4 text-sm text-gray-900">{loan.loanProvider}</td>
-                                                            {/* <td className="px-6 py-4 text-sm text-gray-900">{loan.type || '-'}</td> */}
                                                             <td className="px-6 py-4 text-sm text-gray-900">{formatCurrency(loan.loanAmount)}</td>
                                                             <td className="px-6 py-4 text-sm text-gray-900">{formatCurrency(loan.outstandingBalance)}</td>
                                                             <td className="px-6 py-4 text-sm text-gray-900">{loan.status}</td>
@@ -304,7 +348,6 @@ const CreditChekReportViewer = () => {
                                             <thead className="bg-gray-50">
                                                 <tr>
                                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Loan Provider</th>
-                                                    {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Loan Type</th> */}
                                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
                                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Balance</th>
                                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
@@ -316,7 +359,6 @@ const CreditChekReportViewer = () => {
                                                     creditData.loanPerformance.map((loan, index) => (
                                                         <tr key={index}>
                                                             <td className="px-6 py-4 text-sm text-gray-900">{loan.loanProvider}</td>
-                                                            {/* <td className="px-6 py-4 text-sm text-gray-900">{loan.type || '-'}</td> */}
                                                             <td className="px-6 py-4 text-sm text-gray-900">{formatCurrency(loan.loanAmount)}</td>
                                                             <td className="px-6 py-4 text-sm text-gray-900">{formatCurrency(loan.outstandingBalance)}</td>
                                                             <td className="px-6 py-4 text-sm text-gray-900">{loan.status}</td>

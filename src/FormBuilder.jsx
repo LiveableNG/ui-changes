@@ -2,13 +2,9 @@ import React, { useState } from 'react';
 import {
     PlusCircle,
     Trash2,
-    MoveUp,
-    MoveDown,
     Eye,
-    EyeOff,
     Layout,
     Settings,
-    Upload,
     ChevronDown,
     ChevronUp
 } from 'lucide-react';

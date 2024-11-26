@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertCircle, XCircle, X, Info } from 'lucide-react';
+import { AlertCircle, X, Info } from 'lucide-react';
 
 const CreditChekReportViewer = () => {
     const [jsonData, setJsonData] = useState(null);

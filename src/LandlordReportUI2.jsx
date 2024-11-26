@@ -13,7 +13,7 @@ const LandlordReport1 = () => {
       {
         "name": "David's Estate",
         "address": "7 Fisher Street, Dopemu, Lagos Agege, Nigeria",
-        "units": 5,
+        // "units": 5,
         "tenants": 4,
         "rentValue": "₦ 15,000,000",
         "status": "4 Occupied; 1 Vacant",

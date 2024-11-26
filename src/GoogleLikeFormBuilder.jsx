@@ -4,6 +4,65 @@ import { Trash2, Copy, ChevronDown, ChevronRight, ChevronLeft, Plus, Settings, E
 const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedData }) => {
     const [navigationHistory, setNavigationHistory] = useState([0]);
     const [currentSection, setCurrentSection] = useState(0);
+    const [validationErrors, setValidationErrors] = useState({});
+
+    const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    };
+
+    const validatePhone = (phone) => {
+        const re = /^\+?[\d\s-]{10,}$/;
+        return re.test(phone);
+    };
+
+    const validateQuestion = (question, value) => {
+        if (!value && question.required) {
+            return 'This field is required';
+        }
+
+        if (question.key === 'email' && value && !validateEmail(value)) {
+            return 'Please enter a valid email address';
+        }
+
+        if (question.key === 'phone' && value && !validatePhone(value)) {
+            return 'Please enter a valid phone number';
+        }
+
+        if (Array.isArray(value) && question.required && value.length === 0) {
+            return 'Please select at least one option';
+        }
+
+        return null;
+    };
+
+    const validateSection = (sectionIndex) => {
+        const section = formData.sections[sectionIndex];
+        const errors = {};
+        let isValid = true;
+
+        section.questions.forEach(question => {
+            // Skip validation if question is not visible
+            if (!evaluateCondition(question.conditions.visible_if)) {
+                return;
+            }
+
+            // Check if question is required based on conditions
+            const isRequired = question.required ||
+                (question.conditions.required_if && evaluateCondition(question.conditions.required_if));
+
+            if (isRequired) {
+                const error = validateQuestion(question, formResponses[question.id]);
+                if (error) {
+                    errors[question.id] = error;
+                    isValid = false;
+                }
+            }
+        });
+
+        setValidationErrors(errors);
+        return isValid;
+    };
 
     const getNextSection = () => {
         const currentSectionData = formData.sections[currentSection];
@@ -36,15 +95,21 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
     };
 
     // Modified handleNext to update navigation history
-    const handleNext = () => {
+        const handleNext = () => {
+        if (!validateSection(currentSection)) {
+            return; // Stop navigation if validation fails
+        }
+
         const nextSection = getNextSection();
         if (nextSection === 'submit') {
             handleSubmit();
         } else if (nextSection < formData.sections.length) {
             setNavigationHistory(prev => [...prev, nextSection]);
             setCurrentSection(nextSection);
+            setValidationErrors({}); // Clear validation errors when moving to next section
         }
     };
+
 
     // Modified handlePrevious to use navigation history
     const handlePrevious = () => {
@@ -58,6 +123,10 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
     };
 
     const handleSubmit = () => {
+        if (!validateSection(currentSection)) {
+            return;
+        }
+
         setSubmittedData({
             responses: formResponses,
             submittedAt: new Date().toISOString()
@@ -87,10 +156,13 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
 
     const renderQuestion = (question) => {
         if (!evaluateCondition(question.conditions.visible_if)) return null;
-
+    
         const isRequired = question.required ||
             (question.conditions.required_if && evaluateCondition(question.conditions.required_if));
-
+    
+        const error = validationErrors[question.id];
+        const inputClassName = `w-full border rounded-lg p-2 ${error ? 'border-red-500' : ''}`;
+    
         return (
             <div key={question.id} className="mb-6">
                 <label className="block font-medium mb-2">
@@ -100,119 +172,153 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
                 {question.description && (
                     <p className="text-sm text-gray-500 mb-2">{question.description}</p>
                 )}
-
+    
                 {question.type === 'short' && (
-                    <input
-                        type="text"
-                        className="w-full border rounded-lg p-2"
-                        value={formResponses[question.id] || ''}
-                        onChange={(e) => handleInputChange(question.id, e.target.value)}
-                        disabled={question.disabled}
-                        readOnly={question.readonly}
-                    />
+                    <div>
+                        <input
+                            type="text"
+                            className={inputClassName}
+                            value={formResponses[question.id] || ''}
+                            onChange={(e) => handleInputChange(question.id, e.target.value)}
+                            disabled={question.disabled}
+                            readOnly={question.readonly}
+                            placeholder={question.placeholder}
+                        />
+                        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+                    </div>
                 )}
+    
                 {question.type === 'long' && (
-                    <textarea
-                        className="w-full border rounded-lg p-2 min-h-[100px]"
-                        value={formResponses[question.id] || ''}
-                        onChange={(e) => handleInputChange(question.id, e.target.value)}
-                        disabled={question.disabled}
-                        readOnly={question.readonly}
-                    />
+                    <div>
+                        <textarea
+                            className={inputClassName}
+                            value={formResponses[question.id] || ''}
+                            onChange={(e) => handleInputChange(question.id, e.target.value)}
+                            disabled={question.disabled}
+                            readOnly={question.readonly}
+                            placeholder={question.placeholder}
+                        />
+                        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+                    </div>
                 )}
+    
                 {question.type === 'radio' && (
-                    <div className="space-y-2">
-                        {question.options.map((option, index) => (
-                            <label key={index} className="flex items-center gap-2">
-                                <input
-                                    type="radio"
-                                    name={`question_${question.id}`}
-                                    value={option}
-                                    checked={formResponses[question.id] === option}
-                                    onChange={(e) => handleInputChange(question.id, e.target.value)}
-                                    disabled={question.disabled}
-                                    className="border-gray-300 text-blue-500 focus:ring-blue-500"
-                                />
-                                <span>{option}</span>
-                            </label>
-                        ))}
+                    <div>
+                        <div className="space-y-2">
+                            {question.options.map((option, index) => (
+                                <label key={index} className="flex items-center gap-2">
+                                    <input
+                                        type="radio"
+                                        name={`question_${question.id}`}
+                                        value={option}
+                                        checked={formResponses[question.id] === option}
+                                        onChange={(e) => handleInputChange(question.id, e.target.value)}
+                                        disabled={question.disabled}
+                                        className={`border-gray-300 text-blue-500 focus:ring-blue-500 ${error ? 'border-red-500' : ''}`}
+                                    />
+                                    <span>{option}</span>
+                                </label>
+                            ))}
+                        </div>
+                        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
                     </div>
                 )}
+    
                 {question.type === 'checkbox' && (
-                    <div className="space-y-2">
-                        {question.options.map((option, index) => (
-                            <label key={index} className="flex items-center gap-2">
-                                <input
-                                    type="checkbox"
-                                    value={option}
-                                    checked={Array.isArray(formResponses[question.id]) && formResponses[question.id].includes(option)}
-                                    onChange={(e) => {
-                                        const currentValues = Array.isArray(formResponses[question.id])
-                                            ? formResponses[question.id]
-                                            : [];
-                                        const newValues = e.target.checked
-                                            ? [...currentValues, option]
-                                            : currentValues.filter(v => v !== option);
-                                        handleInputChange(question.id, newValues);
-                                    }}
-                                    disabled={question.disabled}
-                                    className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
-                                />
-                                <span>{option}</span>
-                            </label>
-                        ))}
+                    <div>
+                        <div className="space-y-2">
+                            {question.options.map((option, index) => (
+                                <label key={index} className="flex items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        value={option}
+                                        checked={Array.isArray(formResponses[question.id]) && formResponses[question.id].includes(option)}
+                                        onChange={(e) => {
+                                            const currentValues = Array.isArray(formResponses[question.id])
+                                                ? formResponses[question.id]
+                                                : [];
+                                            const newValues = e.target.checked
+                                                ? [...currentValues, option]
+                                                : currentValues.filter(v => v !== option);
+                                            handleInputChange(question.id, newValues);
+                                        }}
+                                        disabled={question.disabled}
+                                        className={`rounded border-gray-300 text-blue-500 focus:ring-blue-500 ${error ? 'border-red-500' : ''}`}
+                                    />
+                                    <span>{option}</span>
+                                </label>
+                            ))}
+                        </div>
+                        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
                     </div>
                 )}
+    
                 {question.type === 'dropdown' && (
-                    <select
-                        className="w-full border rounded-lg p-2"
-                        value={formResponses[question.id] || ''}
-                        onChange={(e) => handleInputChange(question.id, e.target.value)}
-                        disabled={question.disabled}
-                    >
-                        <option value="">Select an option</option>
-                        {question.options.map((option, index) => (
-                            <option key={index} value={option}>
-                                {option}
-                            </option>
-                        ))}
-                    </select>
+                    <div>
+                        <select
+                            className={inputClassName}
+                            value={formResponses[question.id] || ''}
+                            onChange={(e) => handleInputChange(question.id, e.target.value)}
+                            disabled={question.disabled}
+                        >
+                            <option value="">Select an option</option>
+                            {question.options.map((option, index) => (
+                                <option key={index} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+                    </div>
                 )}
+    
                 {question.type === 'file' && (
-                    <input
-                        type="file"
-                        className="block w-full text-sm text-gray-500
-                            file:mr-4 file:py-2 file:px-4
-                            file:rounded-md file:border-0
-                            file:text-sm file:font-semibold
-                            file:bg-blue-50 file:text-blue-700
-                            hover:file:bg-blue-100"
-                        onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            handleInputChange(question.id, file ? file.name : '');
-                        }}
-                        disabled={question.disabled}
-                    />
+                    <div>
+                        <input
+                            type="file"
+                            className={`block w-full text-sm text-gray-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-md file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-blue-50 file:text-blue-700
+                                hover:file:bg-blue-100
+                                ${error ? 'border-red-500' : ''}`}
+                            onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                handleInputChange(question.id, file ? file.name : '');
+                            }}
+                            disabled={question.disabled}
+                        />
+                        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+                    </div>
                 )}
+    
                 {question.type === 'date' && (
-                    <input
-                        type="date"
-                        className="w-full border rounded-lg p-2"
-                        value={formResponses[question.id] || ''}
-                        onChange={(e) => handleInputChange(question.id, e.target.value)}
-                        disabled={question.disabled}
-                        readOnly={question.readonly}
-                    />
+                    <div>
+                        <input
+                            type="date"
+                            className={inputClassName}
+                            value={formResponses[question.id] || ''}
+                            onChange={(e) => handleInputChange(question.id, e.target.value)}
+                            disabled={question.disabled}
+                            readOnly={question.readonly}
+                        />
+                        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+                    </div>
                 )}
+    
                 {question.type === 'time' && (
-                    <input
-                        type="time"
-                        className="w-full border rounded-lg p-2"
-                        value={formResponses[question.id] || ''}
-                        onChange={(e) => handleInputChange(question.id, e.target.value)}
-                        disabled={question.disabled}
-                        readOnly={question.readonly}
-                    />
+                    <div>
+                        <input
+                            type="time"
+                            className={inputClassName}
+                            value={formResponses[question.id] || ''}
+                            onChange={(e) => handleInputChange(question.id, e.target.value)}
+                            disabled={question.disabled}
+                            readOnly={question.readonly}
+                        />
+                        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+                    </div>
                 )}
             </div>
         );
@@ -222,11 +328,61 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
 
     return (
         <div className="bg-white rounded-lg shadow-sm p-6">
-            {/* Progress indicator */}
-            <div className="mb-6 flex items-center gap-2 text-sm text-gray-600">
-                <span>Section {currentSection + 1} of {formData.sections.length}:</span>
-                <span className="font-medium">{currentSectionData.title}</span>
-            </div>
+
+        {/* Progress indicator */}
+        <div className="mb-6">
+            {/* Progress text */}
+            {/* <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <span>Section {currentSection + 1} of {formData.sections.length}:</span>
+                    <span className="font-medium">{currentSectionData.title}</span>
+                </div>
+                <span className="text-sm text-gray-600">
+                    {Math.round((currentSection + 1) / formData.sections.length * 100)}% completed
+                </span>
+            </div> */}
+            
+            {/* Progress bar */}
+            {/* <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div 
+                    className="h-full bg-blue-500 rounded-full transition-all duration-300 ease-in-out"
+                    style={{ 
+                        width: `${((currentSection + 1) / formData.sections.length) * 100}%`
+                    }}
+                />
+            </div> */}
+            
+            {/* Section pills */}
+            {/* <div className="flex items-center justify-between mt-2">
+                {formData.sections.map((section, index) => (
+                    <div 
+                        key={section.id}
+                        className={`flex items-center ${index < formData.sections.length - 1 ? 'flex-1' : ''}`}
+                    >
+                        <div 
+                            className={`
+                                w-6 h-6 rounded-full flex items-center justify-center text-xs
+                                ${index < currentSection ? 'bg-blue-500 text-white' : 
+                                index === currentSection ? 'bg-blue-500 text-white' : 
+                                'bg-gray-200 text-gray-600'}
+                            `}
+                        >
+                            {index + 1}
+                        </div>
+                        {index < formData.sections.length - 1 && (
+                            <div className="flex-1 h-[2px] mx-2 bg-gray-200">
+                                <div 
+                                    className="h-full bg-blue-500 transition-all duration-300 ease-in-out"
+                                    style={{ 
+                                        width: index < currentSection ? '100%' : '0%'
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div> */}
+        </div>
 
             <h2 className="text-xl font-semibold mb-4">{currentSectionData.title}</h2>
             {currentSectionData.description && (

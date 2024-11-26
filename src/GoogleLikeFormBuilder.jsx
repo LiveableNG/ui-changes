@@ -708,7 +708,8 @@ const GoogleLikeFormBuilder = () => {
         setFormData({
             ...formData,
             sections: formData.sections.map(section => {
-                if (section.id === section.id) {
+                // This was the bug - comparing section.id with section.id instead of sectionId
+                if (section.id === sectionId) {  // <-- Fixed this line
                     return {
                         ...section,
                         questions: section.questions.map(question => {
@@ -729,6 +730,7 @@ const GoogleLikeFormBuilder = () => {
             })
         });
     };
+
 
     const updateQuestionCondition = (sectionId, questionId, conditionType, condition) => {
         setFormData({
@@ -1158,15 +1160,13 @@ const GoogleLikeFormBuilder = () => {
                                                                             ))}
                                                                         </select>
 
-                                                                        {['equals', 'not_equals'].includes(question.conditions.required_if?.type) && (
+                                                                        {['equals', 'not_equals'].includes(question.conditions.required_if.type) && (
                                                                             <>
-                                                                                {/* Find selected question's options */}
                                                                                 {(() => {
-                                                                                    const selectedQuestion = question.conditions.required_if?.questionId ?
-                                                                                        formData.sections.flatMap(s => s.questions).find(q => q.id === question.conditions.required_if.questionId)
-                                                                                        : null;
+                                                                                    const selectedQuestion = formData.sections
+                                                                                        .flatMap(s => s.questions)
+                                                                                        .find(q => q.id.toString() === question.conditions.required_if.questionId?.toString());
                                                                                     const hasOptions = selectedQuestion?.options?.length > 0;
-                                                                                    console.log({hasOptions, selectedQuestion})
 
                                                                                     return (
                                                                                         <div className="flex-1">
@@ -1244,12 +1244,12 @@ const GoogleLikeFormBuilder = () => {
                                                                             ))}
                                                                         </select>
 
-                                                                        {['equals', 'not_equals'].includes(question.conditions.visible_if?.type) && (
+                                                                        {['equals', 'not_equals'].includes(question.conditions.visible_if.type) && (
                                                                             <>
                                                                                 {(() => {
-                                                                                    const selectedQuestion = question.conditions.visible_if?.questionId ?
-                                                                                        formData.sections.flatMap(s => s.questions).find(q => q.id === question.conditions.visible_if.questionId)
-                                                                                        : null;
+                                                                                    const selectedQuestion = formData.sections
+                                                                                        .flatMap(s => s.questions)
+                                                                                        .find(q => q.id.toString() === question.conditions.visible_if.questionId?.toString());
                                                                                     const hasOptions = selectedQuestion?.options?.length > 0;
 
                                                                                     return (

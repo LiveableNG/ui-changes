@@ -1,3 +1,4 @@
+/**
 {
   "reportInfo": {
     "date": "2024-11-21",
@@ -38,7 +39,20 @@
         "needsRepair": 15,
         "totalPending": 23
       }
-    }
+    },
+    "supportingImages": [
+      {
+        "title": "Aerial View",
+        "description": "Drone shot of all properties",
+        "image": "/api/placeholder/800/600"
+      },
+      {
+        "title": "Management Team Visit",
+        "description": "Recent property inspection by management",
+        "image": "/api/placeholder/800/600"
+      }
+    ],
+    "additionalNotes": "Comprehensive property inspection was conducted on all properties with focus on structural integrity and tenant safety."
   },
   "properties": [
     {
@@ -261,6 +275,347 @@
           "role": "Security",
           "shift": "Day",
           "contact": "+234 XXX XXXX XXX"
+        }
+      ]
+    }
+  ]
+}
+
+*/
+{
+  "landlordName": "Mrs Adamu Bube",
+  "date": "21st, November 2024",
+  "overview": {
+    "totalProperties": 3,
+    "totalUnits": 15,
+    "totalTenants": 12
+  },
+  "reportInfo": {
+    "preparedBy": "John Doe",
+    "reportNumber": "RPT-2024-11-21",
+    "reportPeriod": "October - November 2024",
+    "supportingImages": [
+      {
+        "title": "Aerial View",
+        "description": "Drone shot of all properties",
+        "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+      },
+      {
+        "title": "Management Team Visit",
+        "description": "Recent property inspection by management",
+        "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+      },
+      {
+        "title": "Management Team Visit",
+        "description": "Recent property inspection by management",
+        "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+      },
+      {
+        "title": "Management Team Visit",
+        "description": "Recent property inspection by management",
+        "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+      },
+      {
+        "title": "Management Team Visit",
+        "description": "Recent property inspection by management",
+        "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+      },
+      {
+        "title": "Management Team Visit",
+        "description": "Recent property inspection by management",
+        "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+      }
+    ],
+    "additionalNotes": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus odio id urna ultrices, non cursus est aliquet. Mauris quis tellus ac orci pharetra fringilla. Mauris tincidunt semper placerat. Nam fermentum mi non quam posuere, eu aliquet orci vehicula. Vivamus ornare mattis ex, sed imperdiet orci egestas vitae. Morbi risus sem, molestie sed molestie sit amet, mattis id dui. Phasellus a lacus odio. Ut vestibulum arcu eu nisi feugiat, in viverra urna consequat. Aenean nec est suscipit, facilisis lacus nec, elementum mauris. Curabitur fringilla imperdiet est, quis efficitur nulla tincidunt nec. Morbi a pellentesque lorem. Nulla aliquam et nunc at accumsan. Donec dictum dapibus eros, ut blandit magna mattis at. Vestibulum porttitor vitae ligula eget facilisis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer tempus justo enim. Sed leo dolor, pellentesque ut nisi a, efficitur tempus nibh. Sed facilisis viverra consectetur. Aliquam ligula augue, vehicula et posuere ultricies, auctor a mi. Sed consequat dolor eu sem lacinia, varius porttitor risus feugiat. Aliquam non fermentum sapien, a scelerisque nisl. Sed et maximus ligula. In convallis euismod scelerisque. Maecenas facilisis nunc ac nibh accumsan, eget interdum ipsum commodo. Maecenas consequat nisl quam, eget sagittis libero iaculis quis. Praesent laoreet nisi ac lobortis laoreet. Aenean ultricies egestas suscipit. Nullam at blandit leo. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam facilisis pellentesque tellus, eu congue mi pharetra aliquet. Donec risus tellus, elementum eu tellus ut, pulvinar ultrices nibh."
+  },
+  "properties": [
+    {
+      "name": "David's Estate",
+      "address": "7 Fisher Street, Dopemu, Lagos Agege, Nigeria",
+      "totalUnits": 5,
+      "totalTenants": 4,
+      "rentValue": {
+        "NGN": "₦ 15,000,000",
+        "USD": "$ 12,500",
+        "EUR": "€ 11,500"
+      },
+      "status": "4 Occupied; 1 Vacant",
+      "units": [
+        {
+          "unit": "Suite 100",
+          "amount": "₦ 1,500,000",
+          "period": "15th, Aug 2024 - 14th, Aug 2025",
+          "status": "paid"
+        },
+        {
+          "unit": "Suite 200",
+          "amount": "$ 2,000,000",
+          "period": "7th, Nov 2024 - 6th, Nov 2025",
+          "status": "part-payment"
+        },
+        {
+          "unit": "Suite 300",
+          "amount": "₦ 7,600,000",
+          "period": "29th, May 2024 - 29th, May 2025",
+          "status": "paid"
+        },
+        {
+          "unit": "Suite 400",
+          "amount": "₦ 250,000",
+          "period": "29th, May 2024 - 29th, May 2025",
+          "status": "part-payment"
+        },
+        {
+          "unit": "Suite 500",
+          "amount": "₦ 3,250,000",
+          "period": "1st, Jan 2024 - 31st, Dec 2024",
+          "status": "vacant"
+        }
+      ],
+      "expenses": [
+        {
+          "category": "Power",
+          "amount": "$ 5,600",
+          "complaint": "Purchase of 50L fuel"
+        },
+        {
+          "category": "Maintenance/Repair",
+          "amount": "$ 9,000",
+          "complaint": "A.C Repair"
+        },
+        {
+          "category": "Maintenance/Repair",
+          "amount": "$ 110,000",
+          "complaint": "Gate Repair"
+        },
+        {
+          "category": "Security",
+          "amount": "₦ 150,000",
+          "complaint": "Monthly Security Fee"
+        }
+      ],
+      "inspections": [
+        {
+          "unit": "Suite 100",
+          "item": "Air Conditioner",
+          "condition": "Needs Repair",
+          "remark": "Gas needs to be refilled",
+          "images": [
+            {
+              "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+            },
+            {
+              "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+            }
+          ]
+        },
+        {
+          "unit": "Suite 200",
+          "item": "Chandelier",
+          "condition": "Critical",
+          "remark": "It is almost falling down",
+          "images": [
+            {
+              "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+            },
+            {
+              "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+            }
+          ]
+        },
+        {
+          "unit": "Suite 300",
+          "item": "Water Heater",
+          "condition": "Needs Repair",
+          "remark": "Socket issues",
+          "images": [
+            {
+              "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+            },
+            {
+              "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Wakeman Heights",
+      "address": "294 Borno Way, Alagomeji, Yaba, Lagos State",
+      "totalUnits": 4,
+      "totalTenants": 3,
+      "rentValue": {
+        "NGN": "₦ 15,000,000",
+        "USD": "$ 12,500",
+        "EUR": "€ 11,500"
+      },
+      "status": "3 Occupied; 1 Vacant",
+      "units": [
+        {
+          "unit": "Unit 1",
+          "amount": "₦ 1,500,000",
+          "period": "15th, Aug 2024 - 14th, Aug 2025",
+          "status": "paid"
+        },
+        {
+          "unit": "Unit 2",
+          "amount": "$ 2,000,000",
+          "period": "7th, Nov 2024 - 6th, Nov 2025",
+          "status": "part-payment"
+        },
+        {
+          "unit": "Unit 3",
+          "amount": "₦ 7,600,000",
+          "period": "29th, May 2024 - 29th, May 2025",
+          "status": "vacant"
+        },
+        {
+          "unit": "Unit 4",
+          "amount": "₦ 250,000",
+          "period": "29th, May 2024 - 29th, May 2025",
+          "status": "paid"
+        }
+      ],
+      "expenses": [
+        {
+          "category": "Power",
+          "amount": "₦ 5,600",
+          "complaint": "Purchase of 50L fuel"
+        },
+        {
+          "category": "Maintenance/Repair",
+          "amount": "₦ 9,000",
+          "complaint": "A.C Repair"
+        },
+        {
+          "category": "Security",
+          "amount": "₦ 120,000",
+          "complaint": "Monthly Security Fee"
+        }
+      ],
+      "inspections": [
+        {
+          "unit": "Unit 1",
+          "item": "Water Closet",
+          "condition": "Critical",
+          "remark": "Flusher no longer works",
+          "images": [
+            {
+              "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+            }
+          ]
+        },
+        {
+          "unit": "Unit 2",
+          "item": "Bathroom tap",
+          "condition": "Needs Repair",
+          "remark": "Clogged with sand from well",
+          "images": [
+            {
+              "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+            },
+            {
+              "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+            },
+            {
+              "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Amity",
+      "address": "2, Funso Street Link, Yaba, Lagos State",
+      "totalUnits": 6,
+      "totalTenants": 5,
+      "rentValue": {
+        "NGN": "₦ 15,000,000",
+        "USD": "$ 12,500",
+        "EUR": "€ 11,500"
+      },
+      "status": "5 Occupied; 1 Vacant",
+      "units": [
+        {
+          "unit": "Unit A",
+          "amount": "$ 12,000,000",
+          "period": "1st, Jan 2024 - 31st, Dec 2024",
+          "status": "paid"
+        },
+        {
+          "unit": "Unit B",
+          "amount": "$ 12,000,000",
+          "period": "1st, Mar 2024 - 28th, Feb 2025",
+          "status": "paid"
+        },
+        {
+          "unit": "Unit C",
+          "amount": "$ 8,000,000",
+          "period": "1st, Jun 2024 - 31st, May 2025",
+          "status": "part-payment"
+        },
+        {
+          "unit": "Unit D",
+          "amount": "$ 8,000,000",
+          "period": "1st, Jul 2024 - 30th, Jun 2025",
+          "status": "vacant"
+        },
+        {
+          "unit": "Unit E",
+          "amount": "$ 5,000,000",
+          "period": "1st, Sep 2024 - 31st, Aug 2025",
+          "status": "paid"
+        },
+        {
+          "unit": "Unit F",
+          "amount": "$ 5,000,000",
+          "period": "1st, Oct 2024 - 30th, Sep 2025",
+          "status": "paid"
+        }
+      ],
+      "expenses": [
+        {
+          "category": "Power",
+          "amount": "$ 10,000",
+          "complaint": "Generator Maintenance"
+        },
+        {
+          "category": "Maintenance/Repair",
+          "amount": "$ 15,000",
+          "complaint": "Building Painting"
+        },
+        {
+          "category": "Security",
+          "amount": "$ 5,000",
+          "complaint": "Monthly Security Fee"
+        },
+        {
+          "category": "Cleaning",
+          "amount": "$ 3,000",
+          "complaint": "Monthly Cleaning Service"
+        }
+      ],
+      "inspections": [
+        {
+          "unit": "Unit A",
+          "item": "Change over switch",
+          "condition": "Critical",
+          "remark": "Causes electrical shocks when touched",
+          "images": []
+        },
+        {
+          "unit": "Unit C",
+          "item": "External bulb",
+          "condition": "Needs Repair",
+          "remark": "Should be replaced",
+          "images": [
+            {
+              "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+            },
+            {
+              "image": "https://www.claudeusercontent.com/api/placeholder/300/300"
+            }
+          ]
         }
       ]
     }

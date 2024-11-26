@@ -1,0 +1,44 @@
+Create a React component for a landlord property management report with the following features:
+1. Real-time JSON editor with:
+- A fixed toggle button in the top-right corner
+- A sliding panel on the right side (1/3 width of screen)
+- JSON validation with error handling
+- Full-height textarea with monospace font
+2. Default JSON data structure containing:
+- Landlord name and date
+- Overview statistics (properties, units, tenants)
+- Property details including:
+  * Name and address
+  * Rent value and occupancy status
+  * Units with amount, period, and payment status
+  * Expenses with category, amount, and complaint
+  * Inspections with unit, item, condition, remark, and image
+3. Report preview layout:
+- A4 page width (210mm)
+- White background with shadow
+- Responsive margin adjustment when JSON panel is open/closed
+- Clear section separation with bottom borders
+4. Report sections in order:
+- Header with company name and date
+- Introduction with landlord name and overview stats in 3-column grid
+- Property Overview with cards for each property
+- Rent Report with tables showing unit details
+- Expense Report with tables showing expenses
+- Inspection Report with two-column layout for details and images, a report and have multiple images
+5. Styling requirements:
+- Use only Tailwind CSS
+- Include break-inside-avoid for PDF compatibility
+- Rounded corners and subtle shadows
+- Status indicators with color-coding:
+  * Paid: green
+  * Part-payment: yellow
+  * Vacant: red
+- Responsive tables with proper overflow handling
+- Image containers with aspect ratio 4:3
+6. Technical requirements:
+- React hooks (useState) for state management
+- JSON parsing and error handling
+- Smooth transitions for panel sliding
+- Proper key usage in all mapped elements
+- Null checks for optional data
+The component should be a self-contained unit requiring no additional dependencies beyond React and Tailwind CSS, with all sample data included within the component itself.

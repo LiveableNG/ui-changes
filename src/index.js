@@ -7,13 +7,17 @@ import FormBuilder from './FormBuilder';
 import './index.css';
 import CreditChekReportViewer from './CreditChekReportViewer';
 import PropertyReport from './LandlordReportUI';
+import LandlordReport1 from './LandlordReportUI2';
+import GoogleLikeFormBuilder from './GoogleLikeFormBuilder';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     {/* <FormBuilder /> */}
     {/* <CreditChekReportViewer /> */}
-    <PropertyReport />
+    {/* <PropertyReport /> */}
+    {/* <LandlordReport1 /> */}
+    <GoogleLikeFormBuilder />
   </React.StrictMode>
 );
 

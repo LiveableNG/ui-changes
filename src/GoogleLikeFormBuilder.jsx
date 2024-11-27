@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Trash2, Copy, ChevronDown, ChevronRight, ChevronLeft, Plus, Settings, Eye, EyeOff, ArrowRight, GripVertical } from 'lucide-react';
 import {
     DndContext,
-    DragOverlay,
     closestCenter,
     KeyboardSensor,
     PointerSensor,

@@ -1,5 +1,23 @@
 import React, { useState } from 'react';
-import { Trash2, Copy, ChevronDown, ChevronRight, ChevronLeft, Plus, Settings, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import { Trash2, Copy, ChevronDown, ChevronRight, ChevronLeft, Plus, Settings, Eye, EyeOff, ArrowRight, GripVertical } from 'lucide-react';
+import {
+    DndContext,
+    DragOverlay,
+    closestCenter,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    closestCorners,
+} from '@dnd-kit/core';
+import {
+    arrayMove,
+    SortableContext,
+    sortableKeyboardCoordinates,
+    verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedData }) => {
     const [navigationHistory, setNavigationHistory] = useState([0]);
@@ -95,7 +113,7 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
     };
 
     // Modified handleNext to update navigation history
-        const handleNext = () => {
+    const handleNext = () => {
         if (!validateSection(currentSection)) {
             return; // Stop navigation if validation fails
         }
@@ -156,13 +174,13 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
 
     const renderQuestion = (question) => {
         if (!evaluateCondition(question.conditions.visible_if)) return null;
-    
+
         const isRequired = question.required ||
             (question.conditions.required_if && evaluateCondition(question.conditions.required_if));
-    
+
         const error = validationErrors[question.id];
         const inputClassName = `w-full border rounded-lg p-2 ${error ? 'border-red-500' : ''}`;
-    
+
         return (
             <div key={question.id} className="mb-6">
                 <label className="block font-medium mb-2">
@@ -172,7 +190,7 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
                 {question.description && (
                     <p className="text-sm text-gray-500 mb-2">{question.description}</p>
                 )}
-    
+
                 {question.type === 'short' && (
                     <div>
                         <input
@@ -187,7 +205,7 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
                         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
                     </div>
                 )}
-    
+
                 {question.type === 'long' && (
                     <div>
                         <textarea
@@ -201,7 +219,7 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
                         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
                     </div>
                 )}
-    
+
                 {question.type === 'radio' && (
                     <div>
                         <div className="space-y-2">
@@ -223,7 +241,7 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
                         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
                     </div>
                 )}
-    
+
                 {question.type === 'checkbox' && (
                     <div>
                         <div className="space-y-2">
@@ -252,7 +270,7 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
                         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
                     </div>
                 )}
-    
+
                 {question.type === 'dropdown' && (
                     <div>
                         <select
@@ -271,7 +289,7 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
                         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
                     </div>
                 )}
-    
+
                 {question.type === 'file' && (
                     <div>
                         <input
@@ -292,7 +310,7 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
                         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
                     </div>
                 )}
-    
+
                 {question.type === 'date' && (
                     <div>
                         <input
@@ -306,7 +324,7 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
                         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
                     </div>
                 )}
-    
+
                 {question.type === 'time' && (
                     <div>
                         <input
@@ -329,10 +347,10 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
     return (
         <div className="bg-white rounded-lg shadow-sm p-6">
 
-        {/* Progress indicator */}
-        <div className="mb-6">
-            {/* Progress text */}
-            {/* <div className="flex items-center justify-between mb-2">
+            {/* Progress indicator */}
+            <div className="mb-6">
+                {/* Progress text */}
+                {/* <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                     <span>Section {currentSection + 1} of {formData.sections.length}:</span>
                     <span className="font-medium">{currentSectionData.title}</span>
@@ -341,9 +359,9 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
                     {Math.round((currentSection + 1) / formData.sections.length * 100)}% completed
                 </span>
             </div> */}
-            
-            {/* Progress bar */}
-            {/* <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+
+                {/* Progress bar */}
+                {/* <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div 
                     className="h-full bg-blue-500 rounded-full transition-all duration-300 ease-in-out"
                     style={{ 
@@ -351,9 +369,9 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
                     }}
                 />
             </div> */}
-            
-            {/* Section pills */}
-            {/* <div className="flex items-center justify-between mt-2">
+
+                {/* Section pills */}
+                {/* <div className="flex items-center justify-between mt-2">
                 {formData.sections.map((section, index) => (
                     <div 
                         key={section.id}
@@ -382,7 +400,7 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
                     </div>
                 ))}
             </div> */}
-        </div>
+            </div>
 
             <h2 className="text-xl font-semibold mb-4">{currentSectionData.title}</h2>
             {currentSectionData.description && (
@@ -428,6 +446,83 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
                         </button>
                     )}
                 </div>
+            </div>
+        </div>
+    );
+};
+
+// Sortable Section Component
+const SortableSection = ({ section, children }) => {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id: section.id });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+    };
+
+    return (
+        <div
+            ref={setNodeRef}
+            style={style}
+            className="bg-white rounded-lg shadow-sm mb-6"
+        >
+            <div className="p-6 border-b">
+                <div className="flex items-center gap-4">
+                    <button
+                        className="text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing"
+                        {...attributes}
+                        {...listeners}
+                    >
+                        <GripVertical size={20} />
+                    </button>
+                    {children}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Sortable Question Component
+const SortableQuestion = ({ question, children }) => {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id: question.id });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+    };
+
+    return (
+        <div
+            ref={setNodeRef}
+            style={style}
+            className={`mb-6 p-4 border rounded-lg hover:border-blue-500 ${!question.visible ? 'opacity-50' : ''
+                }`}
+        >
+            <div className="flex items-center gap-4 mb-2">
+                <button
+                    className="text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing"
+                    {...attributes}
+                    {...listeners}
+                >
+                    <GripVertical size={20} />
+                </button>
+                {children}
             </div>
         </div>
     );
@@ -706,6 +801,68 @@ const GoogleLikeFormBuilder = () => {
     const [formResponses, setFormResponses] = useState({});
     const [submittedData, setSubmittedData] = useState(null);
 
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+    const handleDragEnd = (event) => {
+        const { active, over } = event;
+
+        if (!over) return;
+
+        if (active.id !== over.id) {
+            setFormData((formData) => {
+                const oldIndex = formData.sections.findIndex(
+                    (section) => section.id === active.id
+                );
+                const newIndex = formData.sections.findIndex(
+                    (section) => section.id === over.id
+                );
+
+                return {
+                    ...formData,
+                    sections: arrayMove(formData.sections, oldIndex, newIndex),
+                };
+            });
+        }
+    };
+
+    const handleQuestionDragEnd = (sectionId) => (event) => {
+        const { active, over } = event;
+
+        if (!over) return;
+
+        if (active.id !== over.id) {
+            setFormData((formData) => {
+                const section = formData.sections.find((s) => s.id === sectionId);
+                const oldIndex = section.questions.findIndex(
+                    (question) => question.id === active.id
+                );
+                const newIndex = section.questions.findIndex(
+                    (question) => question.id === over.id
+                );
+
+                const newQuestions = arrayMove(
+                    section.questions,
+                    oldIndex,
+                    newIndex
+                );
+
+                return {
+                    ...formData,
+                    sections: formData.sections.map((s) =>
+                        s.id === sectionId
+                            ? { ...s, questions: newQuestions }
+                            : s
+                    ),
+                };
+            });
+        }
+    };
+
     const questionTypes = [
         { id: 'short', label: 'Short Answer' },
         { id: 'long', label: 'Paragraph' },
@@ -887,7 +1044,6 @@ const GoogleLikeFormBuilder = () => {
         });
     };
 
-
     const updateQuestionCondition = (sectionId, questionId, conditionType, condition) => {
         setFormData({
             ...formData,
@@ -997,7 +1153,6 @@ const GoogleLikeFormBuilder = () => {
         });
     };
 
-    // Add this helper function for type-specific description placeholders
     const getDescriptionPlaceholder = (type) => {
         const placeholders = {
             short: 'Enter a brief help text for this short answer question',
@@ -1062,701 +1217,734 @@ const GoogleLikeFormBuilder = () => {
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         />
                     </div>
-                    {formData.sections.map((section) => (
-                        <div key={section.id} className="bg-white rounded-lg shadow-sm mb-6">
-                            {/* Section Header */}
-                            <div className="p-6 border-b">
-                                <div className="flex items-center gap-4">
-                                    <button
-                                        onClick={() => toggleSectionCollapse(section.id)}
-                                        className="text-gray-500 hover:text-gray-700"
-                                    >
-                                        {section.isCollapsed ? <ChevronRight /> : <ChevronDown />}
-                                    </button>
-                                    <input
-                                        className="flex-1 text-xl font-semibold border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none"
-                                        value={section.title}
-                                        onChange={(e) => {
-                                            setFormData({
-                                                ...formData,
-                                                sections: formData.sections.map(s =>
-                                                    s.id === section.id ? { ...s, title: e.target.value } : s
-                                                )
-                                            });
-                                        }}
-                                    />
-                                    <button
-                                        onClick={() => deleteSection(section.id)}
-                                        className="text-gray-500 hover:text-red-500"
-                                    >
-                                        <Trash2 size={20} />
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Section Content */}
-                            {!section.isCollapsed && (
-                                <div className="p-6">
-                                    {/* Questions */}
-                                    {section.questions.map((question) => (
-                                        <div
-                                            key={question.id}
-                                            className={`mb-6 p-4 border rounded-lg hover:border-blue-500 ${!question.visible ? 'opacity-50' : ''
-                                                }`}
-                                        >
-                                            {/* Question Header */}
-                                            <div className="flex items-center gap-4 mb-2">
-                                                <select
-                                                    className="border rounded px-2 py-1"
-                                                    value={question.type}
-                                                    onChange={(e) => updateQuestionType(section.id, question.id, e.target.value)}
+                    <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        onDragEnd={handleDragEnd}
+                    >
+                        <SortableContext
+                            items={formData.sections.map((s) => s.id)}
+                            strategy={verticalListSortingStrategy}
+                        >
+                            {formData.sections.map((section) => (
+                                <SortableSection key={section.id} section={section}>
+                                    <div key={section.id} className="bg-white rounded-lg shadow-sm mb-6">
+                                        {/* Section Header */}
+                                        <div className="p-6 border-b">
+                                            <div className="flex items-center gap-4">
+                                                <button
+                                                    onClick={() => toggleSectionCollapse(section.id)}
+                                                    className="text-gray-500 hover:text-gray-700"
                                                 >
-                                                    {questionTypes.map(type => (
-                                                        <option key={type.id} value={type.id}>{type.label}</option>
-                                                    ))}
-                                                </select>
-                                                {hasTemplates(question.type) && (
-                                                    <select
-                                                        className="border rounded px-2 py-1 text-sm"
-                                                        value=""
-                                                        onChange={(e) => {
-                                                            const suggestion = questionSuggestions[question.type]?.find(
-                                                                s => s.key === e.target.value
-                                                            );
-                                                            if (suggestion) {
-                                                                setFormData({
-                                                                    ...formData,
-                                                                    sections: formData.sections.map(s =>
-                                                                        s.id === section.id ? {
-                                                                            ...s,
-                                                                            questions: s.questions.map(q =>
-                                                                                q.id === question.id ? {
-                                                                                    ...q,
-                                                                                    title: suggestion.label,
-                                                                                    key: suggestion.key,
-                                                                                    placeholder: suggestion.placeholder || '',
-                                                                                    options: suggestion.options || q.options
-                                                                                } : q
-                                                                            )
-                                                                        } : s
-                                                                    )
-                                                                });
-                                                            }
-                                                        }}
-                                                    >
-                                                        <option value="">Select a template</option>
-                                                        {questionSuggestions[question.type]?.map(suggestion => (
-                                                            <option key={suggestion.key} value={suggestion.key}>
-                                                                {suggestion.label}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                )}
+                                                    {section.isCollapsed ? <ChevronRight /> : <ChevronDown />}
+                                                </button>
                                                 <input
-                                                    className="flex-1 font-medium border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none"
-                                                    value={question.title}
+                                                    className="flex-1 text-xl font-semibold border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none"
+                                                    value={section.title}
                                                     onChange={(e) => {
                                                         setFormData({
                                                             ...formData,
                                                             sections: formData.sections.map(s =>
-                                                                s.id === section.id ? {
-                                                                    ...s,
-                                                                    questions: s.questions.map(q =>
-                                                                        q.id === question.id ? { ...q, title: e.target.value } : q
-                                                                    )
-                                                                } : s
+                                                                s.id === section.id ? { ...s, title: e.target.value } : s
                                                             )
                                                         });
                                                     }}
                                                 />
-                                                {question.description && (
-                                                    <div className="mt-1 text-sm text-gray-500">
-                                                        {question.description}
-                                                    </div>
-                                                )}
                                                 <button
-                                                    onClick={() => duplicateQuestion(section.id, question.id)}
-                                                    className="text-gray-500 hover:text-blue-500"
-                                                >
-                                                    <Copy size={20} />
-                                                </button>
-                                                <button
-                                                    onClick={() => setSelectedQuestion(question.id === selectedQuestion ? null : question.id)}
-                                                    className={`text-gray-500 hover:text-blue-500 ${selectedQuestion === question.id ? 'text-blue-500' : ''
-                                                        }`}
-                                                >
-                                                    <Settings size={20} />
-                                                </button>
-                                                <button
-                                                    onClick={() => deleteQuestion(section.id, question.id)}
+                                                    onClick={() => deleteSection(section.id)}
                                                     className="text-gray-500 hover:text-red-500"
                                                 >
                                                     <Trash2 size={20} />
                                                 </button>
                                             </div>
+                                        </div>
 
-                                            {/* Advanced Settings Panel */}
-                                            {selectedQuestion === question.id && (
-                                                <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                                                    <div className="space-y-4">
-                                                        {/* Basic Settings */}
-                                                        <div className="flex flex-wrap gap-4">
-                                                            <label className="flex items-center gap-2">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    checked={question.required}
-                                                                    onChange={() => toggleQuestionSetting(section.id, question.id, 'required')}
-                                                                    className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
-                                                                />
-                                                                <span className="text-sm">Required</span>
-                                                            </label>
-                                                            <label className="flex items-center gap-2">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    checked={question.readonly}
-                                                                    onChange={() => toggleQuestionSetting(section.id, question.id, 'readonly')}
-                                                                    className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
-                                                                />
-                                                                <span className="text-sm">Read Only</span>
-                                                            </label>
-                                                            <label className="flex items-center gap-2">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    checked={question.disabled}
-                                                                    onChange={() => toggleQuestionSetting(section.id, question.id, 'disabled')}
-                                                                    className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
-                                                                />
-                                                                <span className="text-sm">Disabled</span>
-                                                            </label>
-                                                            <label className="flex items-center gap-2">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    checked={question.visible}
-                                                                    onChange={() => toggleQuestionSetting(section.id, question.id, 'visible')}
-                                                                    className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
-                                                                />
-                                                                <span className="text-sm">Visible</span>
-                                                            </label>
-                                                        </div>
-
-                                                        <div className="mt-4">
-                                                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                                                Description/Help Text
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                className="w-full border rounded-lg p-2 text-sm"
-                                                                placeholder={getDescriptionPlaceholder(question.type)}
-                                                                value={question.description || ''}
-                                                                onChange={(e) => {
-                                                                    setFormData({
-                                                                        ...formData,
-                                                                        sections: formData.sections.map(s =>
-                                                                            s.id === section.id ? {
-                                                                                ...s,
-                                                                                questions: s.questions.map(q =>
-                                                                                    q.id === question.id ? {
-                                                                                        ...q,
-                                                                                        description: e.target.value
-                                                                                    } : q
-                                                                                )
-                                                                            } : s
-                                                                        )
-                                                                    });
-                                                                }}
-                                                            />
-                                                        </div>
-
-                                                        {/* Conditional Logic */}
-                                                        <div className="space-y-2">
-                                                            <h4 className="font-medium text-sm">Conditions</h4>
-
-                                                            {/* Required If */}
-                                                            <div className="flex items-center gap-2">
-                                                                <label className="text-sm min-w-[100px]">Required if:</label>
-                                                                <select
-                                                                    className="text-sm border rounded px-2 py-1 flex-1"
-                                                                    value={question.conditions.required_if?.type || ''}
-                                                                    onChange={(e) => {
-                                                                        const value = e.target.value;
-                                                                        updateQuestionCondition(section.id, question.id, 'required_if',
-                                                                            value ? { type: value, questionId: null, value: null } : null
-                                                                        );
-                                                                    }}
+                                        {/* Section Content */}
+                                        {!section.isCollapsed && (
+                                            <DndContext
+                                                sensors={sensors}
+                                                collisionDetection={closestCorners}
+                                                onDragEnd={handleQuestionDragEnd(
+                                                    section.id
+                                                )}
+                                            >
+                                                <SortableContext
+                                                    items={section.questions.map(
+                                                        (q) => q.id
+                                                    )}
+                                                    strategy={verticalListSortingStrategy}
+                                                >
+                                                    <div className="p-6">
+                                                        {/* Questions */}
+                                                        {section.questions.map((question) => (
+                                                            <SortableQuestion
+                                                                key={question.id}
+                                                                question={question}
+                                                            >
+                                                                <div
+                                                                    key={question.id}
+                                                                    className={`mb-6 p-4 border rounded-lg hover:border-blue-500 ${!question.visible ? 'opacity-50' : ''
+                                                                        }`}
                                                                 >
-                                                                    <option value="">No condition</option>
-                                                                    <option value="equals">Equals</option>
-                                                                    <option value="not_equals">Not Equals</option>
-                                                                    <option value="empty">Empty</option>
-                                                                    <option value="not_empty">Not Empty</option>
-                                                                </select>
-
-                                                                {question.conditions.required_if && (
-                                                                    <>
+                                                                    {/* Question Header */}
+                                                                    <div className="flex items-center gap-4 mb-2">
                                                                         <select
-                                                                            className="text-sm border rounded px-2 py-1"
-                                                                            value={question.conditions.required_if.questionId || ''}
-                                                                            onChange={(e) => {
-                                                                                updateQuestionCondition(section.id, question.id, 'required_if', {
-                                                                                    ...question.conditions.required_if,
-                                                                                    questionId: e.target.value
-                                                                                });
-                                                                            }}
+                                                                            className="border rounded px-2 py-1"
+                                                                            value={question.type}
+                                                                            onChange={(e) => updateQuestionType(section.id, question.id, e.target.value)}
                                                                         >
-                                                                            <option value="">Select question</option>
-                                                                            {formData.sections.map(sect => (
-                                                                                <optgroup key={sect.id} label={sect.title}>
-                                                                                    {sect.questions
-                                                                                        .filter(q => q.id !== question.id)
-                                                                                        .map(q => (
-                                                                                            <option key={q.id} value={q.id}>{q.title}</option>
-                                                                                        ))
-                                                                                    }
-                                                                                </optgroup>
+                                                                            {questionTypes.map(type => (
+                                                                                <option key={type.id} value={type.id}>{type.label}</option>
                                                                             ))}
                                                                         </select>
-
-                                                                        {['equals', 'not_equals'].includes(question.conditions.required_if.type) && (
-                                                                            <>
-                                                                                {(() => {
-                                                                                    const selectedQuestion = formData.sections
-                                                                                        .flatMap(s => s.questions)
-                                                                                        .find(q => q.id.toString() === question.conditions.required_if.questionId?.toString());
-                                                                                    const hasOptions = selectedQuestion?.options?.length > 0;
-
-                                                                                    return (
-                                                                                        <div className="flex-1">
-                                                                                            <input
-                                                                                                type="text"
-                                                                                                list={hasOptions ? `options-${question.id}-required` : undefined}
-                                                                                                className="w-full text-sm border rounded px-2 py-1"
-                                                                                                placeholder="Value"
-                                                                                                value={question.conditions.required_if.value || ''}
-                                                                                                onChange={(e) => {
-                                                                                                    updateQuestionCondition(section.id, question.id, 'required_if', {
-                                                                                                        ...question.conditions.required_if,
-                                                                                                        value: e.target.value
-                                                                                                    });
-                                                                                                }}
-                                                                                            />
-                                                                                            {hasOptions && (
-                                                                                                <datalist id={`options-${question.id}-required`}>
-                                                                                                    {selectedQuestion.options.map((option, index) => (
-                                                                                                        <option key={index} value={option} />
-                                                                                                    ))}
-                                                                                                </datalist>
-                                                                                            )}
-                                                                                        </div>
+                                                                        {hasTemplates(question.type) && (
+                                                                            <select
+                                                                                className="border rounded px-2 py-1 text-sm"
+                                                                                value=""
+                                                                                onChange={(e) => {
+                                                                                    const suggestion = questionSuggestions[question.type]?.find(
+                                                                                        s => s.key === e.target.value
                                                                                     );
-                                                                                })()}
-                                                                            </>
-                                                                        )}
-                                                                    </>
-                                                                )}
-                                                            </div>
-
-                                                            {/* Visible If */}
-                                                            <div className="flex items-center gap-2">
-                                                                <label className="text-sm min-w-[100px]">Visible if:</label>
-                                                                <select
-                                                                    className="text-sm border rounded px-2 py-1 flex-1"
-                                                                    value={question.conditions.visible_if?.type || ''}
-                                                                    onChange={(e) => {
-                                                                        const value = e.target.value;
-                                                                        updateQuestionCondition(section.id, question.id, 'visible_if',
-                                                                            value ? { type: value, questionId: null, value: null } : null
-                                                                        );
-                                                                    }}
-                                                                >
-                                                                    <option value="">No condition</option>
-                                                                    <option value="equals">Equals</option>
-                                                                    <option value="not_equals">Not Equals</option>
-                                                                    <option value="empty">Empty</option>
-                                                                    <option value="not_empty">Not Empty</option>
-                                                                </select>
-
-                                                                {question.conditions.visible_if && (
-                                                                    <>
-                                                                        <select
-                                                                            className="text-sm border rounded px-2 py-1"
-                                                                            value={question.conditions.visible_if.questionId || ''}
-                                                                            onChange={(e) => {
-                                                                                updateQuestionCondition(section.id, question.id, 'visible_if', {
-                                                                                    ...question.conditions.visible_if,
-                                                                                    questionId: e.target.value
-                                                                                });
-                                                                            }}
-                                                                        >
-                                                                            <option value="">Select question</option>
-                                                                            {formData.sections.map(sect => (
-                                                                                <optgroup key={sect.id} label={sect.title}>
-                                                                                    {sect.questions
-                                                                                        .filter(q => q.id !== question.id)
-                                                                                        .map(q => (
-                                                                                            <option key={q.id} value={q.id}>{q.title}</option>
-                                                                                        ))
+                                                                                    if (suggestion) {
+                                                                                        setFormData({
+                                                                                            ...formData,
+                                                                                            sections: formData.sections.map(s =>
+                                                                                                s.id === section.id ? {
+                                                                                                    ...s,
+                                                                                                    questions: s.questions.map(q =>
+                                                                                                        q.id === question.id ? {
+                                                                                                            ...q,
+                                                                                                            title: suggestion.label,
+                                                                                                            key: suggestion.key,
+                                                                                                            placeholder: suggestion.placeholder || '',
+                                                                                                            options: suggestion.options || q.options
+                                                                                                        } : q
+                                                                                                    )
+                                                                                                } : s
+                                                                                            )
+                                                                                        });
                                                                                     }
-                                                                                </optgroup>
-                                                                            ))}
-                                                                        </select>
-
-                                                                        {['equals', 'not_equals'].includes(question.conditions.visible_if.type) && (
-                                                                            <>
-                                                                                {(() => {
-                                                                                    const selectedQuestion = formData.sections
-                                                                                        .flatMap(s => s.questions)
-                                                                                        .find(q => q.id.toString() === question.conditions.visible_if.questionId?.toString());
-                                                                                    const hasOptions = selectedQuestion?.options?.length > 0;
-
-                                                                                    return (
-                                                                                        <div className="flex-1">
-                                                                                            <input
-                                                                                                type="text"
-                                                                                                list={hasOptions ? `options-${question.id}-visible` : undefined}
-                                                                                                className="w-full text-sm border rounded px-2 py-1"
-                                                                                                placeholder="Value"
-                                                                                                value={question.conditions.visible_if.value || ''}
-                                                                                                onChange={(e) => {
-                                                                                                    updateQuestionCondition(section.id, question.id, 'visible_if', {
-                                                                                                        ...question.conditions.visible_if,
-                                                                                                        value: e.target.value
-                                                                                                    });
-                                                                                                }}
-                                                                                            />
-                                                                                            {hasOptions && (
-                                                                                                <datalist id={`options-${question.id}-visible`}>
-                                                                                                    {selectedQuestion.options.map((option, index) => (
-                                                                                                        <option key={index} value={option} />
-                                                                                                    ))}
-                                                                                                </datalist>
-                                                                                            )}
-                                                                                        </div>
-                                                                                    );
-                                                                                })()}
-                                                                            </>
+                                                                                }}
+                                                                            >
+                                                                                <option value="">Select a template</option>
+                                                                                {questionSuggestions[question.type]?.map(suggestion => (
+                                                                                    <option key={suggestion.key} value={suggestion.key}>
+                                                                                        {suggestion.label}
+                                                                                    </option>
+                                                                                ))}
+                                                                            </select>
                                                                         )}
-                                                                    </>
-                                                                )}
-                                                            </div>
-                                                        </div>
-
-                                                        {(question.type === 'radio' || question.type === 'checkbox' || question.type === 'dropdown') && (
-                                                            <div className="mt-4 space-y-2">
-                                                                <div className="flex items-center justify-between">
-                                                                    <h4 className="font-medium text-sm">Section Navigation</h4>
-                                                                    <label className="flex items-center gap-2">
                                                                         <input
-                                                                            type="checkbox"
-                                                                            checked={question.sectionNavigation.enabled}
+                                                                            className="flex-1 font-medium border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none"
+                                                                            value={question.title}
                                                                             onChange={(e) => {
-                                                                                updateSectionNavigation(section.id, question.id, {
-                                                                                    enabled: e.target.checked,
-                                                                                    rules: question.sectionNavigation.rules
+                                                                                setFormData({
+                                                                                    ...formData,
+                                                                                    sections: formData.sections.map(s =>
+                                                                                        s.id === section.id ? {
+                                                                                            ...s,
+                                                                                            questions: s.questions.map(q =>
+                                                                                                q.id === question.id ? { ...q, title: e.target.value } : q
+                                                                                            )
+                                                                                        } : s
+                                                                                    )
                                                                                 });
                                                                             }}
-                                                                            className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
                                                                         />
-                                                                        <span className="text-sm">Enable section navigation</span>
-                                                                    </label>
-                                                                </div>
+                                                                        {question.description && (
+                                                                            <div className="mt-1 text-sm text-gray-500">
+                                                                                {question.description}
+                                                                            </div>
+                                                                        )}
+                                                                        <button
+                                                                            onClick={() => duplicateQuestion(section.id, question.id)}
+                                                                            className="text-gray-500 hover:text-blue-500"
+                                                                        >
+                                                                            <Copy size={20} />
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => setSelectedQuestion(question.id === selectedQuestion ? null : question.id)}
+                                                                            className={`text-gray-500 hover:text-blue-500 ${selectedQuestion === question.id ? 'text-blue-500' : ''
+                                                                                }`}
+                                                                        >
+                                                                            <Settings size={20} />
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => deleteQuestion(section.id, question.id)}
+                                                                            className="text-gray-500 hover:text-red-500"
+                                                                        >
+                                                                            <Trash2 size={20} />
+                                                                        </button>
+                                                                    </div>
 
-                                                                {question.sectionNavigation.enabled && (
-                                                                    <div className="space-y-2 mt-2">
-                                                                        {question.options.map((option, index) => (
-                                                                            <div key={index} className="flex items-center gap-2 pl-4">
-                                                                                <span className="text-sm text-gray-600">{option}:</span>
-                                                                                <select
-                                                                                    className="text-sm border rounded px-2 py-1 flex-1"
-                                                                                    value={
-                                                                                        question.sectionNavigation.rules.find(
-                                                                                            rule => rule.value === option
-                                                                                        )?.goToSection || ''
-                                                                                    }
-                                                                                    onChange={(e) => {
-                                                                                        const newRules = [...question.sectionNavigation.rules];
-                                                                                        const existingRuleIndex = newRules.findIndex(
-                                                                                            rule => rule.value === option
-                                                                                        );
+                                                                    {/* Advanced Settings Panel */}
+                                                                    {selectedQuestion === question.id && (
+                                                                        <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                                                                            <div className="space-y-4">
+                                                                                {/* Basic Settings */}
+                                                                                <div className="flex flex-wrap gap-4">
+                                                                                    <label className="flex items-center gap-2">
+                                                                                        <input
+                                                                                            type="checkbox"
+                                                                                            checked={question.required}
+                                                                                            onChange={() => toggleQuestionSetting(section.id, question.id, 'required')}
+                                                                                            className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                                                                                        />
+                                                                                        <span className="text-sm">Required</span>
+                                                                                    </label>
+                                                                                    <label className="flex items-center gap-2">
+                                                                                        <input
+                                                                                            type="checkbox"
+                                                                                            checked={question.readonly}
+                                                                                            onChange={() => toggleQuestionSetting(section.id, question.id, 'readonly')}
+                                                                                            className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                                                                                        />
+                                                                                        <span className="text-sm">Read Only</span>
+                                                                                    </label>
+                                                                                    <label className="flex items-center gap-2">
+                                                                                        <input
+                                                                                            type="checkbox"
+                                                                                            checked={question.disabled}
+                                                                                            onChange={() => toggleQuestionSetting(section.id, question.id, 'disabled')}
+                                                                                            className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                                                                                        />
+                                                                                        <span className="text-sm">Disabled</span>
+                                                                                    </label>
+                                                                                    <label className="flex items-center gap-2">
+                                                                                        <input
+                                                                                            type="checkbox"
+                                                                                            checked={question.visible}
+                                                                                            onChange={() => toggleQuestionSetting(section.id, question.id, 'visible')}
+                                                                                            className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                                                                                        />
+                                                                                        <span className="text-sm">Visible</span>
+                                                                                    </label>
+                                                                                </div>
 
-                                                                                        if (existingRuleIndex >= 0) {
-                                                                                            if (e.target.value) {
-                                                                                                newRules[existingRuleIndex] = {
-                                                                                                    value: option,
-                                                                                                    goToSection: e.target.value
-                                                                                                };
-                                                                                            } else {
-                                                                                                newRules.splice(existingRuleIndex, 1);
-                                                                                            }
-                                                                                        } else if (e.target.value) {
-                                                                                            newRules.push({
-                                                                                                value: option,
-                                                                                                goToSection: e.target.value
+                                                                                <div className="mt-4">
+                                                                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                                                        Description/Help Text
+                                                                                    </label>
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="w-full border rounded-lg p-2 text-sm"
+                                                                                        placeholder={getDescriptionPlaceholder(question.type)}
+                                                                                        value={question.description || ''}
+                                                                                        onChange={(e) => {
+                                                                                            setFormData({
+                                                                                                ...formData,
+                                                                                                sections: formData.sections.map(s =>
+                                                                                                    s.id === section.id ? {
+                                                                                                        ...s,
+                                                                                                        questions: s.questions.map(q =>
+                                                                                                            q.id === question.id ? {
+                                                                                                                ...q,
+                                                                                                                description: e.target.value
+                                                                                                            } : q
+                                                                                                        )
+                                                                                                    } : s
+                                                                                                )
                                                                                             });
-                                                                                        }
+                                                                                        }}
+                                                                                    />
+                                                                                </div>
 
-                                                                                        updateSectionNavigation(section.id, question.id, {
-                                                                                            enabled: true,
-                                                                                            rules: newRules
+                                                                                {/* Conditional Logic */}
+                                                                                <div className="space-y-2">
+                                                                                    <h4 className="font-medium text-sm">Conditions</h4>
+
+                                                                                    {/* Required If */}
+                                                                                    <div className="flex items-center gap-2">
+                                                                                        <label className="text-sm min-w-[100px]">Required if:</label>
+                                                                                        <select
+                                                                                            className="text-sm border rounded px-2 py-1 flex-1"
+                                                                                            value={question.conditions.required_if?.type || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const value = e.target.value;
+                                                                                                updateQuestionCondition(section.id, question.id, 'required_if',
+                                                                                                    value ? { type: value, questionId: null, value: null } : null
+                                                                                                );
+                                                                                            }}
+                                                                                        >
+                                                                                            <option value="">No condition</option>
+                                                                                            <option value="equals">Equals</option>
+                                                                                            <option value="not_equals">Not Equals</option>
+                                                                                            <option value="empty">Empty</option>
+                                                                                            <option value="not_empty">Not Empty</option>
+                                                                                        </select>
+
+                                                                                        {question.conditions.required_if && (
+                                                                                            <>
+                                                                                                <select
+                                                                                                    className="text-sm border rounded px-2 py-1"
+                                                                                                    value={question.conditions.required_if.questionId || ''}
+                                                                                                    onChange={(e) => {
+                                                                                                        updateQuestionCondition(section.id, question.id, 'required_if', {
+                                                                                                            ...question.conditions.required_if,
+                                                                                                            questionId: e.target.value
+                                                                                                        });
+                                                                                                    }}
+                                                                                                >
+                                                                                                    <option value="">Select question</option>
+                                                                                                    {formData.sections.map(sect => (
+                                                                                                        <optgroup key={sect.id} label={sect.title}>
+                                                                                                            {sect.questions
+                                                                                                                .filter(q => q.id !== question.id)
+                                                                                                                .map(q => (
+                                                                                                                    <option key={q.id} value={q.id}>{q.title}</option>
+                                                                                                                ))
+                                                                                                            }
+                                                                                                        </optgroup>
+                                                                                                    ))}
+                                                                                                </select>
+
+                                                                                                {['equals', 'not_equals'].includes(question.conditions.required_if.type) && (
+                                                                                                    <>
+                                                                                                        {(() => {
+                                                                                                            const selectedQuestion = formData.sections
+                                                                                                                .flatMap(s => s.questions)
+                                                                                                                .find(q => q.id.toString() === question.conditions.required_if.questionId?.toString());
+                                                                                                            const hasOptions = selectedQuestion?.options?.length > 0;
+
+                                                                                                            return (
+                                                                                                                <div className="flex-1">
+                                                                                                                    <input
+                                                                                                                        type="text"
+                                                                                                                        list={hasOptions ? `options-${question.id}-required` : undefined}
+                                                                                                                        className="w-full text-sm border rounded px-2 py-1"
+                                                                                                                        placeholder="Value"
+                                                                                                                        value={question.conditions.required_if.value || ''}
+                                                                                                                        onChange={(e) => {
+                                                                                                                            updateQuestionCondition(section.id, question.id, 'required_if', {
+                                                                                                                                ...question.conditions.required_if,
+                                                                                                                                value: e.target.value
+                                                                                                                            });
+                                                                                                                        }}
+                                                                                                                    />
+                                                                                                                    {hasOptions && (
+                                                                                                                        <datalist id={`options-${question.id}-required`}>
+                                                                                                                            {selectedQuestion.options.map((option, index) => (
+                                                                                                                                <option key={index} value={option} />
+                                                                                                                            ))}
+                                                                                                                        </datalist>
+                                                                                                                    )}
+                                                                                                                </div>
+                                                                                                            );
+                                                                                                        })()}
+                                                                                                    </>
+                                                                                                )}
+                                                                                            </>
+                                                                                        )}
+                                                                                    </div>
+
+                                                                                    {/* Visible If */}
+                                                                                    <div className="flex items-center gap-2">
+                                                                                        <label className="text-sm min-w-[100px]">Visible if:</label>
+                                                                                        <select
+                                                                                            className="text-sm border rounded px-2 py-1 flex-1"
+                                                                                            value={question.conditions.visible_if?.type || ''}
+                                                                                            onChange={(e) => {
+                                                                                                const value = e.target.value;
+                                                                                                updateQuestionCondition(section.id, question.id, 'visible_if',
+                                                                                                    value ? { type: value, questionId: null, value: null } : null
+                                                                                                );
+                                                                                            }}
+                                                                                        >
+                                                                                            <option value="">No condition</option>
+                                                                                            <option value="equals">Equals</option>
+                                                                                            <option value="not_equals">Not Equals</option>
+                                                                                            <option value="empty">Empty</option>
+                                                                                            <option value="not_empty">Not Empty</option>
+                                                                                        </select>
+
+                                                                                        {question.conditions.visible_if && (
+                                                                                            <>
+                                                                                                <select
+                                                                                                    className="text-sm border rounded px-2 py-1"
+                                                                                                    value={question.conditions.visible_if.questionId || ''}
+                                                                                                    onChange={(e) => {
+                                                                                                        updateQuestionCondition(section.id, question.id, 'visible_if', {
+                                                                                                            ...question.conditions.visible_if,
+                                                                                                            questionId: e.target.value
+                                                                                                        });
+                                                                                                    }}
+                                                                                                >
+                                                                                                    <option value="">Select question</option>
+                                                                                                    {formData.sections.map(sect => (
+                                                                                                        <optgroup key={sect.id} label={sect.title}>
+                                                                                                            {sect.questions
+                                                                                                                .filter(q => q.id !== question.id)
+                                                                                                                .map(q => (
+                                                                                                                    <option key={q.id} value={q.id}>{q.title}</option>
+                                                                                                                ))
+                                                                                                            }
+                                                                                                        </optgroup>
+                                                                                                    ))}
+                                                                                                </select>
+
+                                                                                                {['equals', 'not_equals'].includes(question.conditions.visible_if.type) && (
+                                                                                                    <>
+                                                                                                        {(() => {
+                                                                                                            const selectedQuestion = formData.sections
+                                                                                                                .flatMap(s => s.questions)
+                                                                                                                .find(q => q.id.toString() === question.conditions.visible_if.questionId?.toString());
+                                                                                                            const hasOptions = selectedQuestion?.options?.length > 0;
+
+                                                                                                            return (
+                                                                                                                <div className="flex-1">
+                                                                                                                    <input
+                                                                                                                        type="text"
+                                                                                                                        list={hasOptions ? `options-${question.id}-visible` : undefined}
+                                                                                                                        className="w-full text-sm border rounded px-2 py-1"
+                                                                                                                        placeholder="Value"
+                                                                                                                        value={question.conditions.visible_if.value || ''}
+                                                                                                                        onChange={(e) => {
+                                                                                                                            updateQuestionCondition(section.id, question.id, 'visible_if', {
+                                                                                                                                ...question.conditions.visible_if,
+                                                                                                                                value: e.target.value
+                                                                                                                            });
+                                                                                                                        }}
+                                                                                                                    />
+                                                                                                                    {hasOptions && (
+                                                                                                                        <datalist id={`options-${question.id}-visible`}>
+                                                                                                                            {selectedQuestion.options.map((option, index) => (
+                                                                                                                                <option key={index} value={option} />
+                                                                                                                            ))}
+                                                                                                                        </datalist>
+                                                                                                                    )}
+                                                                                                                </div>
+                                                                                                            );
+                                                                                                        })()}
+                                                                                                    </>
+                                                                                                )}
+                                                                                            </>
+                                                                                        )}
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                {(question.type === 'radio' || question.type === 'checkbox' || question.type === 'dropdown') && (
+                                                                                    <div className="mt-4 space-y-2">
+                                                                                        <div className="flex items-center justify-between">
+                                                                                            <h4 className="font-medium text-sm">Section Navigation</h4>
+                                                                                            <label className="flex items-center gap-2">
+                                                                                                <input
+                                                                                                    type="checkbox"
+                                                                                                    checked={question.sectionNavigation.enabled}
+                                                                                                    onChange={(e) => {
+                                                                                                        updateSectionNavigation(section.id, question.id, {
+                                                                                                            enabled: e.target.checked,
+                                                                                                            rules: question.sectionNavigation.rules
+                                                                                                        });
+                                                                                                    }}
+                                                                                                    className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                                                                                                />
+                                                                                                <span className="text-sm">Enable section navigation</span>
+                                                                                            </label>
+                                                                                        </div>
+
+                                                                                        {question.sectionNavigation.enabled && (
+                                                                                            <div className="space-y-2 mt-2">
+                                                                                                {question.options.map((option, index) => (
+                                                                                                    <div key={index} className="flex items-center gap-2 pl-4">
+                                                                                                        <span className="text-sm text-gray-600">{option}:</span>
+                                                                                                        <select
+                                                                                                            className="text-sm border rounded px-2 py-1 flex-1"
+                                                                                                            value={
+                                                                                                                question.sectionNavigation.rules.find(
+                                                                                                                    rule => rule.value === option
+                                                                                                                )?.goToSection || ''
+                                                                                                            }
+                                                                                                            onChange={(e) => {
+                                                                                                                const newRules = [...question.sectionNavigation.rules];
+                                                                                                                const existingRuleIndex = newRules.findIndex(
+                                                                                                                    rule => rule.value === option
+                                                                                                                );
+
+                                                                                                                if (existingRuleIndex >= 0) {
+                                                                                                                    if (e.target.value) {
+                                                                                                                        newRules[existingRuleIndex] = {
+                                                                                                                            value: option,
+                                                                                                                            goToSection: e.target.value
+                                                                                                                        };
+                                                                                                                    } else {
+                                                                                                                        newRules.splice(existingRuleIndex, 1);
+                                                                                                                    }
+                                                                                                                } else if (e.target.value) {
+                                                                                                                    newRules.push({
+                                                                                                                        value: option,
+                                                                                                                        goToSection: e.target.value
+                                                                                                                    });
+                                                                                                                }
+
+                                                                                                                updateSectionNavigation(section.id, question.id, {
+                                                                                                                    enabled: true,
+                                                                                                                    rules: newRules
+                                                                                                                });
+                                                                                                            }}
+                                                                                                        >
+                                                                                                            <option value="">Continue to next section</option>
+                                                                                                            {formData.sections
+                                                                                                                .filter(s => s.id !== section.id)
+                                                                                                                .map(s => (
+                                                                                                                    <option key={s.id} value={s.id}>
+                                                                                                                        Go to: {s.title}
+                                                                                                                    </option>
+                                                                                                                ))}
+                                                                                                            <option value="submit">Submit form</option>
+                                                                                                        </select>
+                                                                                                        {question.sectionNavigation.rules.find(
+                                                                                                            rule => rule.value === option
+                                                                                                        )?.goToSection && (
+                                                                                                                <ArrowRight className="text-blue-500" size={20} />
+                                                                                                            )}
+                                                                                                    </div>
+                                                                                                ))}
+                                                                                            </div>
+                                                                                        )}
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+
+                                                                    {/* Question Preview */}
+                                                                    <div className="mt-4">
+                                                                        {question.type === 'short' && (
+                                                                            <input
+                                                                                className="w-full border rounded-lg p-2"
+                                                                                placeholder="Short answer text"
+                                                                                disabled
+                                                                            />
+                                                                        )}
+                                                                        {question.type === 'long' && (
+                                                                            <textarea
+                                                                                className="w-full border rounded-lg p-2"
+                                                                                placeholder="Long answer text"
+                                                                                disabled
+                                                                            />
+                                                                        )}
+                                                                        {(question.type === 'radio' || question.type === 'checkbox') && (
+                                                                            <div className="space-y-2">
+                                                                                {question.options.map((option, index) => (
+                                                                                    <div key={index} className="flex items-center gap-2">
+                                                                                        {question.type === 'radio' ? (
+                                                                                            <input type="radio" disabled />
+                                                                                        ) : (
+                                                                                            <input type="checkbox" disabled />
+                                                                                        )}
+                                                                                        <input
+                                                                                            className="border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none"
+                                                                                            value={option}
+                                                                                            onChange={(e) => {
+                                                                                                const newOptions = [...question.options];
+                                                                                                newOptions[index] = e.target.value;
+                                                                                                setFormData({
+                                                                                                    ...formData,
+                                                                                                    sections: formData.sections.map(s =>
+                                                                                                        s.id === section.id ? {
+                                                                                                            ...s,
+                                                                                                            questions: s.questions.map(q =>
+                                                                                                                q.id === question.id ? { ...q, options: newOptions } : q
+                                                                                                            )
+                                                                                                        } : s
+                                                                                                    )
+                                                                                                });
+                                                                                            }}
+                                                                                        />
+                                                                                    </div>
+                                                                                ))}
+                                                                                <button
+                                                                                    onClick={() => {
+                                                                                        setFormData({
+                                                                                            ...formData,
+                                                                                            sections: formData.sections.map(s =>
+                                                                                                s.id === section.id ? {
+                                                                                                    ...s,
+                                                                                                    questions: s.questions.map(q =>
+                                                                                                        q.id === question.id ? {
+                                                                                                            ...q,
+                                                                                                            options: [...q.options, `Option ${q.options.length + 1}`]
+                                                                                                        } : q
+                                                                                                    )
+                                                                                                } : s
+                                                                                            )
                                                                                         });
                                                                                     }}
+                                                                                    className="text-blue-500 hover:text-blue-700"
                                                                                 >
-                                                                                    <option value="">Continue to next section</option>
-                                                                                    {formData.sections
-                                                                                        .filter(s => s.id !== section.id)
-                                                                                        .map(s => (
-                                                                                            <option key={s.id} value={s.id}>
-                                                                                                Go to: {s.title}
-                                                                                            </option>
-                                                                                        ))}
-                                                                                    <option value="submit">Submit form</option>
-                                                                                </select>
-                                                                                {question.sectionNavigation.rules.find(
-                                                                                    rule => rule.value === option
-                                                                                )?.goToSection && (
-                                                                                        <ArrowRight className="text-blue-500" size={20} />
-                                                                                    )}
+                                                                                    Add option
+                                                                                </button>
                                                                             </div>
-                                                                        ))}
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            {/* Question Preview */}
-                                            <div className="mt-4">
-                                                {question.type === 'short' && (
-                                                    <input
-                                                        className="w-full border rounded-lg p-2"
-                                                        placeholder="Short answer text"
-                                                        disabled
-                                                    />
-                                                )}
-                                                {question.type === 'long' && (
-                                                    <textarea
-                                                        className="w-full border rounded-lg p-2"
-                                                        placeholder="Long answer text"
-                                                        disabled
-                                                    />
-                                                )}
-                                                {(question.type === 'radio' || question.type === 'checkbox') && (
-                                                    <div className="space-y-2">
-                                                        {question.options.map((option, index) => (
-                                                            <div key={index} className="flex items-center gap-2">
-                                                                {question.type === 'radio' ? (
-                                                                    <input type="radio" disabled />
-                                                                ) : (
-                                                                    <input type="checkbox" disabled />
-                                                                )}
-                                                                <input
-                                                                    className="border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none"
-                                                                    value={option}
-                                                                    onChange={(e) => {
-                                                                        const newOptions = [...question.options];
-                                                                        newOptions[index] = e.target.value;
-                                                                        setFormData({
-                                                                            ...formData,
-                                                                            sections: formData.sections.map(s =>
-                                                                                s.id === section.id ? {
-                                                                                    ...s,
-                                                                                    questions: s.questions.map(q =>
-                                                                                        q.id === question.id ? { ...q, options: newOptions } : q
-                                                                                    )
-                                                                                } : s
-                                                                            )
-                                                                        });
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        ))}
-                                                        <button
-                                                            onClick={() => {
-                                                                setFormData({
-                                                                    ...formData,
-                                                                    sections: formData.sections.map(s =>
-                                                                        s.id === section.id ? {
-                                                                            ...s,
-                                                                            questions: s.questions.map(q =>
-                                                                                q.id === question.id ? {
-                                                                                    ...q,
-                                                                                    options: [...q.options, `Option ${q.options.length + 1}`]
-                                                                                } : q
-                                                                            )
-                                                                        } : s
-                                                                    )
-                                                                });
-                                                            }}
-                                                            className="text-blue-500 hover:text-blue-700"
-                                                        >
-                                                            Add option
-                                                        </button>
-                                                    </div>
-                                                )}
-                                                {question.type === 'dropdown' && (
-                                                    <div className="space-y-2">
-                                                        <select className="w-full border rounded-lg p-2" disabled>
-                                                            <option value="">Select an option</option>
-                                                            {question.options.map((option, index) => (
-                                                                <option key={index} value={option}>{option}</option>
-                                                            ))}
-                                                        </select>
-                                                        <div className="space-y-2">
-                                                            {question.options.map((option, index) => (
-                                                                <div key={index} className="flex items-center gap-2">
-                                                                    <input
-                                                                        className="flex-1 border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none"
-                                                                        value={option}
-                                                                        onChange={(e) => {
-                                                                            const newOptions = [...question.options];
-                                                                            newOptions[index] = e.target.value;
-                                                                            setFormData({
-                                                                                ...formData,
-                                                                                sections: formData.sections.map(s =>
-                                                                                    s.id === section.id ? {
-                                                                                        ...s,
-                                                                                        questions: s.questions.map(q =>
-                                                                                            q.id === question.id ? { ...q, options: newOptions } : q
-                                                                                        )
-                                                                                    } : s
-                                                                                )
-                                                                            });
-                                                                        }}
-                                                                    />
-                                                                    <button
-                                                                        onClick={() => {
-                                                                            const newOptions = question.options.filter((_, i) => i !== index);
-                                                                            setFormData({
-                                                                                ...formData,
-                                                                                sections: formData.sections.map(s =>
-                                                                                    s.id === section.id ? {
-                                                                                        ...s,
-                                                                                        questions: s.questions.map(q =>
-                                                                                            q.id === question.id ? { ...q, options: newOptions } : q
-                                                                                        )
-                                                                                    } : s
-                                                                                )
-                                                                            });
-                                                                        }}
-                                                                        className="text-gray-500 hover:text-red-500"
-                                                                    >
-                                                                        <Trash2 size={16} />
-                                                                    </button>
-                                                                </div>
-                                                            ))}
-                                                            <button
-                                                                onClick={() => {
-                                                                    setFormData({
-                                                                        ...formData,
-                                                                        sections: formData.sections.map(s =>
-                                                                            s.id === section.id ? {
-                                                                                ...s,
-                                                                                questions: s.questions.map(q =>
-                                                                                    q.id === question.id ? {
-                                                                                        ...q,
-                                                                                        options: [...q.options, `Option ${q.options.length + 1}`]
-                                                                                    } : q
-                                                                                )
-                                                                            } : s
-                                                                        )
-                                                                    });
-                                                                }}
-                                                                className="text-blue-500 hover:text-blue-700"
-                                                            >
-                                                                Add option
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                                {question.type === 'file' && (
-                                                    <div className="flex items-center gap-2">
-                                                        <input
-                                                            type="file"
-                                                            className="block w-full text-sm text-gray-500
+                                                                        )}
+                                                                        {question.type === 'dropdown' && (
+                                                                            <div className="space-y-2">
+                                                                                <select className="w-full border rounded-lg p-2" disabled>
+                                                                                    <option value="">Select an option</option>
+                                                                                    {question.options.map((option, index) => (
+                                                                                        <option key={index} value={option}>{option}</option>
+                                                                                    ))}
+                                                                                </select>
+                                                                                <div className="space-y-2">
+                                                                                    {question.options.map((option, index) => (
+                                                                                        <div key={index} className="flex items-center gap-2">
+                                                                                            <input
+                                                                                                className="flex-1 border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none"
+                                                                                                value={option}
+                                                                                                onChange={(e) => {
+                                                                                                    const newOptions = [...question.options];
+                                                                                                    newOptions[index] = e.target.value;
+                                                                                                    setFormData({
+                                                                                                        ...formData,
+                                                                                                        sections: formData.sections.map(s =>
+                                                                                                            s.id === section.id ? {
+                                                                                                                ...s,
+                                                                                                                questions: s.questions.map(q =>
+                                                                                                                    q.id === question.id ? { ...q, options: newOptions } : q
+                                                                                                                )
+                                                                                                            } : s
+                                                                                                        )
+                                                                                                    });
+                                                                                                }}
+                                                                                            />
+                                                                                            <button
+                                                                                                onClick={() => {
+                                                                                                    const newOptions = question.options.filter((_, i) => i !== index);
+                                                                                                    setFormData({
+                                                                                                        ...formData,
+                                                                                                        sections: formData.sections.map(s =>
+                                                                                                            s.id === section.id ? {
+                                                                                                                ...s,
+                                                                                                                questions: s.questions.map(q =>
+                                                                                                                    q.id === question.id ? { ...q, options: newOptions } : q
+                                                                                                                )
+                                                                                                            } : s
+                                                                                                        )
+                                                                                                    });
+                                                                                                }}
+                                                                                                className="text-gray-500 hover:text-red-500"
+                                                                                            >
+                                                                                                <Trash2 size={16} />
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    ))}
+                                                                                    <button
+                                                                                        onClick={() => {
+                                                                                            setFormData({
+                                                                                                ...formData,
+                                                                                                sections: formData.sections.map(s =>
+                                                                                                    s.id === section.id ? {
+                                                                                                        ...s,
+                                                                                                        questions: s.questions.map(q =>
+                                                                                                            q.id === question.id ? {
+                                                                                                                ...q,
+                                                                                                                options: [...q.options, `Option ${q.options.length + 1}`]
+                                                                                                            } : q
+                                                                                                        )
+                                                                                                    } : s
+                                                                                                )
+                                                                                            });
+                                                                                        }}
+                                                                                        className="text-blue-500 hover:text-blue-700"
+                                                                                    >
+                                                                                        Add option
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                                        )}
+                                                                        {question.type === 'file' && (
+                                                                            <div className="flex items-center gap-2">
+                                                                                <input
+                                                                                    type="file"
+                                                                                    className="block w-full text-sm text-gray-500
                                             file:mr-4 file:py-2 file:px-4
                                             file:rounded-md file:border-0
                                             file:text-sm file:font-semibold
                                             file:bg-blue-50 file:text-blue-700
                                             hover:file:bg-blue-100"
-                                                            disabled
-                                                        />
-                                                    </div>
-                                                )}
-                                                {question.type === 'date' && (
-                                                    <input
-                                                        type="date"
-                                                        className="w-full border rounded-lg p-2"
-                                                        disabled
-                                                    />
-                                                )}
-                                                {question.type === 'time' && (
-                                                    <input
-                                                        type="time"
-                                                        className="w-full border rounded-lg p-2"
-                                                        disabled
-                                                    />
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-
-                                    {/* Add Question Button */}
-                                    <button
-                                        onClick={() => addQuestion(section.id)}
-                                        className="w-full py-2 border-2 border-dashed rounded-lg text-gray-500 hover:text-blue-500 hover:border-blue-500 flex items-center justify-center gap-2"
-                                    >
-                                        <Plus size={20} />
-                                        Add Question
-                                    </button>
-
-                                    {/* What section is next */}
-                                    {formData.sections.length > 1 && // Only show when multiple sections exist
-                                        section.id !== formData.sections[formData.sections.length - 1].id && // Hide for last section
-                                        (
-                                            <div className="mt-4 flex items-center gap-2 text-sm">
-                                                <span>After this section:</span>
-                                                <select
-                                                    className="border rounded px-2 py-1"
-                                                    value={section.nextSection || ''}
-                                                    onChange={(e) => {
-                                                        setFormData({
-                                                            ...formData,
-                                                            sections: formData.sections.map(s =>
-                                                                s.id === section.id ? {
-                                                                    ...s,
-                                                                    nextSection: e.target.value || null
-                                                                } : s
-                                                            )
-                                                        });
-                                                    }}
-                                                >
-                                                    <option value="">Continue to next section</option>
-                                                    {formData.sections
-                                                        .filter(s => s.id !== section.id && // Don't allow selecting current section
-                                                            s.id !== formData.sections[formData.sections.length - 1].id) // Don't allow selecting last section
-                                                        .map(s => (
-                                                            <option key={s.id} value={s.id}>
-                                                                Go to: {s.title}
-                                                            </option>
+                                                                                    disabled
+                                                                                />
+                                                                            </div>
+                                                                        )}
+                                                                        {question.type === 'date' && (
+                                                                            <input
+                                                                                type="date"
+                                                                                className="w-full border rounded-lg p-2"
+                                                                                disabled
+                                                                            />
+                                                                        )}
+                                                                        {question.type === 'time' && (
+                                                                            <input
+                                                                                type="time"
+                                                                                className="w-full border rounded-lg p-2"
+                                                                                disabled
+                                                                            />
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </SortableQuestion>
                                                         ))}
-                                                    <option value="submit">Submit form</option>
-                                                </select>
-                                            </div>
-                                        )}
-                                </div>
-                            )}
-                        </div>
-                    ))}
 
-                    {/* Add Section Button */}
-                    <button
-                        onClick={addSection}
-                        className="w-full py-3 border-2 border-dashed rounded-lg text-gray-500 hover:text-blue-500 hover:border-blue-500 flex items-center justify-center gap-2"
-                    >
-                        <Plus size={20} />
-                        Add Section
-                    </button>
+                                                        {/* Add Question Button */}
+                                                        <button
+                                                            onClick={() => addQuestion(section.id)}
+                                                            className="w-full py-2 border-2 border-dashed rounded-lg text-gray-500 hover:text-blue-500 hover:border-blue-500 flex items-center justify-center gap-2"
+                                                        >
+                                                            <Plus size={20} />
+                                                            Add Question
+                                                        </button>
+
+                                                        {/* What section is next */}
+                                                        {formData.sections.length > 1 && // Only show when multiple sections exist
+                                                            section.id !== formData.sections[formData.sections.length - 1].id && // Hide for last section
+                                                            (
+                                                                <div className="mt-4 flex items-center gap-2 text-sm">
+                                                                    <span>After this section:</span>
+                                                                    <select
+                                                                        className="border rounded px-2 py-1"
+                                                                        value={section.nextSection || ''}
+                                                                        onChange={(e) => {
+                                                                            setFormData({
+                                                                                ...formData,
+                                                                                sections: formData.sections.map(s =>
+                                                                                    s.id === section.id ? {
+                                                                                        ...s,
+                                                                                        nextSection: e.target.value || null
+                                                                                    } : s
+                                                                                )
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        <option value="">Continue to next section</option>
+                                                                        {formData.sections
+                                                                            .filter(s => s.id !== section.id && // Don't allow selecting current section
+                                                                                s.id !== formData.sections[formData.sections.length - 1].id) // Don't allow selecting last section
+                                                                            .map(s => (
+                                                                                <option key={s.id} value={s.id}>
+                                                                                    Go to: {s.title}
+                                                                                </option>
+                                                                            ))}
+                                                                        <option value="submit">Submit form</option>
+                                                                    </select>
+                                                                </div>
+                                                            )}
+                                                    </div>
+                                                </SortableContext>
+                                            </DndContext>
+                                        )}
+                                    </div>
+                                </SortableSection>
+                            ))}
+                        </SortableContext>
+
+                        {/* Add Section Button */}
+                        <button
+                            onClick={addSection}
+                            className="w-full py-3 border-2 border-dashed rounded-lg text-gray-500 hover:text-blue-500 hover:border-blue-500 flex items-center justify-center gap-2"
+                        >
+                            <Plus size={20} />
+                            Add Section
+                        </button>
+                    </DndContext>
                 </>
             )
             }

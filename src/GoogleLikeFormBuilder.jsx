@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Trash2, Copy, ChevronDown, ChevronRight, ChevronLeft, Plus, Settings, Eye, EyeOff, ArrowRight, GripVertical } from 'lucide-react';
+import { Trash2, Copy, ChevronDown, ChevronRight, ChevronLeft, Plus, Settings, Eye, EyeOff, ArrowRight, GripHorizontal } from 'lucide-react';
 import {
     DndContext,
     closestCenter,
@@ -471,19 +471,13 @@ const SortableSection = ({ section, children }) => {
         <div
             ref={setNodeRef}
             style={style}
-            className="bg-white rounded-lg shadow-sm mb-6"
+            className="bg-white border-l-4 border-blue-400 rounded-lg shadow-sm mb-6"
         >
-            <div className="p-6 border-b">
-                <div className="flex items-center gap-4">
-                    <button
-                        className="text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing"
-                        {...attributes}
-                        {...listeners}
-                    >
-                        <GripVertical size={20} />
-                    </button>
-                    {children}
+            <div className="flex items-center p-4 border-b gap-3">
+                <div className="bg-blue-50 p-1.5 rounded cursor-move" {...attributes} {...listeners}>
+                    <GripHorizontal className="w-5 h-5 text-blue-500" />
                 </div>
+                {children}
             </div>
         </div>
     );
@@ -510,18 +504,17 @@ const SortableQuestion = ({ question, children }) => {
         <div
             ref={setNodeRef}
             style={style}
-            className={`mb-6 p-4 border rounded-lg hover:border-blue-500 ${!question.visible ? 'opacity-50' : ''
-                }`}
+            className="mb-6"
         >
-            <div className="flex items-center gap-4 mb-2">
-                <button
-                    className="text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing"
-                    {...attributes}
-                    {...listeners}
-                >
-                    <GripVertical size={20} />
-                </button>
-                {children}
+            <div className="bg-gray-50 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                    <div className="bg-white p-1.5 rounded shadow-sm cursor-move" {...attributes} {...listeners}>
+                        <GripHorizontal className="w-5 h-5 text-gray-500" />
+                    </div>
+                    <div className="flex-1">
+                        {children}
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -1229,7 +1222,7 @@ const GoogleLikeFormBuilder = () => {
                                 <SortableSection key={section.id} section={section}>
                                     <div key={section.id} className="bg-white rounded-lg shadow-sm mb-6">
                                         {/* Section Header */}
-                                        <div className="p-6 border-b">
+                                        <div className="p-6 border-b w-full">
                                             <div className="flex items-center gap-4">
                                                 <button
                                                     onClick={() => toggleSectionCollapse(section.id)}

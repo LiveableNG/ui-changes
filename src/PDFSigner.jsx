@@ -21,10 +21,32 @@ const PDFSignature = () => {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
     const signatureRef = useRef(null);
-    const [pdfUrl, setPdfUrl] = useState('');
+    const [pdfUrl, setPdfUrl] = useState('https://good-tenants-bucket.s3.amazonaws.com/uploads/pdf/sfO8uT22IwSzeBC527wfjSMEckum0nbCvx6xDZ1O.pdf');
     const [isLoading, setIsLoading] = useState(false);
     const [fields, setFields] = useState([]);
     const [selectedField, setSelectedField] = useState(null);
+
+    useEffect(() => {
+        const loadInitialPDF = async () => {
+            if (pdfUrl) {
+                setIsLoading(true);
+                try {
+                    const response = await fetch(pdfUrl);
+                    const blob = await response.blob();
+                    const reader = new FileReader();
+                    reader.onload = (e) => setPdf(e.target.result);
+                    reader.readAsDataURL(blob);
+                } catch (error) {
+                    console.error('Error loading PDF from URL:', error);
+                    alert('Failed to load PDF from URL');
+                } finally {
+                    setIsLoading(false);
+                }
+            }
+        };
+    
+        loadInitialPDF();
+    }, []); // Empty dependency array means this runs once when component mounts
 
     const addField = (type) => {
         const newField = {
@@ -99,8 +121,19 @@ const PDFSignature = () => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         const rect = canvas.getBoundingClientRect();
+
+        // Account for canvas scaling
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
+
         ctx.beginPath();
-        ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        ctx.moveTo(x, y);
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
         setIsDrawing(true);
     };
 
@@ -109,9 +142,15 @@ const PDFSignature = () => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         const rect = canvas.getBoundingClientRect();
-        ctx.lineWidth = 2;
-        ctx.lineCap = 'round';
-        ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+
+        // Account for canvas scaling
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
+
+        ctx.lineTo(x, y);
         ctx.stroke();
     };
 
@@ -120,6 +159,10 @@ const PDFSignature = () => {
             const canvas = canvasRef.current;
             setSignature(canvas.toDataURL());
             setIsDrawing(false);
+
+            // Start a new path after stopping
+            const ctx = canvas.getContext('2d');
+            ctx.beginPath();
         }
     };
 
@@ -190,26 +233,26 @@ const PDFSignature = () => {
             const startY = signaturePosition.y;
             const startWidth = signatureSize.width;
             const startHeight = signatureSize.height;
-        
+
             // Calculate the change in position relative to starting point
             const currentX = e.clientX - container.left;
             const currentY = e.clientY - container.top;
             const originalX = startX + dragStartPos.x;
             const originalY = startY + dragStartPos.y;
-            
+
             // Make movement extremely slow by using a very high scaling factor
             const deltaX = (currentX - originalX) / 25;  // Increased to 25
             const deltaY = (currentY - originalY) / 25;  // Increased to 25
-        
+
             // Round the deltas to smooth out tiny movements
             const roundedDeltaX = Math.round(deltaX * 2) / 2; // Round to nearest 0.5
             const roundedDeltaY = Math.round(deltaY * 2) / 2; // Round to nearest 0.5
-        
+
             let newWidth = startWidth;
             let newHeight = startHeight;
             let newX = startX;
             let newY = startY;
-        
+
             switch (resizeDirection) {
                 case 'se':
                     newWidth = Math.max(minSize, Math.round(startWidth + roundedDeltaX));
@@ -234,13 +277,13 @@ const PDFSignature = () => {
                 default:
                     break;
             }
-        
+
             // Ensure the signature stays within container bounds
             const maxX = container.width - newWidth;
             const maxY = container.height - newHeight;
             newX = Math.max(0, Math.min(newX, maxX));
             newY = Math.max(0, Math.min(newY, maxY));
-        
+
             // Round final values to prevent subpixel rendering
             setSignatureSize({
                 width: Math.round(newWidth),
@@ -418,6 +461,7 @@ const PDFSignature = () => {
                         onMouseMove={draw}
                         onMouseUp={stopDrawing}
                         onMouseLeave={stopDrawing}
+                        style={{ touchAction: 'none' }}
                     />
 
                     <div className="flex justify-end mt-2">

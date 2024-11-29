@@ -186,39 +186,70 @@ const PDFSignature = () => {
             }
         } else if (isResizing) {
             const minSize = 50;
-            let newWidth = signatureSize.width;
-            let newHeight = signatureSize.height;
-            let newX = signaturePosition.x;
-            let newY = signaturePosition.y;
-
-            const deltaX = e.clientX - (container.left + signaturePosition.x + dragStartPos.x);
-            const deltaY = e.clientY - (container.top + signaturePosition.y + dragStartPos.y);
-
+            const startX = signaturePosition.x;
+            const startY = signaturePosition.y;
+            const startWidth = signatureSize.width;
+            const startHeight = signatureSize.height;
+        
+            // Calculate the change in position relative to starting point
+            const currentX = e.clientX - container.left;
+            const currentY = e.clientY - container.top;
+            const originalX = startX + dragStartPos.x;
+            const originalY = startY + dragStartPos.y;
+            
+            // Make movement extremely slow by using a very high scaling factor
+            const deltaX = (currentX - originalX) / 25;  // Increased to 25
+            const deltaY = (currentY - originalY) / 25;  // Increased to 25
+        
+            // Round the deltas to smooth out tiny movements
+            const roundedDeltaX = Math.round(deltaX * 2) / 2; // Round to nearest 0.5
+            const roundedDeltaY = Math.round(deltaY * 2) / 2; // Round to nearest 0.5
+        
+            let newWidth = startWidth;
+            let newHeight = startHeight;
+            let newX = startX;
+            let newY = startY;
+        
             switch (resizeDirection) {
                 case 'se':
-                    newWidth = Math.max(minSize, signatureSize.width + deltaX);
-                    newHeight = Math.max(minSize, signatureSize.height + deltaY);
+                    newWidth = Math.max(minSize, Math.round(startWidth + roundedDeltaX));
+                    newHeight = Math.max(minSize, Math.round(startHeight + roundedDeltaY));
                     break;
                 case 'sw':
-                    newWidth = Math.max(minSize, signatureSize.width - deltaX);
-                    newHeight = Math.max(minSize, signatureSize.height + deltaY);
-                    newX = signaturePosition.x + deltaX;
+                    newWidth = Math.max(minSize, Math.round(startWidth - roundedDeltaX));
+                    newHeight = Math.max(minSize, Math.round(startHeight + roundedDeltaY));
+                    newX = Math.min(startX + roundedDeltaX, startX + startWidth - minSize);
                     break;
                 case 'ne':
-                    newWidth = Math.max(minSize, signatureSize.width + deltaX);
-                    newHeight = Math.max(minSize, signatureSize.height - deltaY);
-                    newY = signaturePosition.y + deltaY;
+                    newWidth = Math.max(minSize, Math.round(startWidth + roundedDeltaX));
+                    newHeight = Math.max(minSize, Math.round(startHeight - roundedDeltaY));
+                    newY = Math.min(startY + roundedDeltaY, startY + startHeight - minSize);
                     break;
                 case 'nw':
-                    newWidth = Math.max(minSize, signatureSize.width - deltaX);
-                    newHeight = Math.max(minSize, signatureSize.height - deltaY);
-                    newX = signaturePosition.x + deltaX;
-                    newY = signaturePosition.y + deltaY;
+                    newWidth = Math.max(minSize, Math.round(startWidth - roundedDeltaX));
+                    newHeight = Math.max(minSize, Math.round(startHeight - roundedDeltaY));
+                    newX = Math.min(startX + roundedDeltaX, startX + startWidth - minSize);
+                    newY = Math.min(startY + roundedDeltaY, startY + startHeight - minSize);
+                    break;
+                default:
                     break;
             }
-
-            setSignatureSize({ width: newWidth, height: newHeight });
-            setSignaturePosition({ x: newX, y: newY });
+        
+            // Ensure the signature stays within container bounds
+            const maxX = container.width - newWidth;
+            const maxY = container.height - newHeight;
+            newX = Math.max(0, Math.min(newX, maxX));
+            newY = Math.max(0, Math.min(newY, maxY));
+        
+            // Round final values to prevent subpixel rendering
+            setSignatureSize({
+                width: Math.round(newWidth),
+                height: Math.round(newHeight)
+            });
+            setSignaturePosition({
+                x: Math.round(newX),
+                y: Math.round(newY)
+            });
         }
     };
 

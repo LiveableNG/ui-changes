@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Upload, Download } from 'lucide-react';
-import { PDFDocument } from 'pdf-lib';
+import { Upload, Download, Link, Type, Calendar } from 'lucide-react';
+import { PDFDocument, rgb } from 'pdf-lib';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -21,6 +21,65 @@ const PDFSignature = () => {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
     const signatureRef = useRef(null);
+    const [pdfUrl, setPdfUrl] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [fields, setFields] = useState([]);
+    const [selectedField, setSelectedField] = useState(null);
+
+    const addField = (type) => {
+        const newField = {
+            id: Date.now(),
+            type,
+            content: type === 'date' ? new Date().toISOString().split('T')[0] : '',
+            position: { x: 100, y: 100 },
+            size: { width: type === 'date' ? 150 : 200, height: 40 }
+        };
+        setFields([...fields, newField]);
+    };
+
+    const updateFieldContent = (id, content) => {
+        setFields(fields.map(field =>
+            field.id === id ? { ...field, content } : field
+        ));
+    };
+
+    const handleFieldMouseDown = (e, field) => {
+        if (e.target.tagName === 'INPUT') {
+            return;  // Don't initiate drag if clicking on input
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!containerRef.current) return;
+        const containerRect = containerRef.current.getBoundingClientRect();
+
+        setSelectedField(field.id);
+        setDragStartPos({
+            x: e.clientX - containerRect.left - field.position.x,
+            y: e.clientY - containerRect.top - field.position.y
+        });
+        setIsDragging(true);
+    };
+
+    const handlePdfUrl = async (e) => {
+        e.preventDefault();
+        if (!pdfUrl) return;
+
+        setIsLoading(true);
+        try {
+            const response = await fetch(pdfUrl);
+            const blob = await response.blob();
+            const reader = new FileReader();
+            reader.onload = (e) => setPdf(e.target.result);
+            reader.readAsDataURL(blob);
+        } catch (error) {
+            console.error('Error loading PDF from URL:', error);
+            alert('Failed to load PDF from URL');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const handleFileChange = (e, type) => {
         const file = e.target.files[0];
@@ -74,15 +133,15 @@ const PDFSignature = () => {
     const handleMouseDown = (e, action, direction = null) => {
         e.preventDefault();
         e.stopPropagation();
-        
+
         if (!containerRef.current) return;
         const containerRect = containerRef.current.getBoundingClientRect();
-        
+
         setDragStartPos({
             x: e.clientX - containerRect.left - signaturePosition.x,
             y: e.clientY - containerRect.top - signaturePosition.y
         });
-        
+
         if (action === 'drag') setIsDragging(true);
         if (action === 'resize') {
             setIsResizing(true);
@@ -92,18 +151,39 @@ const PDFSignature = () => {
 
     const handleMouseMove = (e) => {
         if (!isDragging && !isResizing) return;
+        if (e.target.tagName === 'INPUT') return;
         e.preventDefault();
 
         const container = containerRef.current.getBoundingClientRect();
 
         if (isDragging) {
-            const newX = e.clientX - container.left - dragStartPos.x;
-            const newY = e.clientY - container.top - dragStartPos.y;
+            if (selectedField) {
+                // Move field
+                const newX = e.clientX - container.left - dragStartPos.x;
+                const newY = e.clientY - container.top - dragStartPos.y;
 
-            setSignaturePosition({
-                x: Math.max(0, Math.min(newX, container.width - signatureSize.width)),
-                y: Math.max(0, Math.min(newY, container.height - signatureSize.height))
-            });
+                setFields(fields.map(field => {
+                    if (field.id === selectedField) {
+                        return {
+                            ...field,
+                            position: {
+                                x: Math.max(0, Math.min(newX, container.width - field.size.width)),
+                                y: Math.max(0, Math.min(newY, container.height - field.size.height))
+                            }
+                        };
+                    }
+                    return field;
+                }));
+            } else {
+                // Existing signature movement code
+                const newX = e.clientX - container.left - dragStartPos.x;
+                const newY = e.clientY - container.top - dragStartPos.y;
+
+                setSignaturePosition({
+                    x: Math.max(0, Math.min(newX, container.width - signatureSize.width)),
+                    y: Math.max(0, Math.min(newY, container.height - signatureSize.height))
+                });
+            }
         } else if (isResizing) {
             const minSize = 50;
             let newWidth = signatureSize.width;
@@ -146,6 +226,7 @@ const PDFSignature = () => {
         setIsDragging(false);
         setIsResizing(false);
         setResizeDirection(null);
+        setSelectedField(null);
     };
 
     useEffect(() => {
@@ -155,7 +236,7 @@ const PDFSignature = () => {
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseup', handleMouseUp);
         };
-    }, [isDragging, isResizing, signaturePosition, signatureSize]);
+    }, [isDragging, isResizing, signaturePosition, signatureSize, fields, selectedField]);
 
     const onDocumentLoadSuccess = ({ numPages }) => {
         setNumPages(numPages);
@@ -166,10 +247,10 @@ const PDFSignature = () => {
             const pdfDoc = await PDFDocument.load(pdf);
             const pages = pdfDoc.getPages();
             const pageHeights = Array.from(containerRef.current.querySelectorAll('.react-pdf__Page')).map(page => page.clientHeight);
-            
+
             let accumulatedHeight = 0;
             let currentPage = 0;
-            
+
             for (let i = 0; i < pageHeights.length; i++) {
                 if (signaturePosition.y > accumulatedHeight && signaturePosition.y <= accumulatedHeight + pageHeights[i]) {
                     currentPage = i;
@@ -177,24 +258,54 @@ const PDFSignature = () => {
                 }
                 accumulatedHeight += pageHeights[i];
             }
-    
+
             const page = pages[currentPage];
             const { width, height } = page.getSize();
             const container = containerRef.current;
             const localY = signaturePosition.y - accumulatedHeight;
-    
+
             const signatureImage = await pdfDoc.embedPng(signature);
             const pdfX = (signaturePosition.x / container.clientWidth) * width;
-            const pdfY = height - ((localY / pageHeights[currentPage]) * height) - 
+            const pdfY = height - ((localY / pageHeights[currentPage]) * height) -
                 ((signatureSize.height / pageHeights[currentPage]) * height);
-    
+
             page.drawImage(signatureImage, {
                 x: pdfX,
                 y: pdfY,
                 width: (signatureSize.width / container.clientWidth) * width,
                 height: (signatureSize.height / pageHeights[currentPage]) * height,
             });
-    
+
+            // Add text and date fields
+            fields.forEach(field => {
+                let accumulatedHeight = 0;
+                let currentPage = 0;
+
+                for (let i = 0; i < pageHeights.length; i++) {
+                    if (field.position.y > accumulatedHeight && field.position.y <= accumulatedHeight + pageHeights[i]) {
+                        currentPage = i;
+                        break;
+                    }
+                    accumulatedHeight += pageHeights[i];
+                }
+
+                const page = pages[currentPage];
+                const { width, height } = page.getSize();
+                const container = containerRef.current;
+                const localY = field.position.y - accumulatedHeight;
+
+                const pdfX = (field.position.x / container.clientWidth) * width;
+                const pdfY = height - ((localY / pageHeights[currentPage]) * height) -
+                    ((field.size.height / pageHeights[currentPage]) * height);
+
+                page.drawText(field.content, {
+                    x: pdfX,
+                    y: pdfY + (field.size.height / 2),
+                    size: 12,
+                    color: rgb(0, 0, 0),
+                });
+            });
+
             const pdfBytes = await pdfDoc.save();
             const blob = new Blob([pdfBytes], { type: 'application/pdf' });
             const url = URL.createObjectURL(blob);
@@ -211,13 +322,34 @@ const PDFSignature = () => {
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
             <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
-                    <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            <Upload className="w-8 h-8 mb-2 text-gray-500" />
-                            <p className="text-sm text-gray-500">Upload PDF</p>
-                        </div>
-                        <input type="file" className="hidden" accept="application/pdf" onChange={(e) => handleFileChange(e, 'pdf')} />
-                    </label>
+                    <div className="space-y-4">
+                        <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                <Upload className="w-8 h-8 mb-2 text-gray-500" />
+                                <p className="text-sm text-gray-500">Upload PDF</p>
+                            </div>
+                            <input type="file" className="hidden" accept="application/pdf" onChange={(e) => handleFileChange(e, 'pdf')} />
+                        </label>
+
+                        <form onSubmit={handlePdfUrl} className="space-y-2">
+                            <div className="flex gap-2">
+                                <input
+                                    type="url"
+                                    value={pdfUrl}
+                                    onChange={(e) => setPdfUrl(e.target.value)}
+                                    placeholder="Enter PDF URL"
+                                    className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                                >
+                                    <Link className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
 
                     <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -226,6 +358,22 @@ const PDFSignature = () => {
                         </div>
                         <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileChange(e, 'signature')} />
                     </label>
+                </div>
+                <div className="flex gap-4 mt-4">
+                    <button
+                        onClick={() => addField('text')}
+                        className="flex items-center px-4 py-2 bg-gray-100 rounded hover:bg-gray-200"
+                    >
+                        <Type className="w-4 h-4 mr-2" />
+                        Add Text Field
+                    </button>
+                    <button
+                        onClick={() => addField('date')}
+                        className="flex items-center px-4 py-2 bg-gray-100 rounded hover:bg-gray-200"
+                    >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Add Date Field
+                    </button>
                 </div>
 
                 <div className="border rounded-lg p-4">
@@ -240,6 +388,7 @@ const PDFSignature = () => {
                         onMouseUp={stopDrawing}
                         onMouseLeave={stopDrawing}
                     />
+
                     <div className="flex justify-end mt-2">
                         <button onClick={clearSignature} className="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded hover:bg-gray-200">
                             Clear
@@ -303,6 +452,32 @@ const PDFSignature = () => {
                                 />
                             </div>
                         )}
+
+                        {fields.map((field) => (
+                            <div
+                                key={field.id}
+                                className="absolute border-2 border-green-500 cursor-move select-none z-10"
+                                style={{
+                                    left: `${field.position.x}px`,
+                                    top: `${field.position.y}px`,
+                                    width: `${field.size.width}px`,
+                                    height: `${field.size.height}px`,
+                                }}
+                                onMouseDown={(e) => handleFieldMouseDown(e, field)}
+                            >
+                                <input
+                                    type={field.type}
+                                    value={field.content}
+                                    onChange={(e) => {
+                                        e.stopPropagation();  // Add this
+                                        updateFieldContent(field.id, e.target.value);
+                                    }}
+                                    onMouseDown={(e) => e.stopPropagation()}  // Add this
+                                    className="w-full h-full px-2 bg-white/80 focus:outline-none pointer-events-auto"
+                                    placeholder={field.type === 'text' ? "Enter text..." : "Select date..."}
+                                />
+                            </div>
+                        ))}
                     </div>
                 )}
 

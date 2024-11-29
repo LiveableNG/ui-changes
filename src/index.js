@@ -4,6 +4,7 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import GoogleLikeFormBuilder from './GoogleLikeFormBuilder';
+import PDFSignature from './PDFSigner';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,7 +13,8 @@ root.render(
     {/* <CreditChekReportViewer /> */}
     {/* <PropertyReport /> */}
     {/* <LandlordReport1 /> */}
-    <GoogleLikeFormBuilder />
+    {/* <GoogleLikeFormBuilder /> */}
+    <PDFSignature />
   </React.StrictMode>
 );
 

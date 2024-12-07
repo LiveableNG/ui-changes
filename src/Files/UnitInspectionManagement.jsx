@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, MoreVertical, User, MapPin, Phone, MessageSquare, Clock, Check, X, AlertCircle, Calendar } from 'lucide-react';
+import { ChevronLeft, MoreVertical, User, MapPin, Phone, MessageSquare, Clock, Check, X, AlertCircle, Calendar, Users } from 'lucide-react';
+import { mockApiService } from './mockApiService';
 
 const UnitInspectionManagement = () => {
     // State Management
@@ -17,6 +18,11 @@ const UnitInspectionManagement = () => {
     const [rescheduleDate, setRescheduleDate] = useState(null);
     const [confirmationMessage, setConfirmationMessage] = useState('');
     const [loadingMessage, setLoadingMessage] = useState('');
+    const [units, setUnits] = useState([]);
+    const [prospects, setProspects] = useState([]);
+    const [isLoadingUnits, setIsLoadingUnits] = useState(true);
+    const [isLoadingProspects, setIsLoadingProspects] = useState(false);
+    const [showMoveInOnly, setShowMoveInOnly] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -26,126 +32,47 @@ const UnitInspectionManagement = () => {
         };
     }, []);
 
-    // Sample Data
-    const [units, setUnits] = useState([
-        {
-            id: 1,
-            name: '57 Jola Close',
-            address: '294 Borno Way, Yaba, Lagos',
-            date: '2024-12-08',
-            totalProspects: 10,
-            completedInspections: 0
-        },
-        {
-            id: 2,
-            name: '4 Morris Street',
-            address: '04 Alagomeji, Yaba, Lagos',
-            date: '2024-11-15',
-            totalProspects: 8,
-            completedInspections: 0
-        }
-    ]);
+    useEffect(() => {
+        const fetchInitialUnits = async () => {
+            try {
+                setIsLoadingUnits(true);
+                const fetchedUnits = await mockApiService.fetchUnits();
+                setUnits(fetchedUnits);
+            } catch (error) {
+                console.error('Failed to fetch units:', error);
+                setError('Failed to load units. Please try again.');
+            } finally {
+                setIsLoadingUnits(false);
+            }
+        };
 
-    const [prospects, setProspects] = useState([
-        // Prospects for Unit 1 (57 Jola Close)
-        {
-            id: 1,
-            unitId: 1,
-            name: 'John Smith',
-            phone: '+234 801 234 5678',
-            time: '09:00 AM',
-            status: 'scheduled',
-            feedback: ''
-        },
-        {
-            id: 2,
-            unitId: 1,
-            name: 'Sarah Johnson',
-            phone: '+234 802 345 6789',
-            time: '09:30 AM',
-            status: 'scheduled',
-            feedback: ''
-        },
-        {
-            id: 3,
-            unitId: 1,
-            name: 'Michael Brown',
-            phone: '+234 803 456 7890',
-            time: '10:00 AM',
-            status: 'scheduled',
-            feedback: ''
-        },
-        {
-            id: 4,
-            unitId: 1,
-            name: 'Emma Wilson',
-            phone: '+234 804 567 8901',
-            time: '10:30 AM',
-            status: 'scheduled',
-            feedback: ''
-        },
-        {
-            id: 5,
-            unitId: 1,
-            name: 'James Taylor',
-            phone: '+234 805 678 9012',
-            time: '11:00 AM',
-            status: 'scheduled',
-            feedback: ''
-        },
+        fetchInitialUnits();
 
-        // Prospects for Unit 2 (4 Morris Street)
-        {
-            id: 6,
-            unitId: 2,
-            name: 'Lisa Anderson',
-            phone: '+234 806 789 0123',
-            time: '09:00 AM',
-            status: 'scheduled',
-            feedback: ''
-        },
-        {
-            id: 7,
-            unitId: 2,
-            name: 'Robert Martin',
-            phone: '+234 807 890 1234',
-            time: '09:30 AM',
-            status: 'scheduled',
-            feedback: ''
-        },
-        {
-            id: 8,
-            unitId: 2,
-            name: 'Patricia Lee',
-            phone: '+234 808 901 2345',
-            time: '10:00 AM',
-            status: 'scheduled',
-            feedback: ''
-        },
-        {
-            id: 9,
-            unitId: 2,
-            name: 'David Clark',
-            phone: '+234 809 012 3456',
-            time: '10:30 AM',
-            status: 'scheduled',
-            feedback: ''
-        },
-        {
-            id: 10,
-            unitId: 2,
-            name: 'Maria Garcia',
-            phone: '+234 810 123 4567',
-            time: '11:00 AM',
-            status: 'scheduled',
-            feedback: ''
-        }
-    ]);
+        return () => {
+            handleCloseModal();
+            setShowConfirmation(false);
+            setShowRescheduleModal(false);
+        };
+    }, []);
 
     // Handlers
-    const handleUnitSelect = (unit) => {
-        setSelectedUnit(unit);
-        setCurrentView('prospects');
+    const handleUnitSelect = async (unit) => {
+        try {
+            setIsLoadingProspects(true);
+            setCurrentView('prospects'); // Move this up so we see the loading state
+            setSelectedUnit(unit);
+            
+            const fetchedProspects = await mockApiService.fetchProspects(unit.id);
+            setProspects(prevProspects => [
+                ...prevProspects.filter(p => p.unitId !== unit.id),
+                ...fetchedProspects
+            ]);
+        } catch (error) {
+            console.error('Failed to fetch prospects:', error);
+            setError('Failed to load prospects. Please try again.');
+        } finally {
+            setIsLoadingProspects(false);
+        }
     };
 
     const handleBackToUnits = () => {
@@ -170,46 +97,58 @@ const UnitInspectionManagement = () => {
 
     const handleSaveFeedback = async (feedbackText) => {
         setIsLoading(true);
+        setLoadingMessage('Saving feedback...');
         try {
-            // First update prospects
-            const updatedProspects = prospects.map(p => {
-                if (p.id === selectedProspect.id) {
-                    return {
-                        ...p,
-                        status: 'completed',
-                        feedback: feedbackText,  // Use the passed feedback text
-                        departureTime: new Date().toISOString()
-                    };
-                }
-                return p;
-            });
-    
-            setProspects(updatedProspects);
-    
-            // Calculate total handled inspections (completed, no_show, or cancelled)
-            const handledCount = updatedProspects.filter(p =>
-                p.status === 'completed' ||
-                p.status === 'no_show' ||
-                p.status === 'cancelled'
-            ).length;
-    
-            // Update unit with correct count
-            setUnits(units.map(unit => {
-                if (unit.id === selectedUnit.id) {
-                    return {
-                        ...unit,
-                        completedInspections: handledCount
-                    };
-                }
-                return unit;
-            }));
-    
-            handleCloseModal();
+            const result = await mockApiService.updateProspectStatus(
+                selectedProspect.id,
+                'completed',
+                feedbackText
+            );
+
+            if (result.success) {
+                // Update prospects
+                const updatedProspects = prospects.map(p => {
+                    if (p.id === selectedProspect.id) {
+                        return {
+                            ...p,
+                            status: 'completed',
+                            feedback: feedbackText,
+                            departureTime: result.timestamp
+                        };
+                    }
+                    return p;
+                });
+
+                setProspects(updatedProspects);
+
+                // Calculate total handled inspections
+                const handledCount = updatedProspects.filter(p =>
+                    p.unitId === selectedUnit.id && (
+                        p.status === 'completed' ||
+                        p.status === 'no_show' ||
+                        p.status === 'cancelled'
+                    )
+                ).length;
+
+                // Update unit with correct count
+                setUnits(units.map(unit => {
+                    if (unit.id === selectedUnit.id) {
+                        return {
+                            ...unit,
+                            completedInspections: handledCount
+                        };
+                    }
+                    return unit;
+                }));
+
+                handleCloseModal();
+            }
         } catch (error) {
             console.error('Failed to save feedback:', error);
             setError('Failed to save feedback. Please try again.');
         } finally {
             setIsLoading(false);
+            setLoadingMessage('');
         }
     };
 
@@ -230,65 +169,119 @@ const UnitInspectionManagement = () => {
     };
 
     // Units List View Component (Unchanged)
-    const UnitsListView = () => (
-        <div className="space-y-4">
-            {units.map(unit => (
-                <div
-                    key={unit.id}
-                    className="bg-white rounded-lg shadow p-4 space-y-4"
-                >
+    const UnitsListView = () => {
+        const filteredUnits = showMoveInOnly 
+            ? units.filter(unit => unit.isMoveIn)
+            : units;
+    
+        return (
+            <div className="space-y-4">
+                {/* Toggle Switch */}
+                <div className="bg-white p-4 rounded-lg shadow mb-4">
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center text-blue-600">
-                            <Clock className="w-5 h-5 mr-2" />
-                            <span>Upcoming</span>
-                        </div>
-                        <span className="text-gray-600">{unit.date}</span>
+                        <span className="text-sm font-medium text-gray-700">
+                            Show Viewing Inspections Only
+                        </span>
+                        <button
+                            onClick={() => setShowMoveInOnly(!showMoveInOnly)}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                                showMoveInOnly ? 'bg-blue-600' : 'bg-gray-200'
+                            }`}
+                        >
+                            <span
+                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                    showMoveInOnly ? 'translate-x-6' : 'translate-x-1'
+                                }`}
+                            />
+                        </button>
                     </div>
-
-                    <div className="space-y-2">
-                        <div className="flex items-center">
-                            <User className="w-5 h-5 text-gray-400 mr-2" />
-                            <span className="text-gray-600">
-                                {prospects.filter(p =>
-                                    p.unitId === unit.id &&
-                                    (p.status === 'completed' || p.status === 'no_show' || p.status === 'cancelled')
-                                ).length} of {unit.totalProspects} inspections handled
-                            </span>
-                        </div>
-                        <div className="flex items-center">
-                            <MapPin className="w-5 h-5 text-gray-400 mr-2" />
-                            <span className="text-gray-900">{unit.name}</span>
-                        </div>
-                    </div>
-
-                    <button
-                        onClick={() => handleUnitSelect(unit)}
-                        className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                        Start Inspection
-                    </button>
                 </div>
-            ))}
-        </div>
-    );
+    
+                {isLoadingUnits ? (
+                    <div className="text-center py-8">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                        <p className="text-gray-600">Loading units...</p>
+                    </div>
+                ) : filteredUnits.length > 0 ? (
+                    filteredUnits.map(unit => (
+                        <div
+                            key={unit.id}
+                            className="bg-white rounded-lg shadow p-4 space-y-4"
+                        >
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center text-blue-600">
+                                    <Clock className="w-5 h-5 mr-2" />
+                                    <span>Upcoming</span>
+                                </div>
+                                <span className="text-gray-600">{unit.date}</span>
+                            </div>
+    
+                            <div className="space-y-2">
+                                <div className="flex items-center">
+                                    <User className="w-5 h-5 text-gray-400 mr-2" />
+                                    <span className="text-gray-600">
+                                        {prospects.filter(p =>
+                                            p.unitId === unit.id &&
+                                            (p.status === 'completed' || p.status === 'no_show' || p.status === 'cancelled')
+                                        ).length} of {unit.totalProspects} inspections handled
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <MapPin className="w-5 h-5 text-gray-400 mr-2" />
+                                        <span className="text-gray-900">{unit.name}</span>
+                                    </div>
+                                    {unit.isMoveIn && (
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Viewing
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+    
+                            <button
+                                onClick={() => handleUnitSelect(unit)}
+                                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                                Start Inspection
+                            </button>
+                        </div>
+                    ))
+                ) : (
+                    <div className="text-center py-8">
+                        <p className="text-gray-600">No {showMoveInOnly ? 'move-in ' : ''}units available.</p>
+                    </div>
+                )}
+            </div>
+        );
+    };
 
     // Prospects List View Component (Updated)
     const ProspectsListView = () => {
         const [openActionMenu, setOpenActionMenu] = useState(null);
-            // Add this new useEffect
-            useEffect(() => {
-                const handleClickOutside = (event) => {
-                    if (!event.target.closest('.action-menu')) {
-                        setOpenActionMenu(null);
-                    }
-                };
+        // Add this new useEffect
+        useEffect(() => {
+            const handleClickOutside = (event) => {
+                if (!event.target.closest('.action-menu')) {
+                    setOpenActionMenu(null);
+                }
+            };
 
-                document.addEventListener('click', handleClickOutside);
-                return () => {
-                    document.removeEventListener('click', handleClickOutside);
-                };
-            }, []);
-            
+            document.addEventListener('click', handleClickOutside);
+            return () => {
+                document.removeEventListener('click', handleClickOutside);
+            };
+        }, []);
+
+        if (isLoadingProspects) {
+            return (
+                <div className="flex flex-col items-center justify-center min-h-[200px] py-12">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600 text-lg">Loading prospects...</p>
+                </div>
+            );
+        }
+
         const handleCall = (e, phone) => {
             e.stopPropagation();
             window.location.href = `tel:${phone.replace(/\s+/g, '')}`;
@@ -483,13 +476,13 @@ const UnitInspectionManagement = () => {
 
     const FeedbackModal = () => {
         const [localFeedback, setLocalFeedback] = useState('');
-    
+
         useEffect(() => {
             if (selectedProspect) {
                 setLocalFeedback(selectedProspect.feedback || '');
             }
         }, [selectedProspect, isModalOpen]);
-    
+
         const handleSave = () => {
             if (!localFeedback.trim()) {
                 setError('Feedback is required for completed inspections');
@@ -497,7 +490,7 @@ const UnitInspectionManagement = () => {
             }
             handleSaveFeedback(localFeedback);
         };
-    
+
         return (
             <div className={`fixed inset-0 bg-black bg-opacity-50 z-50 ${isModalOpen ? 'flex items-center justify-center' : 'hidden'}`}>
                 <div className="w-full max-w-lg mx-4 bg-white rounded-lg shadow-xl">
@@ -515,7 +508,7 @@ const UnitInspectionManagement = () => {
                         </div>
                         <p className="text-sm text-gray-500">{selectedProspect?.time}</p>
                     </div>
-    
+
                     <div className="p-4">
                         {error && (
                             <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md">
@@ -529,7 +522,7 @@ const UnitInspectionManagement = () => {
                             onChange={(e) => setLocalFeedback(e.target.value)}
                             readOnly={modalMode === 'view'}
                         />
-    
+
                         <div className="flex justify-end space-x-3">
                             <button
                                 onClick={handleCloseModal}
@@ -665,13 +658,6 @@ const UnitInspectionManagement = () => {
             <FeedbackModal />
             <ConfirmationDialog />
             <RescheduleModal />
-
-            {/* Loading Overlay */}
-            {isLoading && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-                    <div className="bg-white p-4 rounded-lg">{loadingMessage || 'Loading...'}</div>
-                </div>
-            )}
         </div>
     );
 };

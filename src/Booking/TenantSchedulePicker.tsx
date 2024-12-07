@@ -3,7 +3,7 @@ import { Calendar, Clock, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 type TimeSlot = {
   start: string;
-  end: string;
+  end?: string;
 };
 
 type WeekDayTimeSlots = {
@@ -33,12 +33,60 @@ interface KYCScheduleViewerProps {
   formData: UseCase;
 }
 
+interface AppointmentData {
+  kycType: string;
+  date: string;
+  timeSlot: {
+    start: string;
+    end: string;
+  };
+  timestamp: number;
+}
+
 const formatTime = (time24: string): string => {
   const [hours, minutes] = time24.split(':');
   const hour = parseInt(hours, 10);
   const period = hour >= 12 ? 'PM' : 'AM';
   const hour12 = hour % 12 || 12;
   return `${hour12}:${minutes} ${period}`;
+};
+
+const generateTimesForSlot = (date: Date, start: string, end: string): string[] => {
+  const times = [];
+  let currentTime = new Date(`2000-01-01T${start}`);
+  const endTime = new Date(`2000-01-01T${end}`);
+  
+  // Check if selected date is today
+  const isToday = new Date().toDateString() === date.toDateString();
+  const now = new Date();
+  
+  while (currentTime < endTime) {
+    const timeString = currentTime.toTimeString().slice(0, 5);
+    
+    // If it's today, only include future times (adding a small buffer)
+    if (!isToday || (isToday && `${timeString}:00` > now.toTimeString())) {
+      times.push(timeString);
+    }
+    
+    currentTime.setMinutes(currentTime.getMinutes() + 15);
+  }
+  
+  return times;
+};
+
+const generateTimeOptions = () => {
+  const options = [];
+  for (let hour = 0; hour < 24; hour++) {
+    for (let minute = 0; minute < 60; minute += 15) {
+      const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+      options.push(time);
+    }
+  }
+  return options;
+};
+
+const isTimeInRange = (time: string, start: string, end: string): boolean => {
+  return time >= start && time <= end;
 };
 
 const useCases: UseCases = {
@@ -246,6 +294,25 @@ const KYCScheduleViewer: React.FC<KYCScheduleViewerProps> = ({ formData }) => {
     }
   };
 
+  const handleAppointmentSubmit = () => {
+    if (!selectedDate || !selectedTimeSlot) return;
+
+    const appointmentData: AppointmentData = {
+      kycType: formData.kycType,
+      date: selectedDate.toISOString().split('T')[0],
+      timeSlot: {
+        start: selectedTimeSlot.start,
+        end: selectedTimeSlot.end
+      },
+      time: selectedTimeSlot.start,
+      timestamp: Date.now()
+    };
+
+    // Here you would typically send this to your API
+    console.log('Appointment Data:', JSON.stringify(appointmentData, null, 2));
+    alert('Appointment submitted successfully! Check console for JSON data.');
+  };
+
   useEffect(() => {
     setSelectedDate(null);
     setSelectedTimeSlot(null);
@@ -324,33 +391,40 @@ const KYCScheduleViewer: React.FC<KYCScheduleViewerProps> = ({ formData }) => {
         </div>
       </div>
 
-      {selectedDate && (
-        <div className="mt-6">
-          <h3 className="text-lg font-medium mb-4">Available Time Slots</h3>
-          <div className="grid grid-cols-2 gap-4">
-            {getTimeSlots(selectedDate).map((slot, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedTimeSlot(slot)}
-                className={`p-4 rounded-lg border flex items-center justify-center space-x-2
-                  ${selectedTimeSlot === slot 
-                    ? 'border-blue-900 bg-blue-50' 
-                    : 'border-gray-200 hover:border-blue-900'
-                  }`}
-              >
-                <Clock className="w-4 h-4" />
-                <span>{formatTime(slot.start)} - {formatTime(slot.end)}</span>
-              </button>
+{selectedDate && (
+  <div className="mt-6">
+    <h3 className="text-lg font-medium mb-4">Select Available Time</h3>
+    <select
+      value={selectedTimeSlot?.start || ''}
+      onChange={(e) => setSelectedTimeSlot({ start: e.target.value })}
+      className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+    >
+      <option value="">Select time</option>
+      {getTimeSlots(selectedDate).map((slot, slotIndex) => {
+        const times = generateTimesForSlot(selectedDate, slot.start, slot.end);
+        // Only show slots that have available times
+        if (times.length === 0) return null;
+        
+        return (
+          <optgroup 
+            key={slotIndex} 
+            label={`${formatTime(slot.start)} - ${formatTime(slot.end)}`}
+          >
+            {times.map((time) => (
+              <option key={time} value={time}>
+                {formatTime(time)}
+              </option>
             ))}
-          </div>
-        </div>
-      )}
+          </optgroup>
+        );
+      })}
+    </select>
+  </div>
+)}
 
       {selectedDate && selectedTimeSlot && (
         <button
-          onClick={() => {
-            alert(`Appointment confirmed for ${formatDate(selectedDate)} at ${formatTime(selectedTimeSlot.start)} - ${formatTime(selectedTimeSlot.end)}`);
-          }}
+          onClick={handleAppointmentSubmit}
           className="w-full mt-6 bg-blue-900 text-white py-3 rounded-lg hover:bg-blue-800 transition-colors"
         >
           Confirm Appointment

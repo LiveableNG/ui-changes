@@ -641,21 +641,23 @@ const UnitInspectionManagement = () => {
 
     const FeedbackModal = () => {
         const [localFeedback, setLocalFeedback] = useState('');
-
+        const [sendKyc, setSendKyc] = useState(true); // Add this line
+    
         useEffect(() => {
             if (selectedProspect) {
                 setLocalFeedback(selectedProspect.feedback || '');
+                setSendKyc(true); // Add this line to reset KYC checkbox state
             }
         }, [selectedProspect, isModalOpen]);
-
+    
         const handleSave = () => {
             if (!localFeedback.trim()) {
                 setError('Feedback is required for completed inspections');
                 return;
             }
-            handleSaveFeedback(localFeedback);
+            handleSaveFeedback(localFeedback, sendKyc); // Update this line to include sendKyc
         };
-
+    
         return (
             <div className={`fixed inset-0 bg-black bg-opacity-50 z-50 ${isModalOpen ? 'flex items-center justify-center' : 'hidden'}`}>
                 <div className="w-full max-w-lg mx-4 bg-white rounded-lg shadow-xl">
@@ -673,7 +675,7 @@ const UnitInspectionManagement = () => {
                         </div>
                         <p className="text-sm text-gray-500">{selectedProspect?.time}</p>
                     </div>
-
+    
                     <div className="p-4">
                         {error && (
                             <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md">
@@ -687,7 +689,23 @@ const UnitInspectionManagement = () => {
                             onChange={(e) => setLocalFeedback(e.target.value)}
                             readOnly={modalMode === 'view'}
                         />
-
+    
+                        {/* Add this checkbox section */}
+                        {modalMode === 'create' && (
+                            <div className="flex items-center mb-4">
+                                <input
+                                    type="checkbox"
+                                    id="sendKyc"
+                                    checked={sendKyc}
+                                    onChange={(e) => setSendKyc(e.target.checked)}
+                                    className="h-4 w-4 text-blue-600 rounded border-gray-300"
+                                />
+                                <label htmlFor="sendKyc" className="ml-2 text-gray-700">
+                                    Send KYC form to prospect
+                                </label>
+                            </div>
+                        )}
+    
                         <div className="flex justify-end space-x-3">
                             <button
                                 onClick={handleCloseModal}

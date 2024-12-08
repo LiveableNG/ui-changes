@@ -15,8 +15,8 @@ export const mockApiService = {
                 totalProspects: 10,
                 completedInspections: 0,
                 isMoveIn: true,
-                latitude: 1.234567,
-                longitude: 103.123456,
+                latitude: 6.634692658232527,
+                longitude: 3.3587870540327556,
             },
             {
                 id: 2,

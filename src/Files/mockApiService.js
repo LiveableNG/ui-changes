@@ -14,7 +14,9 @@ export const mockApiService = {
                 date: '2024-12-08',
                 totalProspects: 10,
                 completedInspections: 0,
-                isMoveIn: true
+                isMoveIn: true,
+                latitude: 1.234567,
+                longitude: 103.123456,
             },
             {
                 id: 2,
@@ -23,7 +25,9 @@ export const mockApiService = {
                 date: '2024-11-15',
                 totalProspects: 8,
                 completedInspections: 0,
-                isMoveIn: false
+                isMoveIn: false,
+                latitude: 1.234567,
+                longitude: 103.123456,
             },
             {
                 id: 3,
@@ -32,7 +36,9 @@ export const mockApiService = {
                 date: '2024-12-10',
                 totalProspects: 5,
                 completedInspections: 0,
-                isMoveIn: true
+                isMoveIn: true,
+                latitude: 1.234567,
+                longitude: 103.123456,
             }
         ];
     },

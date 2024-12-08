@@ -2,6 +2,122 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, MoreVertical, User, MapPin, Phone, MessageSquare, Clock, Check, X, AlertCircle, Calendar, Users, MessageCircle } from 'lucide-react';
 import { mockApiService } from './mockApiService';
 
+const GeofenceError = ({ onBack, distance, radius }) => {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="w-full max-w-md rounded-lg p-6">
+          <div className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="p-3 bg-red-100 rounded-full">
+                <AlertCircle className="w-8 h-8 text-red-600" />
+              </div>
+            </div>
+            
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              Location Out of Range
+            </h2>
+            
+            <div className="flex items-center justify-center mb-4">
+              <MapPin className="w-5 h-5 text-gray-500 mr-2" />
+              <p className="text-gray-600">
+                You are {distance}m away from the unit
+              </p>
+            </div>
+            
+            <p className="text-gray-500 mb-6">
+              Please move within {radius}m of the unit to perform the inspection
+            </p>
+            
+            <button
+              onClick={onBack}
+              className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Go Back
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+// Geofencing utility functions
+const checkGeofence = (unitLat, unitLong, userLat, userLong, radiusInMeters = 100) => {
+    // Earth's radius in meters
+    const earthRadius = 6371000;
+
+    // Helper function to convert degrees to radians
+    const toRadians = (degrees) => degrees * (Math.PI / 180);
+
+    // Convert latitude and longitude from degrees to radians
+    const lat1 = toRadians(unitLat);
+    const lon1 = toRadians(unitLong);
+    const lat2 = toRadians(userLat);
+    const lon2 = toRadians(userLong);
+
+    // Calculate differences
+    const latDelta = lat2 - lat1;
+    const lonDelta = lon2 - lon1;
+
+    // Haversine formula
+    const a = 
+        Math.sin(latDelta / 2) * Math.sin(latDelta / 2) +
+        Math.cos(lat1) * Math.cos(lat2) * 
+        Math.sin(lonDelta / 2) * Math.sin(lonDelta / 2);
+    
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    // Calculate distance in meters
+    const distance = earthRadius * c;
+
+    return {
+        isInRange: distance <= radiusInMeters,
+        distance: Math.round(distance), // Returns distance in meters
+        radius: radiusInMeters
+    };
+};
+
+// Helper function to get current position with error handling
+const getCurrentPosition = () => {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject(new Error('Geolocation is not supported by your browser'));
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                resolve({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    accuracy: position.coords.accuracy
+                });
+            },
+            (error) => {
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        reject(new Error('Please allow location access to use this feature'));
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        reject(new Error('Location information is unavailable'));
+                        break;
+                    case error.TIMEOUT:
+                        reject(new Error('Location request timed out'));
+                        break;
+                    default:
+                        reject(new Error('An unknown error occurred'));
+                        break;
+                }
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            }
+        );
+    });
+};
+  
+
 const UnitInspectionManagement = () => {
     // State Management
     const [currentView, setCurrentView] = useState('units');
@@ -23,6 +139,7 @@ const UnitInspectionManagement = () => {
     const [isLoadingUnits, setIsLoadingUnits] = useState(true);
     const [isLoadingProspects, setIsLoadingProspects] = useState(false);
     const [showMoveInOnly, setShowMoveInOnly] = useState(false);
+    const [geofenceError, setGeofenceError] = useState(null);
 
     useEffect(() => {
         return () => {
@@ -59,17 +176,39 @@ const UnitInspectionManagement = () => {
     const handleUnitSelect = async (unit) => {
         try {
             setIsLoadingProspects(true);
-            setCurrentView('prospects'); // Move this up so we see the loading state
+            setError(null);
+    
+            if (!unit.latitude || !unit.longitude) {
+                setError('Unit location data is missing');
+                return;
+            }
+    
+            const position = await getCurrentPosition();
+            const geofenceResult = checkGeofence(
+                unit.latitude,
+                unit.longitude,
+                position.latitude,
+                position.longitude
+            );
+    
+            if (!geofenceResult.isInRange) {
+                setGeofenceError({
+                    distance: geofenceResult.distance,
+                    radius: geofenceResult.radius
+                });
+                return;
+            }
+    
+            setCurrentView('prospects');
             setSelectedUnit(unit);
-
+    
             const fetchedProspects = await mockApiService.fetchProspects(unit.id);
             setProspects(prevProspects => [
                 ...prevProspects.filter(p => p.unitId !== unit.id),
                 ...fetchedProspects
             ]);
         } catch (error) {
-            console.error('Failed to fetch prospects:', error);
-            setError('Failed to load prospects. Please try again.');
+            setError(error.message || 'Failed to check location or load prospects');
         } finally {
             setIsLoadingProspects(false);
         }
@@ -206,13 +345,15 @@ const UnitInspectionManagement = () => {
                             key={unit.id}
                             className="bg-white rounded-lg shadow p-4 space-y-4"
                         >
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center text-blue-600">
-                                    <Clock className="w-5 h-5 mr-2" />
-                                    <span>Upcoming</span>
+                            { !unit.isMoveIn &&
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center text-blue-600">
+                                        <Clock className="w-5 h-5 mr-2" />
+                                        <span>Upcoming</span>
+                                    </div>
+                                    <span className="text-gray-600">{unit.date}</span>
                                 </div>
-                                <span className="text-gray-600">{unit.date}</span>
-                            </div>
+                            }
 
                             <div className="space-y-2">
 
@@ -423,9 +564,11 @@ const UnitInspectionManagement = () => {
                     >
                         <div className="flex justify-between items-start mb-3">
                             <div className="flex-1">
-                                <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center justify-between mb-1">
                                     <h3 className="text-base font-medium text-gray-900">{prospect.name}</h3>
-                                    <span className="text-sm text-blue-600">{prospect.time}</span>
+                                    <span className="text-sm text-blue-600">
+                                    {'1 week from now'} | {prospect.time}
+                                    </span>
                                 </div>
                                 <p className="text-sm text-gray-500 mb-2">{prospect.phone}</p>
                                 <div className="flex items-center text-sm">
@@ -675,6 +818,20 @@ const UnitInspectionManagement = () => {
             <div className="pt-20 pb-6 px-4">
                 {currentView === 'units' ? <UnitsListView /> : <ProspectsListView />}
             </div>
+
+        {/* Geofence Error Overlay */}
+        {geofenceError && (
+            <div className="fixed inset-0 z-50">
+                <GeofenceError
+                    distance={geofenceError.distance}
+                    radius={geofenceError.radius}
+                    onBack={() => {
+                        setGeofenceError(null);
+                        setIsLoadingProspects(false);
+                    }}
+                />
+            </div>
+        )}
 
             {/* Modals */}
             <FeedbackModal />

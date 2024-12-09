@@ -1058,7 +1058,11 @@ const GoogleLikeFormBuilder = () => {
                         isCollapsed: !section.isCollapsed
                     };
                 }
-                return section;
+                // Collapse all other sections
+                return {
+                    ...section,
+                    isCollapsed: true
+                };
             })
         });
     };

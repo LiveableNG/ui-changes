@@ -346,61 +346,6 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
     return (
         <div className="bg-white rounded-lg shadow-sm p-6">
 
-            {/* Progress indicator */}
-            <div className="mb-6">
-                {/* Progress text */}
-                {/* <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <span>Section {currentSection + 1} of {formData.sections.length}:</span>
-                    <span className="font-medium">{currentSectionData.title}</span>
-                </div>
-                <span className="text-sm text-gray-600">
-                    {Math.round((currentSection + 1) / formData.sections.length * 100)}% completed
-                </span>
-            </div> */}
-
-                {/* Progress bar */}
-                {/* <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div 
-                    className="h-full bg-blue-500 rounded-full transition-all duration-300 ease-in-out"
-                    style={{ 
-                        width: `${((currentSection + 1) / formData.sections.length) * 100}%`
-                    }}
-                />
-            </div> */}
-
-                {/* Section pills */}
-                {/* <div className="flex items-center justify-between mt-2">
-                {formData.sections.map((section, index) => (
-                    <div 
-                        key={section.id}
-                        className={`flex items-center ${index < formData.sections.length - 1 ? 'flex-1' : ''}`}
-                    >
-                        <div 
-                            className={`
-                                w-6 h-6 rounded-full flex items-center justify-center text-xs
-                                ${index < currentSection ? 'bg-blue-500 text-white' : 
-                                index === currentSection ? 'bg-blue-500 text-white' : 
-                                'bg-gray-200 text-gray-600'}
-                            `}
-                        >
-                            {index + 1}
-                        </div>
-                        {index < formData.sections.length - 1 && (
-                            <div className="flex-1 h-[2px] mx-2 bg-gray-200">
-                                <div 
-                                    className="h-full bg-blue-500 transition-all duration-300 ease-in-out"
-                                    style={{ 
-                                        width: index < currentSection ? '100%' : '0%'
-                                    }}
-                                />
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </div> */}
-            </div>
-
             <h2 className="text-xl font-semibold mb-4">{currentSectionData.title}</h2>
             {currentSectionData.description && (
                 <p className="text-gray-600 mb-6">{currentSectionData.description}</p>
@@ -471,13 +416,17 @@ const SortableSection = ({ section, children }) => {
         <div
             ref={setNodeRef}
             style={style}
-            className="bg-white border-l-4 border-blue-400 rounded-lg shadow-sm mb-6"
+            className="bg-white rounded-lg shadow-sm mb-6"
         >
-            <div className="flex items-center p-4 border-b gap-3">
-                <div className="bg-blue-50 p-1.5 rounded cursor-move" {...attributes} {...listeners}>
-                    <GripHorizontal className="w-5 h-5 text-blue-500" />
+            <div className="p-4 border-b">
+                <div className="flex items-start gap-3">
+                    <div className="bg-blue-50 p-1.5 rounded cursor-move mt-1" {...attributes} {...listeners}>
+                        <GripHorizontal className="w-5 h-5 text-blue-500" />
+                    </div>
+                    <div className="flex-1">
+                        {children}
+                    </div>
                 </div>
-                {children}
             </div>
         </div>
     );
@@ -1220,34 +1169,52 @@ const GoogleLikeFormBuilder = () => {
                         >
                             {formData.sections.map((section) => (
                                 <SortableSection key={section.id} section={section}>
-                                    <div key={section.id} className="bg-white rounded-lg shadow-sm mb-6">
+                                    <div key={section.id} className="bg-white rounded-lg">
                                         {/* Section Header */}
-                                        <div className="p-6 border-b w-full">
-                                            <div className="flex items-center gap-4">
-                                                <button
-                                                    onClick={() => toggleSectionCollapse(section.id)}
-                                                    className="text-gray-500 hover:text-gray-700"
-                                                >
-                                                    {section.isCollapsed ? <ChevronRight /> : <ChevronDown />}
-                                                </button>
-                                                <input
-                                                    className="flex-1 text-xl font-semibold border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none"
-                                                    value={section.title}
-                                                    onChange={(e) => {
-                                                        setFormData({
-                                                            ...formData,
-                                                            sections: formData.sections.map(s =>
-                                                                s.id === section.id ? { ...s, title: e.target.value } : s
-                                                            )
-                                                        });
-                                                    }}
-                                                />
-                                                <button
-                                                    onClick={() => deleteSection(section.id)}
-                                                    className="text-gray-500 hover:text-red-500"
-                                                >
-                                                    <Trash2 size={20} />
-                                                </button>
+                                        <div className="">
+                                            <div className="flex flex-col w-full">
+                                                <div className="flex items-center gap-4 w-full">
+                                                    <button
+                                                        onClick={() => toggleSectionCollapse(section.id)}
+                                                        className="text-gray-500 hover:text-gray-700 shrink-0"
+                                                    >
+                                                        {section.isCollapsed ? <ChevronRight /> : <ChevronDown />}
+                                                    </button>
+                                                    <input
+                                                        className="flex-1 text-xl font-semibold border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none min-w-0"
+                                                        value={section.title}
+                                                        placeholder="Section title"
+                                                        onChange={(e) => {
+                                                            setFormData({
+                                                                ...formData,
+                                                                sections: formData.sections.map(s =>
+                                                                    s.id === section.id ? { ...s, title: e.target.value } : s
+                                                                )
+                                                            });
+                                                        }}
+                                                    />
+                                                    <button
+                                                        onClick={() => deleteSection(section.id)}
+                                                        className="text-gray-500 hover:text-red-500 shrink-0"
+                                                    >
+                                                        <Trash2 size={20} />
+                                                    </button>
+                                                </div>
+                                                <div className="ml-10 mt-1">
+                                                    <input
+                                                        className="w-full text-sm text-gray-600 border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none"
+                                                        value={section.description || ''}
+                                                        placeholder="Section description (optional)"
+                                                        onChange={(e) => {
+                                                            setFormData({
+                                                                ...formData,
+                                                                sections: formData.sections.map(s =>
+                                                                    s.id === section.id ? { ...s, description: e.target.value } : s
+                                                                )
+                                                            });
+                                                        }}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
 
@@ -1275,98 +1242,101 @@ const GoogleLikeFormBuilder = () => {
                                                             >
                                                                 <div
                                                                     key={question.id}
-                                                                    className={`mb-6 p-4 border rounded-lg hover:border-blue-500 ${!question.visible ? 'opacity-50' : ''
+                                                                    className={`pt-4 pl-4 pr-4 rounded-lg ${!question.visible ? 'opacity-50' : ''
                                                                         }`}
                                                                 >
                                                                     {/* Question Header */}
-                                                                    <div className="flex items-center gap-4 mb-2">
-                                                                        <select
-                                                                            className="border rounded px-2 py-1"
-                                                                            value={question.type}
-                                                                            onChange={(e) => updateQuestionType(section.id, question.id, e.target.value)}
-                                                                        >
-                                                                            {questionTypes.map(type => (
-                                                                                <option key={type.id} value={type.id}>{type.label}</option>
-                                                                            ))}
-                                                                        </select>
-                                                                        {hasTemplates(question.type) && (
+                                                                    <div className="flex items-center gap-4 mb-2 flex-wrap">
+                                                                        <div className="flex items-center gap-4 flex-1 min-w-0">
                                                                             <select
-                                                                                className="border rounded px-2 py-1 text-sm"
-                                                                                value=""
-                                                                                onChange={(e) => {
-                                                                                    const suggestion = questionSuggestions[question.type]?.find(
-                                                                                        s => s.key === e.target.value
-                                                                                    );
-                                                                                    if (suggestion) {
-                                                                                        setFormData({
-                                                                                            ...formData,
-                                                                                            sections: formData.sections.map(s =>
-                                                                                                s.id === section.id ? {
-                                                                                                    ...s,
-                                                                                                    questions: s.questions.map(q =>
-                                                                                                        q.id === question.id ? {
-                                                                                                            ...q,
-                                                                                                            title: suggestion.label,
-                                                                                                            key: suggestion.key,
-                                                                                                            placeholder: suggestion.placeholder || '',
-                                                                                                            options: suggestion.options || q.options
-                                                                                                        } : q
-                                                                                                    )
-                                                                                                } : s
-                                                                                            )
-                                                                                        });
-                                                                                    }
-                                                                                }}
+                                                                                className="border rounded px-2 py-1"
+                                                                                value={question.type}
+                                                                                onChange={(e) => updateQuestionType(section.id, question.id, e.target.value)}
                                                                             >
-                                                                                <option value="">Select a template</option>
-                                                                                {questionSuggestions[question.type]?.map(suggestion => (
-                                                                                    <option key={suggestion.key} value={suggestion.key}>
-                                                                                        {suggestion.label}
-                                                                                    </option>
+                                                                                {questionTypes.map(type => (
+                                                                                    <option key={type.id} value={type.id}>{type.label}</option>
                                                                                 ))}
                                                                             </select>
-                                                                        )}
-                                                                        <input
-                                                                            className="flex-1 font-medium border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none"
-                                                                            value={question.title}
-                                                                            onChange={(e) => {
-                                                                                setFormData({
-                                                                                    ...formData,
-                                                                                    sections: formData.sections.map(s =>
-                                                                                        s.id === section.id ? {
-                                                                                            ...s,
-                                                                                            questions: s.questions.map(q =>
-                                                                                                q.id === question.id ? { ...q, title: e.target.value } : q
-                                                                                            )
-                                                                                        } : s
-                                                                                    )
-                                                                                });
-                                                                            }}
-                                                                        />
-                                                                        {question.description && (
-                                                                            <div className="mt-1 text-sm text-gray-500">
-                                                                                {question.description}
-                                                                            </div>
-                                                                        )}
-                                                                        <button
-                                                                            onClick={() => duplicateQuestion(section.id, question.id)}
-                                                                            className="text-gray-500 hover:text-blue-500"
-                                                                        >
-                                                                            <Copy size={20} />
-                                                                        </button>
-                                                                        <button
-                                                                            onClick={() => setSelectedQuestion(question.id === selectedQuestion ? null : question.id)}
-                                                                            className={`text-gray-500 hover:text-blue-500 ${selectedQuestion === question.id ? 'text-blue-500' : ''
-                                                                                }`}
-                                                                        >
-                                                                            <Settings size={20} />
-                                                                        </button>
-                                                                        <button
-                                                                            onClick={() => deleteQuestion(section.id, question.id)}
-                                                                            className="text-gray-500 hover:text-red-500"
-                                                                        >
-                                                                            <Trash2 size={20} />
-                                                                        </button>
+                                                                            {hasTemplates(question.type) && (
+                                                                                <select
+                                                                                    className="border rounded px-2 py-1 text-sm shrink-0"
+                                                                                    value=""
+                                                                                    onChange={(e) => {
+                                                                                        const suggestion = questionSuggestions[question.type]?.find(
+                                                                                            s => s.key === e.target.value
+                                                                                        );
+                                                                                        if (suggestion) {
+                                                                                            setFormData({
+                                                                                                ...formData,
+                                                                                                sections: formData.sections.map(s =>
+                                                                                                    s.id === section.id ? {
+                                                                                                        ...s,
+                                                                                                        questions: s.questions.map(q =>
+                                                                                                            q.id === question.id ? {
+                                                                                                                ...q,
+                                                                                                                title: suggestion.label,
+                                                                                                                key: suggestion.key,
+                                                                                                                placeholder: suggestion.placeholder || '',
+                                                                                                                options: suggestion.options || q.options
+                                                                                                            } : q
+                                                                                                        )
+                                                                                                    } : s
+                                                                                                )
+                                                                                            });
+                                                                                        }
+                                                                                    }}
+                                                                                >
+                                                                                    <option value="">Select a template</option>
+                                                                                    {questionSuggestions[question.type]?.map(suggestion => (
+                                                                                        <option key={suggestion.key} value={suggestion.key}>
+                                                                                            {suggestion.label}
+                                                                                        </option>
+                                                                                    ))}
+                                                                                </select>
+                                                                            )}
+                                                                            <input
+                                                                                className="flex-1 font-medium border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none min-w-0"
+                                                                                value={question.title}
+                                                                                onChange={(e) => {
+                                                                                    setFormData({
+                                                                                        ...formData,
+                                                                                        sections: formData.sections.map(s =>
+                                                                                            s.id === section.id ? {
+                                                                                                ...s,
+                                                                                                questions: s.questions.map(q =>
+                                                                                                    q.id === question.id ? { ...q, title: e.target.value } : q
+                                                                                                )
+                                                                                            } : s
+                                                                                        )
+                                                                                    });
+                                                                                }}
+                                                                            />
+                                                                            {question.description && (
+                                                                                <div className="mt-1 text-sm text-gray-500">
+                                                                                    {question.description}
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                        <div className="flex items-center gap-4 shrink-0">
+                                                                            <button
+                                                                                onClick={() => duplicateQuestion(section.id, question.id)}
+                                                                                className="text-gray-500 hover:text-blue-500"
+                                                                            >
+                                                                                <Copy size={20} />
+                                                                            </button>
+                                                                            <button
+                                                                                onClick={() => setSelectedQuestion(question.id === selectedQuestion ? null : question.id)}
+                                                                                className={`text-gray-500 hover:text-blue-500 ${selectedQuestion === question.id ? 'text-blue-500' : ''}`}
+                                                                            >
+                                                                                <Settings size={20} />
+                                                                            </button>
+                                                                            <button
+                                                                                onClick={() => deleteQuestion(section.id, question.id)}
+                                                                                className="text-gray-500 hover:text-red-500"
+                                                                            >
+                                                                                <Trash2 size={20} />
+                                                                            </button>
+                                                                        </div>
                                                                     </div>
 
                                                                     {/* Advanced Settings Panel */}
@@ -1936,6 +1906,50 @@ const GoogleLikeFormBuilder = () => {
                             <Plus size={20} />
                             Add Section
                         </button>
+
+                        {/* Form Import Section */}
+                        <div className="mt-8 space-y-4">
+                            <h2 className="text-lg font-semibold">Form JSON:</h2>
+                            <div className="bg-gray-50 p-4 rounded-lg">
+                                <pre className="text-sm overflow-auto">
+                                    {JSON.stringify(formData, null, 2)}
+                                </pre>
+                            </div>
+
+                            <div className="space-y-2">
+                                <h2 className="text-lg font-semibold">Import Form Definition</h2>
+                                <textarea
+                                    className="w-full h-40 p-4 border rounded-lg font-mono text-sm"
+                                    placeholder="Paste your form JSON here..."
+                                    onChange={(e) => {
+                                        try {
+                                            const imported = JSON.parse(e.target.value);
+                                            // You might want to add validation here
+                                            setFormData(imported);
+                                        } catch (error) {
+                                            // Optionally handle parse errors
+                                            console.error('Invalid JSON');
+                                        }
+                                    }}
+                                />
+                                <button
+                                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 inline-flex items-center gap-2"
+                                    onClick={() => {
+                                        const textarea = document.querySelector('textarea');
+                                        if (textarea.value) {
+                                            try {
+                                                const imported = JSON.parse(textarea.value);
+                                                setFormData(imported);
+                                            } catch (error) {
+                                                alert('Invalid JSON format');
+                                            }
+                                        }
+                                    }}
+                                >
+                                    Import JSON
+                                </button>
+                            </div>
+                        </div>
                     </DndContext>
                 </>
             )

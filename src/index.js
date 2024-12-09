@@ -3,8 +3,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
+import KYCForm from './PublishUnit';
+import HomeServiceApp from './Handiman/HomeServiceApp';
+import { PDFSignature } from 'pdf-lib';
+import UnitInspectionManagement from './Files/UnitInspectionManagement';
+import LettingManagementTable from './Files/LettingManagement/LettingManagement';
 import GoogleLikeFormBuilder from './GoogleLikeFormBuilder';
-import PDFSignature from './PDFSigner';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,8 +17,13 @@ root.render(
     {/* <CreditChekReportViewer /> */}
     {/* <PropertyReport /> */}
     {/* <LandlordReport1 /> */}
-    {/* <GoogleLikeFormBuilder /> */}
-    <PDFSignature />
+    <GoogleLikeFormBuilder />
+    {/* <PDFSignature /> */}
+    {/* <KYCForm /> */}
+    {/* <HomeServiceApp /> */}
+    {/* <PropertyInspection /> */}
+    {/* <UnitInspectionManagement /> */}
+    {/* <LettingManagementTable /> */}
   </React.StrictMode>
 );
 

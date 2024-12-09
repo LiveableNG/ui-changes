@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
-import KYCForm from './PublishUnit';
-import HomeServiceApp from './Handiman/HomeServiceApp';
-import { PDFSignature } from 'pdf-lib';
-import UnitInspectionManagement from './Files/UnitInspectionManagement';
-import LettingManagementTable from './Files/LettingManagement/LettingManagement';
+// import KYCForm from './PublishUnit';
+// import HomeServiceApp from './Handiman/HomeServiceApp';
+// import { PDFSignature } from 'pdf-lib';
+// import UnitInspectionManagement from './Files/UnitInspectionManagement';
+// import LettingManagementTable from './Files/LettingManagement/LettingManagement';
 import GoogleLikeFormBuilder from './GoogleLikeFormBuilder';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -143,9 +143,32 @@ const PreviewMode = ({ formData, formResponses, setFormResponses, setSubmittedDa
         if (!validateSection(currentSection)) {
             return;
         }
-
+    
+        // Create a mapping of question IDs to their keys
+        const questionKeyMap = {};
+        formData.sections.forEach(section => {
+            section.questions.forEach(question => {
+                if (question.key) {
+                    questionKeyMap[question.id] = question.key;
+                }
+            });
+        });
+    
+        // Transform the responses using the key mapping
+        const transformedResponses = {};
+        Object.entries(formResponses).forEach(([questionId, response]) => {
+            const key = questionKeyMap[questionId];
+            // Only include responses that have a corresponding key
+            if (key) {
+                transformedResponses[key] = response;
+            } else {
+                // For questions without keys, use the ID as fallback
+                transformedResponses[questionId] = response;
+            }
+        });
+    
         setSubmittedData({
-            responses: formResponses,
+            responses: transformedResponses,
             submittedAt: new Date().toISOString()
         });
     };

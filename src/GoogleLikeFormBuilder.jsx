@@ -827,6 +827,66 @@ const GoogleLikeFormBuilder = () => {
         }
     };
 
+    const generateUniqueKey = (title, existingKeys) => {
+        // Convert title to snake case
+        let key = title.toLowerCase()
+            .replace(/[^a-z0-9\s]/g, '') // Remove special characters
+            .trim()
+            .replace(/\s+/g, '_'); // Replace spaces with underscores
+    
+        // If empty, use 'question' as base
+        if (!key) {
+            key = 'question';
+        }
+    
+        // Ensure uniqueness
+        let uniqueKey = key;
+        let counter = 1;
+        while (existingKeys.includes(uniqueKey)) {
+            uniqueKey = `${key}_${counter}`;
+            counter++;
+        }
+    
+        return uniqueKey;
+    };
+    
+    const getAllExistingKeys = (formData) => {
+        const keys = [];
+        formData.sections.forEach(section => {
+            section.questions.forEach(question => {
+                if (question.key) {
+                    keys.push(question.key);
+                }
+            });
+        });
+        return keys;
+    };
+
+    const updateQuestionTitle = (sectionId, questionId, newTitle) => {
+        const existingKeys = getAllExistingKeys(formData).filter(
+            key => !formData.sections
+                .find(s => s.id === sectionId)
+                .questions
+                .find(q => q.id === questionId && q.key === key)
+        );
+    
+        setFormData({
+            ...formData,
+            sections: formData.sections.map(s =>
+                s.id === sectionId ? {
+                    ...s,
+                    questions: s.questions.map(q =>
+                        q.id === questionId ? {
+                            ...q,
+                            title: newTitle,
+                            key: generateUniqueKey(newTitle, existingKeys)
+                        } : q
+                    )
+                } : s
+            )
+        });
+    };    
+
     const questionTypes = [
         { id: 'short', label: 'Short Answer' },
         { id: 'long', label: 'Paragraph' },
@@ -922,11 +982,12 @@ const GoogleLikeFormBuilder = () => {
     };
 
     const addQuestion = (sectionId) => {
+        const existingKeys = getAllExistingKeys(formData);
         const newQuestion = {
             id: Date.now(),
             type: 'short',
             title: 'Untitled Question',
-            key: '',
+            key: generateUniqueKey('Untitled Question', existingKeys),
             description: '',
             placeholder: '',
             required: false,
@@ -943,7 +1004,7 @@ const GoogleLikeFormBuilder = () => {
                 rules: []
             }
         };
-
+    
         setFormData({
             ...formData,
             sections: formData.sections.map(section => {
@@ -1324,19 +1385,7 @@ const GoogleLikeFormBuilder = () => {
                                                                             <input
                                                                                 className="flex-1 font-medium border-b border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none min-w-0"
                                                                                 value={question.title}
-                                                                                onChange={(e) => {
-                                                                                    setFormData({
-                                                                                        ...formData,
-                                                                                        sections: formData.sections.map(s =>
-                                                                                            s.id === section.id ? {
-                                                                                                ...s,
-                                                                                                questions: s.questions.map(q =>
-                                                                                                    q.id === question.id ? { ...q, title: e.target.value } : q
-                                                                                                )
-                                                                                            } : s
-                                                                                        )
-                                                                                    });
-                                                                                }}
+                                                                                onChange={(e) => updateQuestionTitle(section.id, question.id, e.target.value)}
                                                                             />
                                                                             {question.description && (
                                                                                 <div className="mt-1 text-sm text-gray-500">

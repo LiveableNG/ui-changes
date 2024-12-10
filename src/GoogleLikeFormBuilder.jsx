@@ -494,14 +494,14 @@ const SortableQuestion = ({ question, children }) => {
 
 const GoogleLikeFormBuilder = () => {
     const [formData, setFormData] = useState({
-        "title": "Untitled Form",
+        "title": "Test Form",
         "description": "",
         "sections": [
             {
                 "id": "1",
                 "title": "Personal Information",
                 "description": "",
-                "isCollapsed": false,
+                "isCollapsed": true,
                 "nextSection": null,
                 "questions": [
                     {
@@ -601,12 +601,12 @@ const GoogleLikeFormBuilder = () => {
                             "required_if": {
                                 "type": "equals",
                                 "questionId": "1732617992285",
-                                "value": ""
+                                "value": "Corporate"
                             },
                             "visible_if": {
                                 "type": "equals",
                                 "questionId": "1732617992285",
-                                "value": ""
+                                "value": "Corporate"
                             }
                         },
                         "options": [],
@@ -664,7 +664,7 @@ const GoogleLikeFormBuilder = () => {
                     {
                         "id": 1732618701511,
                         "type": "radio",
-                        "title": "Work type",
+                        "title": "Work Type",
                         "key": "",
                         "description": "",
                         "placeholder": "",
@@ -693,6 +693,99 @@ const GoogleLikeFormBuilder = () => {
                                 }
                             ]
                         }
+                    },
+                    {
+                        "id": 1733738252739,
+                        "type": "short",
+                        "title": "Previous Landlord/Caretaker Phone Number",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733738279810,
+                        "type": "short",
+                        "title": "Previous Apartment Address",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733738450900,
+                        "type": "radio",
+                        "title": "Who Will You Live With?",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [
+                            "Family (Married)",
+                            "Friends",
+                            "Alone",
+                            "Partner",
+                            "Relatives"
+                        ],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733738607877,
+                        "type": "radio",
+                        "title": "Do You Own Pets?",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [
+                            "Yes",
+                            "No"
+                        ],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
                     }
                 ]
             },
@@ -700,13 +793,116 @@ const GoogleLikeFormBuilder = () => {
                 "id": "2",
                 "title": "Employee Information",
                 "description": "",
-                "isCollapsed": false,
-                "nextSection": "submit",
+                "isCollapsed": true,
+                "nextSection": "4",
                 "questions": [
                     {
                         "id": 1732618687663,
                         "type": "short",
-                        "title": "Untitled Question",
+                        "title": "Where do you work?",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733738698556,
+                        "type": "radio",
+                        "title": "Do you have a work email?",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [
+                            "Yes",
+                            "No"
+                        ],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733738924645,
+                        "type": "short",
+                        "title": "Enter your work email:",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": {
+                                "type": "equals",
+                                "questionId": "1733738698556",
+                                "value": "Yes"
+                            },
+                            "visible_if": {
+                                "type": "equals",
+                                "questionId": "1733738698556",
+                                "value": "Yes"
+                            }
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733739144609,
+                        "type": "short",
+                        "title": "Enter work place address:",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": {
+                                "type": "equals",
+                                "questionId": "1733738698556",
+                                "value": "No"
+                            },
+                            "visible_if": {
+                                "type": "equals",
+                                "questionId": "1733738698556",
+                                "value": "No"
+                            }
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733739295121,
+                        "type": "short",
+                        "title": "Work Position",
                         "key": "",
                         "description": "",
                         "placeholder": "",
@@ -730,13 +926,34 @@ const GoogleLikeFormBuilder = () => {
                 "id": "3",
                 "title": "Self-employed Information",
                 "description": "",
-                "isCollapsed": false,
-                "nextSection": null,
+                "isCollapsed": true,
+                "nextSection": "4",
                 "questions": [
                     {
                         "id": 1732618689259,
                         "type": "short",
-                        "title": "Untitled Question",
+                        "title": "Business Name",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": true,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733739470686,
+                        "type": "short",
+                        "title": "Business Address",
                         "key": "",
                         "description": "",
                         "placeholder": "",
@@ -747,6 +964,343 @@ const GoogleLikeFormBuilder = () => {
                         "conditions": {
                             "required_if": null,
                             "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733739481792,
+                        "type": "short",
+                        "title": "Linkedin URL",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733739490216,
+                        "type": "short",
+                        "title": "Other Sociam Media URL",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "4",
+                "title": "Referee Info",
+                "description": "",
+                "isCollapsed": true,
+                "nextSection": null,
+                "questions": [
+                    {
+                        "id": 1733739616032,
+                        "type": "short",
+                        "title": "Next of kin full name",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733739639424,
+                        "type": "radio",
+                        "title": "Next of kin relationship",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [
+                            "Parent",
+                            "Sibling",
+                            "Friend",
+                            "Relative"
+                        ],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733739652360,
+                        "type": "short",
+                        "title": "What best describes your referee?",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733740086726,
+                        "type": "short",
+                        "title": "Referee Work Email",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733740099865,
+                        "type": "short",
+                        "title": "Referee Phone Number",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "5",
+                "title": "Financial Info",
+                "description": "",
+                "isCollapsed": true,
+                "nextSection": "submit",
+                "questions": [
+                    {
+                        "id": 1733740210859,
+                        "type": "radio",
+                        "title": "Bank Name",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [
+                            "First Bank",
+                            "GTB",
+                            "Zenith Bank",
+                            "Kuda Bank",
+                            "Moniepoint MFB"
+                        ],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733740264846,
+                        "type": "short",
+                        "title": "Account Number (Preferably salary account)",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733740296850,
+                        "type": "short",
+                        "title": "Account Name",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733740304822,
+                        "type": "radio",
+                        "title": "Account Type",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [
+                            "Current",
+                            "Savings"
+                        ],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733741303464,
+                        "type": "file",
+                        "title": "Upload Bank Statement",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733740397601,
+                        "type": "radio",
+                        "title": "Is Bank Statement passworded?",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": null,
+                            "visible_if": null
+                        },
+                        "options": [
+                            "Yes",
+                            "No"
+                        ],
+                        "sectionNavigation": {
+                            "enabled": false,
+                            "rules": []
+                        }
+                    },
+                    {
+                        "id": 1733741328491,
+                        "type": "short",
+                        "title": "Enter Bank Statement Password",
+                        "key": "",
+                        "description": "",
+                        "placeholder": "",
+                        "required": false,
+                        "disabled": false,
+                        "visible": true,
+                        "readonly": false,
+                        "conditions": {
+                            "required_if": {
+                                "type": "equals",
+                                "questionId": "1733740397601",
+                                "value": "Yes"
+                            },
+                            "visible_if": {
+                                "type": "equals",
+                                "questionId": "1733740397601",
+                                "value": "Yes"
+                            }
                         },
                         "options": [],
                         "sectionNavigation": {

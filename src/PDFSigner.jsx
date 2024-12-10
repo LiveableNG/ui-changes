@@ -25,6 +25,7 @@ const PDFSignature = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [fields, setFields] = useState([]);
     const [selectedField, setSelectedField] = useState(null);
+    const [selectedItem, setSelectedItem] = useState(null);
 
     useEffect(() => {
         const loadInitialPDF = async () => {
@@ -44,7 +45,7 @@ const PDFSignature = () => {
                 }
             }
         };
-    
+
         loadInitialPDF();
     }, []); // Empty dependency array means this runs once when component mounts
 
@@ -76,7 +77,14 @@ const PDFSignature = () => {
         if (!containerRef.current) return;
         const containerRect = containerRef.current.getBoundingClientRect();
 
-        setSelectedField(field.id);
+        // Add this selection toggle logic
+        if (selectedItem === field.id) {
+            setSelectedItem(null);
+            return;
+        }
+
+        setSelectedItem(field.id);
+        // Keep existing code
         setDragStartPos({
             x: e.clientX - containerRect.left - field.position.x,
             y: e.clientY - containerRect.top - field.position.y
@@ -180,6 +188,14 @@ const PDFSignature = () => {
         if (!containerRef.current) return;
         const containerRect = containerRef.current.getBoundingClientRect();
 
+        // Add this selection toggle logic
+        if (action === 'drag' && selectedItem === 'signature') {
+            setSelectedItem(null);
+            return;
+        }
+        setSelectedItem('signature');
+
+        // Keep existing code
         setDragStartPos({
             x: e.clientX - containerRect.left - signaturePosition.x,
             y: e.clientY - containerRect.top - signaturePosition.y
@@ -300,7 +316,6 @@ const PDFSignature = () => {
         setIsDragging(false);
         setIsResizing(false);
         setResizeDirection(null);
-        setSelectedField(null);
     };
 
     useEffect(() => {
@@ -475,13 +490,18 @@ const PDFSignature = () => {
                     <div
                         ref={containerRef}
                         className="relative border rounded-lg"
-                        onMouseDown={(e) => {
+                        // onMouseDown={(e) => {
+                        //     if (e.target === e.currentTarget) {
+                        //         const rect = e.currentTarget.getBoundingClientRect();
+                        //         setSignaturePosition({
+                        //             x: e.clientX - rect.left,
+                        //             y: e.clientY - rect.top
+                        //         });
+                        //     }
+                        // }}
+                        onClick={(e) => {
                             if (e.target === e.currentTarget) {
-                                const rect = e.currentTarget.getBoundingClientRect();
-                                setSignaturePosition({
-                                    x: e.clientX - rect.left,
-                                    y: e.clientY - rect.top
-                                });
+                                setSelectedItem(null);
                             }
                         }}
                     >
@@ -494,7 +514,8 @@ const PDFSignature = () => {
                         {signature && (
                             <div
                                 ref={signatureRef}
-                                className="absolute border-2 border-blue-500 cursor-move select-none z-10"
+                                className={`absolute ${selectedItem === 'signature' ? 'border-2 border-blue-500 cursor-move' : 'hover:cursor-pointer'
+                                    } select-none z-10`}
                                 style={{
                                     left: `${signaturePosition.x}px`,
                                     top: `${signaturePosition.y}px`,
@@ -509,29 +530,34 @@ const PDFSignature = () => {
                                     className="w-full h-full object-contain"
                                     draggable="false"
                                 />
-                                <div
-                                    className="absolute top-0 left-0 w-3 h-3 bg-blue-500 rounded-full cursor-nw-resize"
-                                    onMouseDown={(e) => handleMouseDown(e, 'resize', 'nw')}
-                                />
-                                <div
-                                    className="absolute top-0 right-0 w-3 h-3 bg-blue-500 rounded-full cursor-ne-resize"
-                                    onMouseDown={(e) => handleMouseDown(e, 'resize', 'ne')}
-                                />
-                                <div
-                                    className="absolute bottom-0 left-0 w-3 h-3 bg-blue-500 rounded-full cursor-sw-resize"
-                                    onMouseDown={(e) => handleMouseDown(e, 'resize', 'sw')}
-                                />
-                                <div
-                                    className="absolute bottom-0 right-0 w-3 h-3 bg-blue-500 rounded-full cursor-se-resize"
-                                    onMouseDown={(e) => handleMouseDown(e, 'resize', 'se')}
-                                />
+                                {selectedItem === 'signature' && (
+                                    <>
+                                        <div
+                                            className="absolute top-0 left-0 w-3 h-3 bg-blue-500 rounded-full cursor-nw-resize"
+                                            onMouseDown={(e) => handleMouseDown(e, 'resize', 'nw')}
+                                        />
+                                        <div
+                                            className="absolute top-0 right-0 w-3 h-3 bg-blue-500 rounded-full cursor-ne-resize"
+                                            onMouseDown={(e) => handleMouseDown(e, 'resize', 'ne')}
+                                        />
+                                        <div
+                                            className="absolute bottom-0 left-0 w-3 h-3 bg-blue-500 rounded-full cursor-sw-resize"
+                                            onMouseDown={(e) => handleMouseDown(e, 'resize', 'sw')}
+                                        />
+                                        <div
+                                            className="absolute bottom-0 right-0 w-3 h-3 bg-blue-500 rounded-full cursor-se-resize"
+                                            onMouseDown={(e) => handleMouseDown(e, 'resize', 'se')}
+                                        />
+                                    </>
+                                )}
                             </div>
                         )}
 
                         {fields.map((field) => (
                             <div
                                 key={field.id}
-                                className="absolute border-2 border-green-500 cursor-move select-none z-10"
+                                className={`absolute ${selectedItem === field.id ? 'border-2 border-green-500 cursor-move' : 'hover:cursor-pointer'
+                                    } select-none z-10`}
                                 style={{
                                     left: `${field.position.x}px`,
                                     top: `${field.position.y}px`,
@@ -544,11 +570,15 @@ const PDFSignature = () => {
                                     type={field.type}
                                     value={field.content}
                                     onChange={(e) => {
-                                        e.stopPropagation();  // Add this
                                         updateFieldContent(field.id, e.target.value);
                                     }}
-                                    onMouseDown={(e) => e.stopPropagation()}  // Add this
-                                    className="w-full h-full px-2 bg-white/80 focus:outline-none pointer-events-auto"
+                                    onFocus={() => setSelectedItem(field.id)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setSelectedItem(field.id);
+                                    }}
+                                    className={`w-full h-full px-2 bg-white/80 ${selectedItem === field.id ? '' : 'hover:cursor-pointer'
+                                        } focus:outline-none pointer-events-auto`}
                                     placeholder={field.type === 'text' ? "Enter text..." : "Select date..."}
                                 />
                             </div>

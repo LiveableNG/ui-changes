@@ -7,7 +7,7 @@ import './index.css';
 // import HomeServiceApp from './Handiman/HomeServiceApp';
 // import { PDFSignature } from 'pdf-lib';
 // import UnitInspectionManagement from './Files/UnitInspectionManagement';
-// import LettingManagementTable from './Files/LettingManagement/LettingManagement';
+import LettingManagementTable from './Files/LettingManagement/LettingManagement';
 import GoogleLikeFormBuilder from './GoogleLikeFormBuilder';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -17,13 +17,13 @@ root.render(
     {/* <CreditChekReportViewer /> */}
     {/* <PropertyReport /> */}
     {/* <LandlordReport1 /> */}
-    <GoogleLikeFormBuilder />
+    {/* <GoogleLikeFormBuilder /> */}
     {/* <PDFSignature /> */}
     {/* <KYCForm /> */}
     {/* <HomeServiceApp /> */}
     {/* <PropertyInspection /> */}
     {/* <UnitInspectionManagement /> */}
-    {/* <LettingManagementTable /> */}
+    <LettingManagementTable />
   </React.StrictMode>
 );
 

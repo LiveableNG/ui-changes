@@ -371,28 +371,7 @@ const LettingManagementTable = () => {
           console.log(`Running credit check for ${fullName}`);
           alert(`Credit check initiated for ${fullName}`);
         },
-        
-        employment: () => {
-          // Get employment info from KYC submission
-          const employer = kycSubmission.where_do_you_work;
-          const position = kycSubmission.work_position;
-          // Here you would typically:
-          // 1. Initiate employment verification process
-          // 2. Update UI with pending status
-          console.log(`Verifying employment at ${employer} as ${position}`);
-          alert(`Employment verification initiated with ${employer}`);
-        },
-        
-        landlordReference: () => {
-          // Get landlord info from KYC submission
-          const landlordPhone = kycSubmission.previous_landlordcaretaker_phone_number;
-          const previousAddress = kycSubmission.previous_apartment_address;
-          // Here you would typically:
-          // 1. Initiate landlord reference check
-          // 2. Update UI with pending status
-          console.log(`Checking landlord reference for ${previousAddress}`);
-          alert(`Landlord reference check initiated for ${landlordPhone}`);
-        }
+  
       };
     
       if (verificationHandlers[type]) {
@@ -485,7 +464,7 @@ const LettingManagementTable = () => {
                               </button>
 
                               {/* Add divider */}
-                              <div className="border-t my-1"></div>
+                              {/* <div className="border-t my-1"></div> */}
 
                               {/* New verification actions */}
                               <button
@@ -512,32 +491,8 @@ const LettingManagementTable = () => {
                                 Run Credit Check
                               </button>
 
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleVerification('employment', prospect);
-                                  setOpenActionMenu(null);
-                                }}
-                                className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50"
-                              >
-                                <UserCheck className="h-4 w-4 text-gray-500" />
-                                Verify Employment
-                              </button>
-
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleVerification('landlordReference', prospect);
-                                  setOpenActionMenu(null);
-                                }}
-                                className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50"
-                              >
-                                <Building2 className="h-4 w-4 text-gray-500" />
-                                Check Landlord Reference
-                              </button>
-
                               {/* Show Submission remains at the bottom */}
-                              <div className="border-t my-1"></div>
+                              {/* <div className="border-t my-1"></div> */}
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();

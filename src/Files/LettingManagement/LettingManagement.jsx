@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Search, MoreVertical, ChevronLeft, XIcon, ChevronRight, Clock, Users, ClipboardCheck, CheckCircle, ClipboardList, FileCheck, ChevronDown, Mail, Phone, Calendar, FileText, UserCheck, MessagesSquare, ChevronUp, X, Building2, Download, RefreshCw, FileUp, Send, Plus } from 'lucide-react';
 
-const VerificationDecision = ({ prospectId, onMoveToDocumentation, onDiscontinue }) => {
+const VerificationDecision = ({   prospectId, 
+  onDiscontinue, 
+  setExpandedSubmission, 
+  setExpandedDocuments  }) => {
   const [showDiscontinueDialog, setShowDiscontinueDialog] = useState(false);
   const [discontinueReason, setDiscontinueReason] = useState('');
   const [isSelectOpen, setIsSelectOpen] = useState(false);
@@ -54,7 +57,10 @@ const VerificationDecision = ({ prospectId, onMoveToDocumentation, onDiscontinue
           Discontinue Process
         </button>
         <button
-          onClick={() => onMoveToDocumentation(prospectId)}
+          onClick={() => {
+            setExpandedSubmission(null); // Close submission view
+            setExpandedDocuments(prospectId); // Open documents view
+          }}
           className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg text-sm font-medium transition-colors"
         >
           Move to Documentation
@@ -991,10 +997,8 @@ const LettingManagementTable = () => {
                           {/* Process Actions */}
                           <VerificationDecision
                             prospectId={prospect.id}
-                            onMoveToDocumentation={(prospectId) => {
-                              // Handle moving to documentation
-                              console.log('Moving to documentation:', prospectId);
-                            }}
+                            setExpandedSubmission={setExpandedSubmission}
+                            setExpandedDocuments={setExpandedDocuments}
                             onDiscontinue={(prospectId, reason) => {
                               // Handle discontinuation with reason
                               console.log('Discontinuing process:', prospectId, 'Reason:', reason);

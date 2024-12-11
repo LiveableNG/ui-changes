@@ -1,5 +1,48 @@
 import React, { useEffect, useState } from 'react';
-import { Search, MoreVertical, ChevronLeft, ChevronRight, Clock, Users, ClipboardCheck, CheckCircle, ClipboardList, FileCheck, ChevronDown, Mail, Phone, Calendar, FileText, UserCheck, MessagesSquare } from 'lucide-react';
+import { Search, MoreVertical, ChevronLeft, ChevronRight, Clock, Users, ClipboardCheck, CheckCircle, ClipboardList, FileCheck, ChevronDown, Mail, Phone, Calendar, FileText, UserCheck, MessagesSquare, ChevronUp, X, Building2 } from 'lucide-react';
+
+const VerificationCard = ({ title, status, details, onViewReport }) => {
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'verified':
+      case 'completed':
+        return 'text-green-600 bg-green-50';
+      case 'in-progress':
+        return 'text-blue-600 bg-blue-50';
+      case 'pending':
+        return 'text-yellow-600 bg-yellow-50';
+      case 'failed':
+        return 'text-red-600 bg-red-50';
+      default:
+        return 'text-gray-600 bg-gray-50';
+    }
+  };
+
+  return (
+    <div className="bg-white p-4 rounded-lg border">
+      <div className="flex justify-between items-start mb-2">
+        <h3 className="font-medium text-sm">{title}</h3>
+        <span className={`text-xs px-2 py-1 rounded-full capitalize ${getStatusColor(status)}`}>
+          {status}
+        </span>
+      </div>
+      <div className="space-y-1 mb-3">
+        {Object.entries(details).map(([key, value]) => (
+          <div key={key} className="text-sm">
+            <span className="text-gray-500">{key}: </span>
+            <span className="text-gray-900">{value}</span>
+          </div>
+        ))}
+      </div>
+      <button
+        onClick={onViewReport}
+        className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+      >
+        View Report
+      </button>
+    </div>
+  );
+};
 
 const LettingManagementTable = () => {
   const [expandedView, setExpandedView] = useState({
@@ -7,6 +50,7 @@ const LettingManagementTable = () => {
     index: null
   });
   const [openActionMenu, setOpenActionMenu] = useState(null);
+  const [expandedSubmission, setExpandedSubmission] = useState(null);
 
   // Mock API data and functions
   const mockApi = {
@@ -239,6 +283,33 @@ const LettingManagementTable = () => {
     }
   ];
 
+  const kycSubmission = {
+    "type_of_tenant": "Individual",
+    "first_name": "Mote",
+    "last_name": "Olawale",
+    "previous_apartment_address": "Olasode Streett, No 4",
+    "work_type": "Employee",
+    "previous_landlordcaretaker_phone_number": "08160124649",
+    "who_will_you_live_with": "Friends",
+    "do_you_own_pets": "No",
+    "where_do_you_work": "GoodTenants",
+    "do_you_have_a_work_email": "Yes",
+    "enter_your_work_email": "ola.ojimoh@gtx.africa",
+    "work_position": "Some guy",
+    "next_of_kin_full_name": "Tes Jim",
+    "next_of_kin_relationship": "Parent",
+    "referee_name": "Pipe Olayi",
+    "what_best_describes_your_referee": "Lecturer, Former",
+    "referee_work_email": "ola.ojimoh@gtx.africa",
+    "bank_name": "GTB",
+    "account_number_preferably_salary_account": "0359792271",
+    "account_name": "Mote OLAWALE",
+    "account_type": "Savings",
+    "upload_bank_statement": "Landlord report (17).pdf",
+    "is_bank_statement_passworded": "Yes",
+    "enter_bank_statement_password": "Osun"
+  };
+
   // Add loading state
   const [loading, setLoading] = useState(false);
   const [propertyProspects, setPropertyProspects] = useState({});
@@ -279,6 +350,56 @@ const LettingManagementTable = () => {
   const renderProspects = (property, index) => {
     if (expandedView.type !== 'prospects' || expandedView.index !== index) return null;
 
+    const handleVerification = (type, prospect) => {
+      const verificationHandlers = {
+        workEmail: () => {
+          // Get work email from KYC submission
+          const workEmail = kycSubmission.enter_your_work_email;
+          // Here you would typically:
+          // 1. Send verification email
+          // 2. Update UI to show pending status
+          console.log(`Sending verification email to ${workEmail}`);
+          alert(`Work email verification initiated for ${workEmail}`);
+        },
+        
+        creditCheck: () => {
+          // Get required info from KYC submission
+          const fullName = `${kycSubmission.first_name} ${kycSubmission.last_name}`;
+          // Here you would typically:
+          // 1. Call credit check API
+          // 2. Update UI with pending status
+          console.log(`Running credit check for ${fullName}`);
+          alert(`Credit check initiated for ${fullName}`);
+        },
+        
+        employment: () => {
+          // Get employment info from KYC submission
+          const employer = kycSubmission.where_do_you_work;
+          const position = kycSubmission.work_position;
+          // Here you would typically:
+          // 1. Initiate employment verification process
+          // 2. Update UI with pending status
+          console.log(`Verifying employment at ${employer} as ${position}`);
+          alert(`Employment verification initiated with ${employer}`);
+        },
+        
+        landlordReference: () => {
+          // Get landlord info from KYC submission
+          const landlordPhone = kycSubmission.previous_landlordcaretaker_phone_number;
+          const previousAddress = kycSubmission.previous_apartment_address;
+          // Here you would typically:
+          // 1. Initiate landlord reference check
+          // 2. Update UI with pending status
+          console.log(`Checking landlord reference for ${previousAddress}`);
+          alert(`Landlord reference check initiated for ${landlordPhone}`);
+        }
+      };
+    
+      if (verificationHandlers[type]) {
+        verificationHandlers[type]();
+      }
+    };
+
     return (
       <tr>
         <td colSpan="3" className="px-6 py-4 bg-gray-50">
@@ -297,81 +418,220 @@ const LettingManagementTable = () => {
                 <div className="p-8 text-center text-gray-500">Loading prospects...</div>
               ) : (
                 propertyProspects[property.id]?.map((prospect) => (
-                  <div key={prospect.id} className="flex items-center justify-between p-3 hover:bg-gray-50">
-                    {/* Left section - Basic Info */}
-                    <div className="flex items-center space-x-4">
-                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-medium text-gray-600">
-                          {prospect.name.split(' ').map(n => n[0]).join('')}
-                        </span>
-                      </div>
-                      <div>
-                        <div className="font-medium text-sm">{prospect.name}</div>
-                        <div className="flex items-center gap-4 text-xs text-gray-500">
-                          <span className="flex items-center gap-1">
-                            <Mail className="h-3 w-3" />
-                            {prospect.email}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Phone className="h-3 w-3" />
-                            {prospect.phone}
+                  <div key={prospect.id}>
+                    <div className="flex items-center justify-between p-3 hover:bg-gray-50">
+                      {/* Left section - Basic Info */}
+                      <div className="flex items-center space-x-4">
+                        <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                          <span className="text-sm font-medium text-gray-600">
+                            {prospect.name.split(' ').map(n => n[0]).join('')}
                           </span>
                         </div>
-                      </div>
-                    </div>
-
-                    {/* Middle section - Status Indicators */}
-                    <div className="flex items-center gap-6">
-                      {['inspection', 'kyc', 'verification', 'documentation'].map(stage => (
-                        <div key={stage} className="flex items-center gap-1.5">
-                          <div className={`h-1.5 w-1.5 rounded-full ${prospect.status[stage]
-                            ? 'bg-green-500'
-                            : 'bg-gray-300'
-                            }`} />
-                          <span className="text-xs text-gray-500 capitalize">{stage}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Right section - Actions */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium px-2 py-1 rounded-full bg-blue-50 text-blue-600">
-                        {prospect.currentStage}
-                      </span>
-                      <div className="flex items-center relative">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleActionMenu(prospect.id);
-                          }}
-                          className="p-1 hover:bg-gray-100 rounded"
-                        >
-                          <MoreVertical className="h-4 w-4 text-gray-500" />
-                        </button>
-
-                        {/* Action Dropdown - Updated positioning and z-index */}
-                        {openActionMenu === prospect.id && (
-                          <div className="fixed transform -translate-x-48 mt-2 w-48 bg-white rounded-lg shadow-lg border py-1 z-50 action-menu">
-                            <button className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50">
-                              <Calendar className="h-4 w-4 text-gray-500" />
-                              Schedule Inspection
-                            </button>
-                            <button className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50">
-                              <FileText className="h-4 w-4 text-gray-500" />
-                              Send KYC Form
-                            </button>
-                            <button className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50">
-                              <UserCheck className="h-4 w-4 text-gray-500" />
-                              Start Verification
-                            </button>
-                            <button className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50">
-                              <MessagesSquare className="h-4 w-4 text-gray-500" />
-                              Send Message
-                            </button>
+                        <div>
+                          <div className="font-medium text-sm">{prospect.name}</div>
+                          <div className="flex items-center gap-4 text-xs text-gray-500">
+                            <span className="flex items-center gap-1">
+                              <Mail className="h-3 w-3" />
+                              {prospect.email}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Phone className="h-3 w-3" />
+                              {prospect.phone}
+                            </span>
                           </div>
-                        )}
+                        </div>
+                      </div>
+
+                      {/* Middle section - Status Indicators */}
+                      <div className="flex items-center gap-6">
+                        {['inspection', 'kyc', 'verification', 'documentation'].map(stage => (
+                          <div key={stage} className="flex items-center gap-1.5">
+                            <div className={`h-1.5 w-1.5 rounded-full ${prospect.status[stage]
+                              ? 'bg-green-500'
+                              : 'bg-gray-300'
+                              }`} />
+                            <span className="text-xs text-gray-500 capitalize">{stage}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Right section - Actions */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-medium px-2 py-1 rounded-full bg-blue-50 text-blue-600">
+                          {prospect.currentStage}
+                        </span>
+                        <div className="flex items-center relative">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleActionMenu(prospect.id);
+                            }}
+                            className="p-1 hover:bg-gray-100 rounded"
+                          >
+                            <MoreVertical className="h-4 w-4 text-gray-500" />
+                          </button>
+
+                          {/* Action Dropdown - Updated positioning and z-index */}
+                          {openActionMenu === prospect.id && (
+                            <div className="fixed transform -translate-x-48 mt-2 w-48 bg-white rounded-lg shadow-lg border py-1 z-50 action-menu">
+                              {/* Existing actions */}
+                              <button className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50">
+                                <Calendar className="h-4 w-4 text-gray-500" />
+                                Schedule Inspection
+                              </button>
+                              <button className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50">
+                                <FileText className="h-4 w-4 text-gray-500" />
+                                Send KYC Form
+                              </button>
+
+                              {/* Add divider */}
+                              <div className="border-t my-1"></div>
+
+                              {/* New verification actions */}
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleVerification('workEmail', prospect);
+                                  setOpenActionMenu(null);
+                                }}
+                                className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50"
+                              >
+                                <Mail className="h-4 w-4 text-gray-500" />
+                                Verify Work Email
+                              </button>
+
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleVerification('creditCheck', prospect);
+                                  setOpenActionMenu(null);
+                                }}
+                                className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50"
+                              >
+                                <FileCheck className="h-4 w-4 text-gray-500" />
+                                Run Credit Check
+                              </button>
+
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleVerification('employment', prospect);
+                                  setOpenActionMenu(null);
+                                }}
+                                className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50"
+                              >
+                                <UserCheck className="h-4 w-4 text-gray-500" />
+                                Verify Employment
+                              </button>
+
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleVerification('landlordReference', prospect);
+                                  setOpenActionMenu(null);
+                                }}
+                                className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50"
+                              >
+                                <Building2 className="h-4 w-4 text-gray-500" />
+                                Check Landlord Reference
+                              </button>
+
+                              {/* Show Submission remains at the bottom */}
+                              <div className="border-t my-1"></div>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setExpandedSubmission(expandedSubmission === prospect.id ? null : prospect.id);
+                                  setOpenActionMenu(null);
+                                }}
+                                className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50"
+                              >
+                                <FileText className="h-4 w-4 text-gray-500" />
+                                Show Submission
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
+
+                    {/* Expand submission */}
+                    {expandedSubmission === prospect.id && (
+                      <div className="mt-4 px-4 py-3 bg-gray-50 rounded-lg">
+                        <div className="mb-3 flex justify-between items-center">
+                          <h4 className="text-sm font-medium">KYC Form Submission</h4>
+                          <button
+                            onClick={() => setExpandedSubmission(null)}
+                            className="text-gray-500 hover:text-gray-700"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+
+                        {/* KYC Form Grid */}
+                        <div className="grid grid-cols-4 gap-2 mb-6">
+                          {Object.entries(kycSubmission).map(([key, value], index) => (
+                            <div key={index} className="bg-white p-3 rounded-lg">
+                              <div className="text-xs text-gray-500 mb-1">
+                                {key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                              </div>
+                              <div className="text-sm font-medium truncate">
+                                {value}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Verifications Section */}
+                        <div className="mt-6">
+                          <h4 className="text-sm font-medium mb-3">Verifications</h4>
+                          <div className="grid grid-cols-2 gap-4">
+                            <VerificationCard
+                              title="Work Email Verification"
+                              status="verified"
+                              details={{
+                                Email: 'ola.ojimoh@gtx.africa',
+                                Verified: 'Dec 9, 2024, 10:30 AM',
+                                Method: 'Email Link Verification'
+                              }}
+                              onViewReport={() => {/* Handle view report */ }}
+                            />
+                            <VerificationCard
+                              title="Credit Check"
+                              status="completed"
+                              details={{
+                                Score: '750',
+                                'Report Date': 'Dec 10, 2024, 3:45 PM',
+                                Bureau: 'TransUnion',
+                                Risk: 'Low'
+                              }}
+                              onViewReport={() => {/* Handle view report */ }}
+                            />
+                            <VerificationCard
+                              title="Employment Verification"
+                              status="in-progress"
+                              details={{
+                                Employer: 'GoodTenants',
+                                Position: 'Some guy',
+                                'Annual Salary': '₦8,500,000',
+                                Started: 'Dec 8, 2024, 9:15 AM'
+                              }}
+                              onViewReport={() => {/* Handle view report */ }}
+                            />
+                            <VerificationCard
+                              title="Previous Landlord Reference"
+                              status="pending"
+                              details={{
+                                Phone: '08160124649',
+                                Address: 'Olasode Streett, No 4',
+                                Requested: 'Dec 7, 2024, 2:20 PM'
+                              }}
+                              onViewReport={() => {/* Handle view report */ }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))
               )}
@@ -498,7 +758,7 @@ const LettingManagementTable = () => {
 
                   <td className="px-6 py-4">
                     <div className="space-y-3">
-                      
+
                       {/* Total Prospects with separate toggle */}
                       {/* <div
                         className="flex items-center gap-2 border-b pb-2 cursor-pointer"
@@ -617,6 +877,7 @@ const LettingManagementTable = () => {
                     </td>
                   </tr>
                 )}
+
               </React.Fragment>
             ))}
           </tbody>

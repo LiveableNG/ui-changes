@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Search, MoreVertical, ChevronLeft, XIcon, ChevronRight, Clock, Users, ClipboardCheck, CheckCircle, ClipboardList, FileCheck, ChevronDown, Mail, Phone, Calendar, FileText, UserCheck, MessagesSquare, ChevronUp, X, Building2, Download, RefreshCw } from 'lucide-react';
+import { Search, MoreVertical, ChevronLeft, XIcon, ChevronRight, Clock, Users, ClipboardCheck, CheckCircle, ClipboardList, FileCheck, ChevronDown, Mail, Phone, Calendar, FileText, UserCheck, MessagesSquare, ChevronUp, X, Building2, Download, RefreshCw, FileUp, Send, Plus } from 'lucide-react';
 
 const VerificationDecision = ({ prospectId, onMoveToDocumentation, onDiscontinue }) => {
   const [showDiscontinueDialog, setShowDiscontinueDialog] = useState(false);
@@ -155,9 +155,13 @@ const VerificationDecision = ({ prospectId, onMoveToDocumentation, onDiscontinue
 
 const DocumentManagement = ({ prospectId }) => {
   const [filterStatus, setFilterStatus] = useState('all');
-
+  const [showSendDialog, setShowSendDialog] = useState(false);
+  
   // Mock document data - in real app would be fetched based on prospectId
-  const documents = [
+  const [documents, setDocuments] = useState([
+    // Empty for testing empty state
+    // Uncomment below for testing with data
+    /*
     {
       id: 1,
       name: 'Lease Agreement',
@@ -177,28 +181,9 @@ const DocumentManagement = ({ prospectId }) => {
       dateReceived: '2024-12-05',
       version: '1.0',
       category: 'Employment Documents'
-    },
-    {
-      id: 3,
-      name: 'Bank Statements',
-      type: 'financial',
-      status: 'verified',
-      dateSent: '2024-12-01',
-      dateReceived: '2024-12-03',
-      version: '1.0',
-      category: 'Financial Documents'
-    },
-    {
-      id: 4,
-      name: 'Reference Letter',
-      type: 'reference',
-      status: 'rejected',
-      dateSent: '2024-12-01',
-      dateReceived: '2024-12-04',
-      version: '1.0',
-      category: 'References'
     }
-  ];
+    */
+  ]);
 
   const getStatusColor = (status) => {
     const colors = {
@@ -210,58 +195,197 @@ const DocumentManagement = ({ prospectId }) => {
     return colors[status] || 'bg-gray-50 text-gray-600';
   };
 
-  const filteredDocuments = filterStatus === 'all'
-    ? documents
+  const filteredDocuments = filterStatus === 'all' 
+    ? documents 
     : documents.filter(doc => doc.status === filterStatus);
+
+  const handleSendDocument = (documentData) => {
+    // Handle sending document logic here
+    console.log('Sending document:', documentData);
+    setShowSendDialog(false);
+  };
+
+  // Empty State Component
+  const EmptyState = () => (
+    <div className="text-center py-12">
+      <div className="flex justify-center mb-4">
+        <div className="p-3 bg-gray-100 rounded-full">
+          <FileUp className="h-6 w-6 text-gray-400" />
+        </div>
+      </div>
+      <h3 className="text-sm font-medium text-gray-900 mb-1">No documents yet</h3>
+      <p className="text-sm text-gray-500 mb-4">Get started by sending your first document</p>
+      <button
+        onClick={() => setShowSendDialog(true)}
+        className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        <Send className="h-4 w-4 mr-2" />
+        Send Document
+      </button>
+    </div>
+  );
+
+  // Send Document Dialog
+  const SendDocumentDialog = () => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
+        <div className="px-4 py-3 border-b flex justify-between items-center">
+          <h3 className="text-lg font-medium">Send New Document</h3>
+          <button
+            onClick={() => setShowSendDialog(false)}
+            className="text-gray-400 hover:text-gray-500"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        
+        <div className="p-4">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Document Type
+              </label>
+              <select className="w-full border rounded-md px-3 py-2 text-sm">
+                <option>Lease Agreement</option>
+                <option>Employment Verification</option>
+                <option>Bank Statement Request</option>
+                <option>Reference Letter Request</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Due Date
+              </label>
+              <input
+                type="date"
+                className="w-full border rounded-md px-3 py-2 text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Notes
+              </label>
+              <textarea
+                className="w-full border rounded-md px-3 py-2 text-sm"
+                rows={3}
+                placeholder="Add any additional instructions..."
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="px-4 py-3 bg-gray-50 border-t flex justify-end gap-2">
+          <button
+            onClick={() => setShowSendDialog(false)}
+            className="px-3 py-2 border rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => handleSendDocument({ /* form data */ })}
+            className="px-3 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700"
+          >
+            Send Document
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="mt-6">
-      {/* Document Grid */}
-      <div className="grid grid-cols-2 gap-4">
-        {filteredDocuments.map((doc) => (
-          <div
-            key={doc.id}
-            className="bg-white p-4 rounded-lg border hover:border-gray-300 transition-colors"
-          >
-            <div className="flex items-start justify-between">
-              <div className="flex items-start gap-3">
-                <div className="p-2 bg-gray-100 rounded-lg">
-                  <FileText className="h-5 w-5 text-gray-600" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-sm">{doc.name}</h3>
-                  <p className="text-xs text-gray-500">{doc.category}</p>
-                  <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      {new Date(doc.dateSent).toLocaleDateString()}
+      {/* Header with Send Document button */}
+      <div className="flex justify-between items-center mb-4">
+        <h4 className="text-sm font-medium">Documents</h4>
+        <button
+          onClick={() => setShowSendDialog(true)}
+          className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Send Document
+        </button>
+      </div>
+      
+      {documents.length > 0 ? (
+        <>
+          {/* Search and Filters */}
+          <div className="flex gap-4 mb-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <input
+                type="text"
+                placeholder="Search documents"
+                className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm"
+              />
+            </div>
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="border rounded-lg px-3 py-2 text-sm"
+            >
+              <option value="all">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="received">Received</option>
+              <option value="verified">Verified</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+
+          {/* Document Grid */}
+          <div className="grid grid-cols-2 gap-4">
+            {filteredDocuments.map((doc) => (
+              <div 
+                key={doc.id}
+                className="bg-white p-4 rounded-lg border hover:border-gray-300 transition-colors"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-gray-100 rounded-lg">
+                      <FileText className="h-5 w-5 text-gray-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-sm">{doc.name}</h3>
+                      <p className="text-xs text-gray-500">{doc.category}</p>
+                      <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {new Date(doc.dateSent).toLocaleDateString()}
+                        </span>
+                        {doc.dateReceived && (
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            {new Date(doc.dateReceived).toLocaleDateString()}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(doc.status)}`}>
+                      {doc.status}
                     </span>
-                    {doc.dateReceived && (
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {new Date(doc.dateReceived).toLocaleDateString()}
-                      </span>
+                    <button className="p-1 hover:bg-gray-100 rounded">
+                      <Download className="h-4 w-4 text-gray-500" />
+                    </button>
+                    {doc.status === 'pending' && (
+                      <button className="p-1 hover:bg-gray-100 rounded">
+                        <RefreshCw className="h-4 w-4 text-gray-500" />
+                      </button>
                     )}
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(doc.status)}`}>
-                  {doc.status}
-                </span>
-                <button className="p-1 hover:bg-gray-100 rounded">
-                  <Download className="h-4 w-4 text-gray-500" />
-                </button>
-                {doc.status === 'pending' && (
-                  <button className="p-1 hover:bg-gray-100 rounded">
-                    <RefreshCw className="h-4 w-4 text-gray-500" />
-                  </button>
-                )}
-              </div>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      ) : (
+        <EmptyState />
+      )}
+
+      {/* Send Document Dialog */}
+      {showSendDialog && <SendDocumentDialog />}
     </div>
   );
 };

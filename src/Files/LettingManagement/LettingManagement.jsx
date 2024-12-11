@@ -167,7 +167,7 @@ const DocumentManagement = ({ prospectId }) => {
   const [documents, setDocuments] = useState([
     // Empty for testing empty state
     // Uncomment below for testing with data
-    /*
+    
     {
       id: 1,
       name: 'Lease Agreement',
@@ -188,7 +188,7 @@ const DocumentManagement = ({ prospectId }) => {
       version: '1.0',
       category: 'Employment Documents'
     }
-    */
+    
   ]);
 
   const getStatusColor = (status) => {
@@ -396,7 +396,9 @@ const DocumentManagement = ({ prospectId }) => {
   );
 };
 
-const VerificationCard = ({ title, status, details, onViewReport }) => {
+const VerificationCard = ({ title, status, details, onViewReport, onStartVerification }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'verified':
@@ -413,29 +415,73 @@ const VerificationCard = ({ title, status, details, onViewReport }) => {
     }
   };
 
+  const handleStartVerification = () => {
+    setIsModalOpen(false);
+    onStartVerification && onStartVerification();
+  };
+
+  const isPending = status === 'pending';
+
   return (
-    <div className="bg-white p-4 rounded-lg border">
-      <div className="flex justify-between items-start mb-2">
-        <h3 className="font-medium text-sm">{title}</h3>
-        <span className={`text-xs px-2 py-1 rounded-full capitalize ${getStatusColor(status)}`}>
-          {status}
-        </span>
+    <>
+      <div className="bg-white p-4 rounded-lg border">
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="font-medium text-sm">{title}</h3>
+          <span className={`text-xs px-2 py-1 rounded-full capitalize ${getStatusColor(status)}`}>
+            {status}
+          </span>
+        </div>
+        <div className="space-y-1 mb-3">
+          {Object.entries(details).map(([key, value]) => (
+            <div key={key} className="text-sm">
+              <span className="text-gray-500">{key}: </span>
+              <span className="text-gray-900">{value}</span>
+            </div>
+          ))}
+        </div>
+        {isPending ? (
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Start Verification
+          </button>
+        ) : (
+          <button
+            onClick={onViewReport}
+            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+          >
+            View Report
+          </button>
+        )}
       </div>
-      <div className="space-y-1 mb-3">
-        {Object.entries(details).map(([key, value]) => (
-          <div key={key} className="text-sm">
-            <span className="text-gray-500">{key}: </span>
-            <span className="text-gray-900">{value}</span>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-medium mb-2">Confirm Verification</h3>
+            <p className="text-gray-600 mb-4">
+              Are you sure you want to start the verification process? This action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-700 font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleStartVerification}
+                className="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Confirm
+              </button>
+            </div>
           </div>
-        ))}
-      </div>
-      <button
-        onClick={onViewReport}
-        className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-      >
-        View Report
-      </button>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 
@@ -960,6 +1006,20 @@ const LettingManagementTable = () => {
                               onViewReport={() => {/* Handle view report */ }}
                             />
                             <VerificationCard
+                              title="BVN Verification"
+                              status="pending"
+                              details={{
+                                'Required for': 'Identity Verification',
+                                'Depends on': 'BVN'
+                              }}
+                              onStartVerification={() => {
+                                // Handle verification start
+                                console.log('Starting verification process');
+                              }}
+                              onViewReport={() => {/* Handle view report */}}
+                            />
+
+                            <VerificationCard
                               title="Credit Check"
                               status="completed"
                               details={{
@@ -978,16 +1038,6 @@ const LettingManagementTable = () => {
                                 Position: 'Some guy',
                                 'Annual Salary': '₦8,500,000',
                                 Started: 'Dec 8, 2024, 9:15 AM'
-                              }}
-                              onViewReport={() => {/* Handle view report */ }}
-                            />
-                            <VerificationCard
-                              title="Previous Landlord Reference"
-                              status="pending"
-                              details={{
-                                Phone: '08160124649',
-                                Address: 'Olasode Streett, No 4',
-                                Requested: 'Dec 7, 2024, 2:20 PM'
                               }}
                               onViewReport={() => {/* Handle view report */ }}
                             />

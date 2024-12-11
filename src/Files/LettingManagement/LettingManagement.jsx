@@ -1,5 +1,270 @@
-import React, { useEffect, useState } from 'react';
-import { Search, MoreVertical, ChevronLeft, ChevronRight, Clock, Users, ClipboardCheck, CheckCircle, ClipboardList, FileCheck, ChevronDown, Mail, Phone, Calendar, FileText, UserCheck, MessagesSquare, ChevronUp, X, Building2 } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Search, MoreVertical, ChevronLeft, XIcon, ChevronRight, Clock, Users, ClipboardCheck, CheckCircle, ClipboardList, FileCheck, ChevronDown, Mail, Phone, Calendar, FileText, UserCheck, MessagesSquare, ChevronUp, X, Building2, Download, RefreshCw } from 'lucide-react';
+
+const VerificationDecision = ({ prospectId, onMoveToDocumentation, onDiscontinue }) => {
+  const [showDiscontinueDialog, setShowDiscontinueDialog] = useState(false);
+  const [discontinueReason, setDiscontinueReason] = useState('');
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const selectRef = useRef(null);
+
+  const discontinueReasons = [
+    { value: 'failed_verification', label: 'Failed Verification Checks' },
+    { value: 'incomplete_documents', label: 'Incomplete Documentation' },
+    { value: 'false_information', label: 'False Information Provided' },
+    { value: 'credit_issues', label: 'Credit Issues' },
+    { value: 'employment_verification_failed', label: 'Employment Verification Failed' },
+    { value: 'landlord_reference_issues', label: 'Negative Landlord Reference' },
+    { value: 'withdraw_application', label: 'Prospect Withdrew Application' },
+    { value: 'other', label: 'Other' }
+  ];
+
+  // Close select dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setIsSelectOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleDiscontinue = () => {
+    if (discontinueReason) {
+      onDiscontinue(prospectId, discontinueReason);
+      setShowDiscontinueDialog(false);
+      setDiscontinueReason('');
+    }
+  };
+
+  const getSelectedReasonLabel = () => {
+    const reason = discontinueReasons.find(r => r.value === discontinueReason);
+    return reason ? reason.label : 'Select a reason';
+  };
+
+  return (
+    <div className="border-t pt-6 mt-6">
+      {/* Action Buttons */}
+      <div className="flex justify-end gap-4">
+        <button
+          onClick={() => setShowDiscontinueDialog(true)}
+          className="px-4 py-2 border border-red-200 text-red-600 hover:bg-red-50 rounded-lg text-sm font-medium transition-colors"
+        >
+          Discontinue Process
+        </button>
+        <button
+          onClick={() => onMoveToDocumentation(prospectId)}
+          className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg text-sm font-medium transition-colors"
+        >
+          Move to Documentation
+        </button>
+      </div>
+
+      {/* Modal Overlay */}
+      {showDiscontinueDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          {/* Modal Content */}
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md mx-4">
+            {/* Modal Header */}
+            <div className="p-6 border-b">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Discontinue Process
+                </h3>
+                <button
+                  onClick={() => setShowDiscontinueDialog(false)}
+                  className="text-gray-400 hover:text-gray-500"
+                >
+                  <XIcon className="h-5 w-5" />
+                </button>
+              </div>
+              <p className="mt-2 text-sm text-gray-500">
+                Please select a reason for discontinuing the process. This will be recorded and cannot be undone.
+              </p>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6">
+              {/* Custom Select */}
+              <div className="relative" ref={selectRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsSelectOpen(!isSelectOpen)}
+                  className="relative w-full bg-white border rounded-lg px-4 py-2.5 text-left text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <span className={`block truncate ${!discontinueReason ? 'text-gray-500' : 'text-gray-900'}`}>
+                    {getSelectedReasonLabel()}
+                  </span>
+                  <span className="absolute inset-y-0 right-0 flex items-center pr-2">
+                    <svg className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                      <path d="M7 7l3 3 3-3" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </button>
+
+                {/* Dropdown */}
+                {isSelectOpen && (
+                  <div className="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-lg py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    {discontinueReasons.map((reason) => (
+                      <button
+                        key={reason.value}
+                        onClick={() => {
+                          setDiscontinueReason(reason.value);
+                          setIsSelectOpen(false);
+                        }}
+                        className={`relative w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${discontinueReason === reason.value ? 'bg-blue-50 text-blue-600' : 'text-gray-900'
+                          }`}
+                      >
+                        {reason.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 py-4 bg-gray-50 rounded-b-lg flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setShowDiscontinueDialog(false);
+                  setDiscontinueReason('');
+                }}
+                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDiscontinue}
+                disabled={!discontinueReason}
+                className={`px-4 py-2 text-sm font-medium text-white rounded-lg ${discontinueReason
+                    ? 'bg-red-600 hover:bg-red-700'
+                    : 'bg-red-300 cursor-not-allowed'
+                  }`}
+              >
+                Confirm Discontinue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const DocumentManagement = ({ prospectId }) => {
+  const [filterStatus, setFilterStatus] = useState('all');
+
+  // Mock document data - in real app would be fetched based on prospectId
+  const documents = [
+    {
+      id: 1,
+      name: 'Lease Agreement',
+      type: 'contract',
+      status: 'pending',
+      dateSent: '2024-12-01',
+      dueDate: '2024-12-15',
+      version: '1.0',
+      category: 'Lease Documents'
+    },
+    {
+      id: 2,
+      name: 'Employment Verification',
+      type: 'verification',
+      status: 'received',
+      dateSent: '2024-12-02',
+      dateReceived: '2024-12-05',
+      version: '1.0',
+      category: 'Employment Documents'
+    },
+    {
+      id: 3,
+      name: 'Bank Statements',
+      type: 'financial',
+      status: 'verified',
+      dateSent: '2024-12-01',
+      dateReceived: '2024-12-03',
+      version: '1.0',
+      category: 'Financial Documents'
+    },
+    {
+      id: 4,
+      name: 'Reference Letter',
+      type: 'reference',
+      status: 'rejected',
+      dateSent: '2024-12-01',
+      dateReceived: '2024-12-04',
+      version: '1.0',
+      category: 'References'
+    }
+  ];
+
+  const getStatusColor = (status) => {
+    const colors = {
+      pending: 'bg-yellow-50 text-yellow-600',
+      received: 'bg-blue-50 text-blue-600',
+      verified: 'bg-green-50 text-green-600',
+      rejected: 'bg-red-50 text-red-600'
+    };
+    return colors[status] || 'bg-gray-50 text-gray-600';
+  };
+
+  const filteredDocuments = filterStatus === 'all'
+    ? documents
+    : documents.filter(doc => doc.status === filterStatus);
+
+  return (
+    <div className="mt-6">
+      {/* Document Grid */}
+      <div className="grid grid-cols-2 gap-4">
+        {filteredDocuments.map((doc) => (
+          <div
+            key={doc.id}
+            className="bg-white p-4 rounded-lg border hover:border-gray-300 transition-colors"
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-gray-100 rounded-lg">
+                  <FileText className="h-5 w-5 text-gray-600" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-sm">{doc.name}</h3>
+                  <p className="text-xs text-gray-500">{doc.category}</p>
+                  <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      {new Date(doc.dateSent).toLocaleDateString()}
+                    </span>
+                    {doc.dateReceived && (
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {new Date(doc.dateReceived).toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(doc.status)}`}>
+                  {doc.status}
+                </span>
+                <button className="p-1 hover:bg-gray-100 rounded">
+                  <Download className="h-4 w-4 text-gray-500" />
+                </button>
+                {doc.status === 'pending' && (
+                  <button className="p-1 hover:bg-gray-100 rounded">
+                    <RefreshCw className="h-4 w-4 text-gray-500" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const VerificationCard = ({ title, status, details, onViewReport }) => {
   const getStatusColor = (status) => {
@@ -51,6 +316,8 @@ const LettingManagementTable = () => {
   });
   const [openActionMenu, setOpenActionMenu] = useState(null);
   const [expandedSubmission, setExpandedSubmission] = useState(null);
+  const [showDocuments, setShowDocuments] = useState(null); // Documents
+  const [expandedDocuments, setExpandedDocuments] = useState(null);
 
   // Mock API data and functions
   const mockApi = {
@@ -361,7 +628,7 @@ const LettingManagementTable = () => {
           console.log(`Sending verification email to ${workEmail}`);
           alert(`Work email verification initiated for ${workEmail}`);
         },
-        
+
         creditCheck: () => {
           // Get required info from KYC submission
           const fullName = `${kycSubmission.first_name} ${kycSubmission.last_name}`;
@@ -371,9 +638,9 @@ const LettingManagementTable = () => {
           console.log(`Running credit check for ${fullName}`);
           alert(`Credit check initiated for ${fullName}`);
         },
-  
+
       };
-    
+
       if (verificationHandlers[type]) {
         verificationHandlers[type]();
       }
@@ -504,6 +771,17 @@ const LettingManagementTable = () => {
                                 <FileText className="h-4 w-4 text-gray-500" />
                                 Show Submission
                               </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setExpandedDocuments(expandedDocuments === prospect.id ? null : prospect.id);
+                                  setOpenActionMenu(null);
+                                }}
+                                className="w-full px-4 py-2 text-sm text-left flex items-center gap-2 hover:bg-gray-50"
+                              >
+                                <FileText className="h-4 w-4 text-gray-500" />
+                                Show Documents
+                              </button>
                             </div>
                           )}
                         </div>
@@ -584,9 +862,39 @@ const LettingManagementTable = () => {
                               onViewReport={() => {/* Handle view report */ }}
                             />
                           </div>
+
+
+                          {/* Process Actions */}
+                          <VerificationDecision
+                            prospectId={prospect.id}
+                            onMoveToDocumentation={(prospectId) => {
+                              // Handle moving to documentation
+                              console.log('Moving to documentation:', prospectId);
+                            }}
+                            onDiscontinue={(prospectId, reason) => {
+                              // Handle discontinuation with reason
+                              console.log('Discontinuing process:', prospectId, 'Reason:', reason);
+                            }}
+                          />
                         </div>
                       </div>
                     )}
+
+{/* Separate Documents View */}
+{expandedDocuments === prospect.id && (
+  <div className="mt-4 px-4 py-3 bg-gray-50 rounded-lg">
+    <div className="mb-3 flex justify-between items-center">
+      <h4 className="text-sm font-medium">Documents</h4>
+      <button
+        onClick={() => setExpandedDocuments(null)}
+        className="text-gray-500 hover:text-gray-700"
+      >
+        <X className="h-4 w-4" />
+      </button>
+    </div>
+    <DocumentManagement prospectId={prospect.id} />
+  </div>
+)}
                   </div>
                 ))
               )}

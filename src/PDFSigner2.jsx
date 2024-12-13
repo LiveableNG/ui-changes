@@ -80,6 +80,7 @@ const PDFSignature2 = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     // const [pdfUrl, setPdfUrl] = useState('https://good-tenants-bucket.s3.amazonaws.com/uploads/pdf/sfO8uT22IwSzeBC527wfjSMEckum0nbCvx6xDZ1O.pdf')
     const [pdfUrl, setPdfUrl] = useState('https://good-tenants-bucket.s3.amazonaws.com/uploads/staging/5YwmiBGCTvg8XXacRJDzmPcE621lqABVtDx1jMwK.pdf');
+    // const [pdfUrl, setPdfUrl] = useState('https://good-tenants-bucket.s3.us-east-1.amazonaws.com/documents/staging/2024-12/offer-temp-001-20241213-123028-V6fWVwNe.pdf');
     const [isLoading, setIsLoading] = useState(false);
     const [selectedField, setSelectedField] = useState(null);
     const [documentInfo, setDocumentInfo] = useState({
@@ -89,6 +90,9 @@ const PDFSignature2 = () => {
         sharedBy: ''
     });
     const [editingField, setEditingField] = useState(null);
+    const [currentPageNumber, setCurrentPageNumber] = useState(1);
+
+    const [signaturePage, setSignaturePage] = useState(1);
 
     // New state variables for UI
     const [currentStep, setCurrentStep] = useState(1);
@@ -151,20 +155,25 @@ const PDFSignature2 = () => {
     useEffect(() => {
         if (signature && containerRef.current && currentIndex === -1) {
             const container = containerRef.current;
-            const initialPosition = {
-                x: (container.clientWidth - signatureSize.width) / 2,
-                y: (container.clientHeight - signatureSize.height) / 2
-            };
+            const visiblePage = container.querySelector('.react-pdf__Page');
 
-            const initialState = {
-                signaturePosition: initialPosition,
-                signatureSize,
-                fields: []
-            };
+            if (visiblePage) {
+                const pageRect = visiblePage.getBoundingClientRect();
+                const initialPosition = {
+                    x: (container.clientWidth - signatureSize.width) / 2,
+                    y: (pageRect.height - signatureSize.height) / 2
+                };
 
-            setHistory([initialState]);
-            setCurrentIndex(0);
-            setSignaturePosition(initialPosition);
+                const initialState = {
+                    signaturePosition: initialPosition,
+                    signatureSize,
+                    fields: []
+                };
+
+                setHistory([initialState]);
+                setCurrentIndex(0);
+                setSignaturePosition(initialPosition);
+            }
         }
     }, [signature]);
 
@@ -186,11 +195,40 @@ const PDFSignature2 = () => {
                 e.preventDefault(); // Prevent browser's default redo
                 handleRedo();
             }
+
+            // Updated delete handler to use clearSignature
+            else if ((e.key === 'Delete' || e.key === 'Backspace') && selectedItem && !editingField) {
+                e.preventDefault();
+                if (selectedItem === 'signature') {
+                    clearSignature(); // Use the existing clearSignature function
+                    setSelectedItem(null);
+
+                    // Add to history
+                    const newState = {
+                        signaturePosition,
+                        signatureSize,
+                        fields
+                    };
+                    addToHistory(newState);
+                } else {
+                    const newFields = fields.filter(field => field.id !== selectedItem);
+                    setFields(newFields);
+                    setSelectedItem(null);
+
+                    // Add to history
+                    const newState = {
+                        signaturePosition,
+                        signatureSize,
+                        fields: newFields
+                    };
+                    addToHistory(newState);
+                }
+            }
         };
 
         document.addEventListener('keydown', handleKeyPress);
         return () => document.removeEventListener('keydown', handleKeyPress);
-    }, [currentIndex, history]);
+    }, [currentIndex, history, selectedItem, fields, editingField, signaturePosition, signatureSize]);
 
     useEffect(() => {
         const handleGlobalClick = (e) => {
@@ -207,6 +245,73 @@ const PDFSignature2 = () => {
         document.addEventListener('mousedown', handleGlobalClick);
         return () => document.removeEventListener('mousedown', handleGlobalClick);
     }, [editingField, selectedItem]);
+
+    const renderUploadedPDF = () => {
+        if (!pdf) return null;
+
+        return (
+            <div
+                ref={containerRef}
+                className="relative border rounded-lg overflow-auto h-[80vh]"
+            >
+                <Document
+                    file={pdf}
+                    onLoadSuccess={onDocumentLoadSuccess}
+                    className="w-full"
+                    onClick={() => setSelectedItem(null)}
+                >
+                    <div className="sticky top-0 z-50 flex items-center justify-center gap-4 mb-4 bg-white p-4 shadow-md rounded-lg">
+                        <button
+                            onClick={() => setCurrentPageNumber(prev => Math.max(1, prev - 1))}
+                            disabled={currentPageNumber <= 1}
+                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                        >
+                            Previous
+                        </button>
+                        <span className="text-lg font-medium">Page {currentPageNumber} of {numPages}</span>
+                        <button
+                            onClick={() => setCurrentPageNumber(prev => Math.min(numPages, prev + 1))}
+                            disabled={currentPageNumber >= numPages}
+                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                        >
+                            Next
+                        </button>
+                    </div>
+                    <Page
+                        pageNumber={currentPageNumber}
+                        width={containerRef.current?.clientWidth || 600}
+                        onClick={() => setSelectedItem(null)}
+                    />
+                </Document>
+            </div>
+        );
+    };
+
+    const renderUploadForm = () => {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[600px]">
+                <div className="bg-white rounded-lg shadow-sm p-4 w-full max-w-lg">
+                    <h3 className="text-lg font-medium mb-6 text-center">Upload Signed Document</h3>
+
+                    <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            <Upload className="w-16 h-16 mb-4 text-gray-400" />
+                            <h3 className="mb-2 text-lg font-medium">Choose a file</h3>
+                            <p className="text-sm text-gray-500">
+                                Upload the signed version of this document
+                            </p>
+                        </div>
+                        <input
+                            type="file"
+                            className="hidden"
+                            accept="application/pdf"
+                            onChange={(e) => handleFileChange(e, 'signedPdf')}
+                        />
+                    </label>
+                </div>
+            </div>
+        );
+    };
 
     const addToHistory = (newState) => {
         // Remove any future states if we're in the middle of the history
@@ -273,7 +378,8 @@ const PDFSignature2 = () => {
             type,
             content: type === 'date' ? new Date().toISOString().split('T')[0] : '',
             position: { x: 100, y: 100 },
-            size: { width: type === 'date' ? 150 : 200, height: 40 }
+            size: { width: type === 'date' ? 150 : 200, height: 40 },
+            pageNumber: currentPageNumber
         };
 
         const newFields = [...fields, newField];
@@ -285,9 +391,13 @@ const PDFSignature2 = () => {
             fields: newFields
         };
         addToHistory(newState);
+
+        setSelectedItem(newField.id);
     };
 
     const handleFieldMouseDown = (e, field) => {
+        if (currentStep === 3) return;
+
         e.preventDefault();
         e.stopPropagation();
 
@@ -305,21 +415,18 @@ const PDFSignature2 = () => {
             y: e.clientY - field.position.y
         });
 
-        // Always select the field when clicking
-        setSelectedItem(field.id);
-
-        // If not editing, initiate drag
+        // Only select if not in editing mode
         if (!editingField) {
+            setSelectedItem(field.id);
             setIsDragging(true);
         }
     };
 
-    // Add new function to handle field double click
     const handleFieldDoubleClick = (field) => {
+        if (currentStep === 3) return;
+        setIsDragging(false);
         setEditingField(field.id);
-        setSelectedItem(field.id);
     };
-
 
     const handlePdfUrl = async (e) => {
         e.preventDefault();
@@ -345,31 +452,64 @@ const PDFSignature2 = () => {
         if (!file) return;
 
         const reader = new FileReader();
-        if (type === 'pdf' && file.type === 'application/pdf') {
-            reader.onload = (e) => setPdf(e.target.result);
-            reader.readAsDataURL(file);
+
+        if (type === 'pdf' || type === 'signedPdf') {
+            if (file.type === 'application/pdf') {
+                // Create URL for PDF viewer
+                const newPdfUrl = URL.createObjectURL(file);
+
+                setPdfUrl(newPdfUrl);
+
+                // Set document info
+                setDocumentInfo({
+                    name: file.name,
+                    pages: 0,  // Will be updated when PDF loads
+                    size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+                    sharedBy: 'Uploaded by user'
+                });
+
+                // Read file for PDF state
+                reader.onload = (e) => {
+                    setPdf(e.target.result);
+
+                    if (type === 'signedPdf') {
+                        setShowSigningOptions(false);
+                        // Don't change the step here, let the PDF load first
+                    }
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('Please upload a PDF file');
+            }
         } else if (type === 'signature' && file.type.startsWith('image/')) {
             reader.onload = (e) => {
                 setSignature(e.target.result);
                 setSelectedItem('signature');
 
-                // Set initial position to center of container
                 if (containerRef.current) {
-                    const container = containerRef.current;
-                    const newPosition = {
-                        x: (container.clientWidth - signatureSize.width) / 2,
-                        y: (container.clientHeight - signatureSize.height) / 2
-                    };
-                    setSignaturePosition(newPosition);
+                    // Get the actual scrollable container
+                    const scrollableContainer = containerRef.current.querySelector('.react-pdf__Document');
+                    if (scrollableContainer) {
+                        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                        const viewportHeight = window.innerHeight;
+                        const containerRect = scrollableContainer.getBoundingClientRect();
 
-                    // Initialize history with first state
-                    const initialState = {
-                        signaturePosition: newPosition,
-                        signatureSize,
-                        fields
-                    };
-                    setHistory([initialState]);
-                    setCurrentIndex(0);
+                        // Calculate position relative to the viewport
+                        const newPosition = {
+                            x: (containerRect.width - signatureSize.width) / 2,
+                            y: scrollTop + (viewportHeight / 2) - containerRect.top - (signatureSize.height / 2)
+                        };
+                        setSignaturePosition(newPosition);
+
+                        // Initialize history with first state
+                        const initialState = {
+                            signaturePosition: newPosition,
+                            signatureSize,
+                            fields
+                        };
+                        setHistory([initialState]);
+                        setCurrentIndex(0);
+                    }
                 }
             };
             reader.readAsDataURL(file);
@@ -382,8 +522,15 @@ const PDFSignature2 = () => {
                     size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
                     sharedBy: 'Uploaded by user'
                 });
-                setShowSigningOptions(false);
-                setCurrentStep(3);
+                // setShowSigningOptions(false);
+                // setCurrentStep(3);
+
+                // // Add these lines to properly load the PDF
+                // const newPdfUrl = URL.createObjectURL(file);
+                // setPdfUrl(newPdfUrl);
+
+                // // Clean up the URL when done
+                // return () => URL.revokeObjectURL(newPdfUrl);
             };
             reader.readAsDataURL(file);
         }
@@ -430,14 +577,23 @@ const PDFSignature2 = () => {
         if (isDrawing) {
             const canvas = canvasRef.current;
             setSignature(canvas.toDataURL());
-            setSelectedItem('signature'); // Set as selected when drawn
-            // Set initial position to center of container
+            setSignaturePage(currentPageNumber); // Add this line
+            setSelectedItem('signature');
+
             if (containerRef.current) {
-                const container = containerRef.current;
-                setSignaturePosition({
-                    x: (container.clientWidth - signatureSize.width) / 2,
-                    y: (container.clientHeight - signatureSize.height) / 2
-                });
+                // Get the actual scrollable container
+                const scrollableContainer = containerRef.current.querySelector('.react-pdf__Document');
+                if (scrollableContainer) {
+                    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                    const viewportHeight = window.innerHeight;
+                    const containerRect = scrollableContainer.getBoundingClientRect();
+
+                    // Calculate position relative to the viewport
+                    setSignaturePosition({
+                        x: (containerRect.width - signatureSize.width) / 2,
+                        y: scrollTop + (viewportHeight / 2) - containerRect.top - (signatureSize.height / 2)
+                    });
+                }
             }
             setIsDrawing(false);
 
@@ -455,6 +611,8 @@ const PDFSignature2 = () => {
     };
 
     const handleMouseDown = (e, action, direction = null) => {
+        if (currentStep === 3) return;
+
         e.preventDefault();
         e.stopPropagation();
 
@@ -666,75 +824,73 @@ const PDFSignature2 = () => {
         try {
             const pdfDoc = await PDFDocument.load(pdf);
             const pages = pdfDoc.getPages();
-            const pageHeights = Array.from(containerRef.current.querySelectorAll('.react-pdf__Page')).map(page => page.clientHeight);
-
-            let accumulatedHeight = 0;
-            let currentPage = 0;
-
-            for (let i = 0; i < pageHeights.length; i++) {
-                if (signaturePosition.y > accumulatedHeight && signaturePosition.y <= accumulatedHeight + pageHeights[i]) {
-                    currentPage = i;
-                    break;
-                }
-                accumulatedHeight += pageHeights[i];
+            
+            // First, ensure we're getting the canvas elements
+            const visiblePageCanvas = containerRef.current.querySelector('.react-pdf__Page__canvas');
+            if (!visiblePageCanvas) {
+                throw new Error('No rendered PDF page found');
             }
-
-            const page = pages[currentPage];
-            const { width, height } = page.getSize();
-            const container = containerRef.current;
-            const localY = signaturePosition.y - accumulatedHeight;
-
-            const signatureImage = await pdfDoc.embedPng(signature);
-            const pdfX = (signaturePosition.x / container.clientWidth) * width;
-            const pdfY = height - ((localY / pageHeights[currentPage]) * height) -
-                ((signatureSize.height / pageHeights[currentPage]) * height);
-
-            page.drawImage(signatureImage, {
-                x: pdfX,
-                y: pdfY,
-                width: (signatureSize.width / container.clientWidth) * width,
-                height: (signatureSize.height / pageHeights[currentPage]) * height,
-            });
-
-            // Add text and date fields
-            fields.forEach(field => {
-                let accumulatedHeight = 0;
-                let currentPage = 0;
-
-                for (let i = 0; i < pageHeights.length; i++) {
-                    if (field.position.y > accumulatedHeight && field.position.y <= accumulatedHeight + pageHeights[i]) {
-                        currentPage = i;
-                        break;
-                    }
-                    accumulatedHeight += pageHeights[i];
-                }
-
-                const page = pages[currentPage];
-                const { width, height } = page.getSize();
-                const container = containerRef.current;
-                const localY = field.position.y - accumulatedHeight;
-
-                const pdfX = (field.position.x / container.clientWidth) * width;
-                const pdfY = height - ((localY / pageHeights[currentPage]) * height) -
-                    ((field.size.height / pageHeights[currentPage]) * height);
-
-                page.drawText(field.content, {
-                    x: pdfX,
-                    y: pdfY + (field.size.height / 2),
-                    size: 12,
-                    color: rgb(0, 0, 0),
+    
+            // Get dimensions from the visible page
+            const containerWidth = containerRef.current.clientWidth;
+            const pageHeight_px = visiblePageCanvas.height;
+    
+            // Process signature
+            if (signature) {
+                const page = pages[currentPageNumber - 1]; // Use currentPageNumber instead of signaturePage
+                const { width: pageWidth, height: pageHeight } = page.getSize();
+    
+                // Convert signature to PNG
+                const signatureImage = await pdfDoc.embedPng(signature);
+                
+                // Calculate positions using the visible page dimensions
+                const pdfX = (signaturePosition.x / containerWidth) * pageWidth;
+                const scaledY = (signaturePosition.y / pageHeight_px) * pageHeight;
+                const pdfY = pageHeight - scaledY - ((signatureSize.height / pageHeight_px) * pageHeight);
+    
+                // Draw the signature
+                page.drawImage(signatureImage, {
+                    x: Math.max(0, pdfX),
+                    y: Math.max(0, pdfY),
+                    width: (signatureSize.width / containerWidth) * pageWidth,
+                    height: (signatureSize.height / pageHeight_px) * pageHeight,
                 });
-            });
-
+            }
+    
+            // Process fields
+            for (const field of fields) {
+                if (field.pageNumber > pages.length) continue;
+    
+                const page = pages[field.pageNumber - 1];
+                const { width: pageWidth, height: pageHeight } = page.getSize();
+    
+                // Calculate positions using the visible page dimensions
+                const pdfX = (field.position.x / containerWidth) * pageWidth;
+                const scaledY = (field.position.y / pageHeight_px) * pageHeight;
+                const pdfY = pageHeight - scaledY - ((field.size.height / pageHeight_px) * pageHeight);
+    
+                // Draw the text with error checking
+                if (!isNaN(pdfX) && !isNaN(pdfY)) {
+                    page.drawText(field.content || '', {
+                        x: Math.max(0, pdfX + 5),
+                        y: Math.max(0, pdfY + ((field.size.height / pageHeight_px) * pageHeight / 2)),
+                        size: 12,
+                        color: rgb(0, 0, 0),
+                    });
+                }
+            }
+    
             const pdfBytes = await pdfDoc.save();
             const blob = new Blob([pdfBytes], { type: 'application/pdf' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'signed-document.pdf';
+            link.download = documentInfo.name ? `signed-${documentInfo.name}` : 'signed-document.pdf';
             link.click();
+            URL.revokeObjectURL(url);
         } catch (error) {
             console.error('Error signing PDF:', error);
+            alert('Failed to generate signed PDF. Please ensure the document is properly loaded and all elements are placed correctly.');
         }
     };
 
@@ -746,6 +902,11 @@ const PDFSignature2 = () => {
         if (canvasRef.current) {
             const ctx = canvasRef.current.getContext('2d');
             ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+        }
+
+        // If the signing method was 'online', go back to step 2
+        if (signingMethod === 'online') {
+            setCurrentStep(2);
         }
     };
 
@@ -793,6 +954,7 @@ const PDFSignature2 = () => {
         } else if (method === 'online') {
             setCurrentStep(2);
         } else if (method === 'upload') {
+            setShowSigningOptions(false);
             setCurrentStep(3);
         }
     };
@@ -981,49 +1143,46 @@ const PDFSignature2 = () => {
                         {showSigningOptions ? (
                             <SigningOptions onSelect={handleSigningMethodSelect} />
                         ) : currentStep === 3 && signingMethod === 'upload' ? (
-                            // Upload form for signed document
-                            <div className="flex flex-col items-center justify-center min-h-[600px]">
-                                <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <Upload className="w-16 h-16 mb-4 text-gray-400" />
-                                        <h3 className="mb-2 text-lg font-medium">Upload Signed Document</h3>
-                                        <p className="text-sm text-gray-500">
-                                            Upload the already signed version of this document
-                                        </p>
-                                    </div>
-                                    <input
-                                        type="file"
-                                        className="hidden"
-                                        accept="application/pdf"
-                                        onChange={(e) => handleFileChange(e, 'signedPdf')}
-                                    />
-                                </label>
-                            </div>
+                            !pdf ? renderUploadForm() : renderUploadedPDF()
                         ) : pdf ? (
                             // Show PDF preview with signature and fields
                             <div
                                 ref={containerRef}
-                                className="relative border rounded-lg overflow-hidden"
+                                className="relative border rounded-lg overflow-auto h-[80vh]"
                                 onMouseDown={handleContainerClick}
                             >
                                 <Document
                                     file={pdf}
                                     onLoadSuccess={onDocumentLoadSuccess}
                                     className="w-full"
-                                    onClick={() => setSelectedItem(null)} // Add click handler here too
+                                    onClick={() => setSelectedItem(null)}
                                 >
-                                    {Array.from(new Array(numPages), (_, index) => (
-                                        <Page
-                                            key={`page_${index + 1}`}
-                                            pageNumber={index + 1}
-                                            width={containerRef.current?.clientWidth || 600}
-                                            onClick={() => setSelectedItem(null)} // Add click handler to Page component
-                                        />
-                                    ))}
+                                    <div className="sticky top-0 z-50 flex items-center justify-center gap-4 mb-4 bg-white p-4 shadow-md rounded-lg">
+                                        <button
+                                            onClick={() => setCurrentPageNumber(prev => Math.max(1, prev - 1))}
+                                            disabled={currentPageNumber <= 1}
+                                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                                        >
+                                            Previous
+                                        </button>
+                                        <span className="text-lg font-medium">Page {currentPageNumber} of {numPages}</span>
+                                        <button
+                                            onClick={() => setCurrentPageNumber(prev => Math.min(numPages, prev + 1))}
+                                            disabled={currentPageNumber >= numPages}
+                                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+                                        >
+                                            Next
+                                        </button>
+                                    </div>
+                                    <Page
+                                        pageNumber={currentPageNumber}
+                                        width={containerRef.current?.clientWidth || 600}
+                                        onClick={() => setSelectedItem(null)}
+                                    />
                                 </Document>
 
                                 {/* Signature element */}
-                                {signature && (currentStep === 2 || currentStep === 3) && (
+                                {signature && (currentStep === 2 || currentStep === 3) && signaturePage === currentPageNumber && (
                                     <div
                                         ref={signatureRef}
                                         className={`absolute ${selectedItem === 'signature' ? 'border-1 border-blue-500' : ''} ${isDragging ? 'cursor-move' : 'cursor-pointer'}`}
@@ -1076,60 +1235,67 @@ const PDFSignature2 = () => {
                                     </div>
                                 )}
                                 {/* Fields */}
-                                {(currentStep === 2 || currentStep === 3) && fields.map((field) => (
-                                    <div
-                                        key={field.id}
-                                        className={`absolute ${selectedItem === field.id && !editingField ? 'cursor-move' : 'cursor-pointer'
-                                            } select-none z-10`}
-                                        style={{
-                                            left: `${field.position.x}px`,
-                                            top: `${field.position.y}px`,
-                                            width: `${field.size.width}px`,
-                                            height: `${field.size.height}px`,
-                                        }}
-                                        onMouseDown={(e) => {
-                                            if (!editingField) {
-                                                handleFieldMouseDown(e, field);
-                                            }
-                                        }}
-                                        onDoubleClick={() => handleFieldDoubleClick(field)}
-                                    >
-                                        <input
-                                            type={field.type}
-                                            value={field.content}
-                                            onChange={(e) => updateFieldContent(field.id, e.target.value)}
-                                            className={`w-full h-full px-2 bg-white/80 pointer-events-auto
-                    ${editingField === field.id ? 'border border-blue-500' : ''}
-                    ${selectedItem === field.id && !editingField ? 'border border-blue-500' : ''}
-                    focus:outline-none
-                `}
-                                            placeholder={field.type === 'text' ? "Enter text..." : "Select date..."}
-                                            readOnly={editingField !== field.id}
-                                        />
+                                {(currentStep === 2 || currentStep === 3) && fields
+                                    .filter(field => field.pageNumber === currentPageNumber)
+                                    .map((field) => (
+                                        <div
+                                            key={field.id}
+                                            className={`absolute ${selectedItem === field.id && !editingField ? 'cursor-move' : 'cursor-pointer'
+                                                } select-none z-10`}
+                                            style={{
+                                                left: `${field.position.x}px`,
+                                                top: `${field.position.y}px`,
+                                                width: `${field.size.width}px`,
+                                                height: `${field.size.height}px`,
+                                            }}
+                                            onMouseDown={(e) => {
+                                                if (!editingField) {
+                                                    handleFieldMouseDown(e, field);
+                                                }
+                                            }}
+                                            onDoubleClick={() => handleFieldDoubleClick(field)}
+                                        >
+                                            <input
+                                                type={field.type}
+                                                value={field.content}
+                                                onChange={(e) => updateFieldContent(field.id, e.target.value)}
+                                                className={`w-full h-full px-2 bg-white/5 pointer-events-auto
+        ${editingField === field.id ? 'border border-blue-500' : ''}
+        ${selectedItem === field.id && !editingField ? 'border border-blue-500' : ''}
+        focus:outline-none
+    `}
+                                                placeholder={field.type === 'text' ? "Enter text..." : "Select date..."}
+                                                readOnly={editingField !== field.id || currentStep === 3} // Update this line
+                                                ref={input => {
+                                                    if (input && editingField === field.id && currentStep !== 3) { // Update this line
+                                                        input.focus();
+                                                    }
+                                                }}
+                                            />
 
-                                        {/* Resize handles - only show when selected and not editing */}
-                                        {selectedItem === field.id && !editingField && (
-                                            <>
-                                                {['nw', 'ne', 'sw', 'se'].map((direction) => (
-                                                    <div
-                                                        key={direction}
-                                                        className={`absolute w-3 h-3 border border-blue-500 bg-white cursor-${direction}-resize z-50
+                                            {/* Resize handles - only show when selected and not editing */}
+                                            {selectedItem === field.id && !editingField && currentStep !== 3 && (
+                                                <>
+                                                    {['nw', 'ne', 'sw', 'se'].map((direction) => (
+                                                        <div
+                                                            key={direction}
+                                                            className={`absolute w-3 h-3 border border-blue-500 bg-white cursor-${direction}-resize z-50
                                 ${direction.includes('n') ? '-top-1' : '-bottom-1'}
                                 ${direction.includes('w') ? '-left-1' : '-right-1'}`}
-                                                        onMouseDown={(e) => {
-                                                            e.stopPropagation();
-                                                            handleMouseDown(e, 'resize', direction);
-                                                        }}
-                                                        style={{
-                                                            transform: 'none',
-                                                            margin: 0
-                                                        }}
-                                                    />
-                                                ))}
-                                            </>
-                                        )}
-                                    </div>
-                                ))}
+                                                            onMouseDown={(e) => {
+                                                                e.stopPropagation();
+                                                                handleMouseDown(e, 'resize', direction);
+                                                            }}
+                                                            style={{
+                                                                transform: 'none',
+                                                                margin: 0
+                                                            }}
+                                                        />
+                                                    ))}
+                                                </>
+                                            )}
+                                        </div>
+                                    ))}
                             </div>
                         ) : (
                             <div className="border-2 border-dashed border-gray-200 rounded-lg p-8 min-h-[600px] flex flex-col items-center justify-center">

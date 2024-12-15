@@ -64,6 +64,12 @@ const DocumentSigning = () => {
     const [selectedSignatureForResize, setSelectedSignatureForResize] = useState(null);
     const [resizeDirection, setResizeDirection] = useState(null);
     const [selectedSignatureId, setSelectedSignatureId] = useState(null);
+    const [placedTexts, setPlacedTexts] = useState([]);
+    const [isPlacingText, setIsPlacingText] = useState(false);
+    const [currentText, setCurrentText] = useState('');
+    const [selectedTextId, setSelectedTextId] = useState(null);
+    const [isEditingText, setIsEditingText] = useState(false);
+    const [selectedTextForResize, setSelectedTextForResize] = useState(null);
 
     // Objects
     const fontOptions = [
@@ -75,6 +81,7 @@ const DocumentSigning = () => {
     // Refs
     const containerRef = useRef(null);
     const canvasRef = useRef(null);
+    const activeTextInputRef = useRef(null);
 
     // useEffects
     useEffect(() => {
@@ -112,67 +119,105 @@ const DocumentSigning = () => {
         const handleMouseMove = (e) => {
             if (!isDragging || !movingSignature || !containerRef.current) return;
 
-            // Prevent default to stop text selection
             e.preventDefault();
-
             const rect = containerRef.current.getBoundingClientRect();
             const x = e.clientX - rect.left - dragOffset.x;
             const y = e.clientY - rect.top - dragOffset.y;
 
-            setPlacedSignatures(prev => prev.map(sig => {
-                if (sig.id === movingSignature.id) {
-                    const { x: constrainedX, y: constrainedY } = constrainPosition(x, y, sig.width || 100, sig.height || 50);
-                    return { ...sig, x: constrainedX, y: constrainedY };
-                }
-                return sig;
-            }));
+            if (movingSignature.text !== undefined) {
+                // Moving text
+                setPlacedTexts(prev => prev.map(item => {
+                    if (item.id === movingSignature.id) {
+                        const { x: constrainedX, y: constrainedY } = constrainPosition(x, y, item.width || 100, 50);
+                        return { ...item, x: constrainedX, y: constrainedY };
+                    }
+                    return item;
+                }));
+            } else {
+                // Moving signature
+                setPlacedSignatures(prev => prev.map(sig => {
+                    if (sig.id === movingSignature.id) {
+                        const { x: constrainedX, y: constrainedY } = constrainPosition(x, y, sig.width || 100, sig.height || 50);
+                        return { ...sig, x: constrainedX, y: constrainedY };
+                    }
+                    return sig;
+                }));
+            }
         };
 
         const handleMouseUp = (e) => {
-            // Prevent default and stop propagation
             e.preventDefault();
             e.stopPropagation();
 
             setIsDragging(false);
             setMovingSignature(null);
+            if (!isEditingText) {
+                setSelectedTextId(null);
+            }
         };
 
         // Resize logic
         const handleResize = (e) => {
-            if (!selectedSignatureForResize || !containerRef.current) return;
-
+            if ((!selectedSignatureForResize && !selectedTextForResize) || !containerRef.current) return;
+            
+            // Prevent text selection during resize
+            e.preventDefault();
+            document.body.style.userSelect = 'none';
+            document.body.style.WebkitUserSelect = 'none';
+            
             const rect = containerRef.current.getBoundingClientRect();
-            const startX = selectedSignatureForResize.x;
-            const startY = selectedSignatureForResize.y;
+            const currentMouseX = e.clientX - rect.left;
 
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
+            if (selectedSignatureForResize) {
+                const mouseDelta = currentMouseX - selectedSignatureForResize.initialMouseX;
 
-            // Calculate new dimensions
-            const aspectRatio = selectedSignatureForResize.originalWidth / selectedSignatureForResize.originalHeight;
+                // Add minimum and maximum constraints
+                const minWidth = 50;
+                const maxWidth = rect.width - selectedSignatureForResize.x - 20; // 20px padding
 
-            // Minimum signature size
-            const minWidth = 50;
-            const minHeight = minWidth / aspectRatio;
+                // Smooth the resize using a damping factor
+                const dampingFactor = 0.8;
+                const smoothedDelta = mouseDelta * dampingFactor;
 
-            // Calculate new width and height
-            const newWidth = Math.max(minWidth, Math.abs(mouseX - startX) * 2);
-            const newHeight = newWidth / aspectRatio;
+                // Calculate new dimensions with constraints
+                const targetWidth = selectedSignatureForResize.initialWidth + smoothedDelta;
+                const newWidth = Math.min(maxWidth, Math.max(minWidth, targetWidth));
+                const newHeight = newWidth / selectedSignatureForResize.aspectRatio;
 
-            // Update placed signatures with new dimensions
-            setPlacedSignatures(prev => prev.map(sig =>
-                sig.id === selectedSignatureForResize.id
-                    ? {
-                        ...sig,
-                        width: newWidth,
-                        height: newHeight
-                    }
-                    : sig
-            ));
+                // Use requestAnimationFrame for smoother updates
+                requestAnimationFrame(() => {
+                    setPlacedSignatures(prev => prev.map(sig =>
+                        sig.id === selectedSignatureForResize.id
+                            ? {
+                                ...sig,
+                                width: newWidth,
+                                height: newHeight
+                            }
+                            : sig
+                    ));
+                });
+            } else if (selectedTextForResize) {
+                // Keep existing text resize logic
+                const deltaX = currentMouseX - selectedTextForResize.x;
+                const minWidth = 100;
+                const maxWidth = rect.width - selectedTextForResize.x - 20;
+                const newWidth = Math.min(maxWidth, Math.max(minWidth, deltaX));
+
+                setPlacedTexts(prev => prev.map(text =>
+                    text.id === selectedTextForResize.id
+                        ? { ...text, width: newWidth }
+                        : text
+                ));
+            }
         };
 
         const handleResizeEnd = () => {
+            // Restore text selection
+            document.body.style.userSelect = '';
+            document.body.style.WebkitUserSelect = '';
+            
             setSelectedSignatureForResize(null);
+            setSelectedTextForResize(null);
             setResizeDirection(null);
         };
 
@@ -181,7 +226,7 @@ const DocumentSigning = () => {
             if (isDragging) {
                 handleMouseMove(e);
             }
-            if (selectedSignatureForResize) {
+            if (selectedSignatureForResize || selectedTextForResize) {
                 e.preventDefault();
                 handleResize(e);
             }
@@ -207,8 +252,10 @@ const DocumentSigning = () => {
 
     useEffect(() => {
         const handleDocumentClick = (e) => {
-            if (!e.target.closest('.signature-container')) {
+            if (!e.target.closest('.signature-container') && !e.target.closest('.text-container')) {
                 setSelectedSignatureId(null);
+                setSelectedTextId(null);
+                setIsEditingText(false);
             }
         };
 
@@ -226,30 +273,6 @@ const DocumentSigning = () => {
     };
 
     // -- handlers
-    const handleMouseMove = (e) => {
-        if (!isDragging || !movingSignature || !containerRef.current) return;
-
-        // Prevent default to stop text selection
-        e.preventDefault();
-
-        const rect = containerRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left - dragOffset.x;
-        const y = e.clientY - rect.top - dragOffset.y;
-
-        setPlacedSignatures(prev => prev.map(sig =>
-            sig.id === movingSignature.id ? { ...sig, x, y } : sig
-        ));
-    };
-
-    const handleMouseUp = (e) => {
-        // Prevent default and stop propagation
-        e.preventDefault();
-        e.stopPropagation();
-
-        setIsDragging(false);
-        setMovingSignature(null);
-    };
-
     const handleMouseDown = (e, signature) => {
         if (selectedSignatureForResize) return; // Don't start drag if resizing
 
@@ -295,44 +318,6 @@ const DocumentSigning = () => {
         };
     };
 
-    const handleResize = (e) => {
-        if (!selectedSignatureForResize || !containerRef.current) return;
-
-        const rect = containerRef.current.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-
-        const aspectRatio = selectedSignatureForResize.originalWidth / selectedSignatureForResize.originalHeight;
-        const minWidth = 50;
-        const minHeight = minWidth / aspectRatio;
-
-        let newWidth, newHeight;
-
-        if (resizeDirection === 'bottom-right') {
-            newWidth = Math.max(minWidth, mouseX - selectedSignatureForResize.x);
-            newHeight = newWidth / aspectRatio;
-        } else if (resizeDirection === 'bottom-left') {
-            newWidth = Math.max(minWidth, selectedSignatureForResize.x + selectedSignatureForResize.width - mouseX);
-            newHeight = newWidth / aspectRatio;
-        }
-
-        // Update placed signatures with new dimensions
-        setPlacedSignatures(prev => prev.map(sig =>
-            sig.id === selectedSignatureForResize.id
-                ? {
-                    ...sig,
-                    width: newWidth,
-                    height: newHeight
-                }
-                : sig
-        ));
-    };
-
-    const handleResizeEnd = () => {
-        setSelectedSignatureForResize(null);
-        setResizeDirection(null);
-    };
-
     const SignatureModal = ({ isOpen, onClose, saveSignature }) => {
         const [activeTab, setActiveTab] = useState('draw');
         const [typedSignature, setTypedSignature] = useState('');
@@ -362,26 +347,68 @@ const DocumentSigning = () => {
             }
         };
 
+        const points = useRef([]);
+        const lastVelocity = useRef(0);
+        const lastWidth = useRef(2);
+
+        const getPoint = (e, rect) => {
+            const scaleX = canvasRef.current.width / rect.width;
+            const scaleY = canvasRef.current.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+
+            return { x, y, time: Date.now() };
+        };
+
+        const getVelocity = (p1, p2) => {
+            const timeDiff = p2.time - p1.time;
+            if (timeDiff <= 0) return 0;
+
+            const distance = Math.sqrt(
+                Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2)
+            );
+            return Math.min(distance / timeDiff, 2.5);
+        };
+
+        const getStrokeWidth = (velocity) => {
+            const minWidth = 1;
+            const maxWidth = 3;
+            const velocityFilterWeight = 0.7;
+
+            const newVelocity = velocityFilterWeight * velocity +
+                (1 - velocityFilterWeight) * lastVelocity.current;
+            lastVelocity.current = newVelocity;
+
+            return Math.max(maxWidth / (newVelocity + 1), minWidth);
+        };
+
+        const drawCurve = (ctx, p1, p2, width) => {
+            const midPoint = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.quadraticCurveTo(p1.x, p1.y, midPoint.x, midPoint.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.lineWidth = width;
+            ctx.stroke();
+            ctx.closePath();
+        };
+
         const startDrawing = (e) => {
             const canvas = canvasRef.current;
             const ctx = canvas.getContext('2d');
             const rect = canvas.getBoundingClientRect();
 
-            // Account for canvas scaling
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
+            points.current = [];
+            lastVelocity.current = 0;
+            lastWidth.current = 2;
 
-            const x = (e.clientX - rect.left) * scaleX;
-            const y = (e.clientY - rect.top) * scaleY;
+            const point = getPoint(e, rect);
+            points.current.push(point);
 
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.strokeStyle = '#000000'; // Black color for signature
-            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#000000';
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
-            // Make sure we're drawing with a source-over composition
-            ctx.globalCompositeOperation = 'source-over';
             setIsDrawing(true);
         };
 
@@ -391,25 +418,28 @@ const DocumentSigning = () => {
             const ctx = canvas.getContext('2d');
             const rect = canvas.getBoundingClientRect();
 
-            // Account for canvas scaling
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
+            const newPoint = getPoint(e, rect);
+            points.current.push(newPoint);
 
-            const x = (e.clientX - rect.left) * scaleX;
-            const y = (e.clientY - rect.top) * scaleY;
+            if (points.current.length > 2) {
+                const lastTwoPoints = points.current.slice(-2);
+                const velocity = getVelocity(lastTwoPoints[0], lastTwoPoints[1]);
+                const width = getStrokeWidth(velocity);
 
-            ctx.lineTo(x, y);
-            ctx.stroke();
+                drawCurve(ctx, lastTwoPoints[0], lastTwoPoints[1], width);
+            }
         };
 
         const stopDrawing = () => {
+            points.current = [];
+            lastVelocity.current = 0;
             setIsDrawing(false);
         };
 
         const handleFileChange = (e) => {
             const file = e.target.files?.[0];
             if (!file) return;
-        
+
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
@@ -420,13 +450,13 @@ const DocumentSigning = () => {
                         canvas.width = img.width;
                         canvas.height = img.height;
                         const ctx = canvas.getContext('2d');
-                        
+
                         // Make background transparent
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        
+
                         // Draw the image directly
                         ctx.drawImage(img, 0, 0);
-                        
+
                         // Make white pixels transparent
                         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                         const data = imageData.data;
@@ -437,7 +467,7 @@ const DocumentSigning = () => {
                             }
                         }
                         ctx.putImageData(imageData, 0, 0);
-        
+
                         // Save the signature with transparent background
                         saveSignature(canvas.toDataURL('image/png'));
                         onClose();
@@ -868,7 +898,21 @@ const DocumentSigning = () => {
                                 className="relative border rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300"
                                 onClick={(e) => {
                                     if (isDragging) return; // Prevent placing while dragging
-                                    if (isPlacingSignature && selectedSignature) {
+                                    if (isPlacingText) {
+                                        const rect = containerRef.current.getBoundingClientRect();
+                                        const x = e.clientX - rect.left;
+                                        const y = e.clientY - rect.top;
+
+                                        setPlacedTexts(prev => [...prev, {
+                                            id: Date.now(),
+                                            text: currentText || 'Type here...',
+                                            page: currentPage,
+                                            x,
+                                            y
+                                        }]);
+                                        setIsPlacingText(false);
+                                        setCurrentText('');
+                                    } else if (isPlacingSignature && selectedSignature) {
                                         const rect = containerRef.current.getBoundingClientRect();
                                         const x = e.clientX - rect.left;
                                         const y = e.clientY - rect.top;
@@ -897,6 +941,141 @@ const DocumentSigning = () => {
                                         pageNumber={currentPage}
                                         width={containerRef.current?.clientWidth || 600}
                                     />
+
+                                    {/* Render placed texts */}
+                                    {placedTexts
+                                        .filter(text => text.page === currentPage)
+                                        .map(text => (
+                                            <div
+                                                key={text.id}
+                                                className="text-container"
+                                                style={{
+                                                    position: 'absolute',
+                                                    left: text.x,
+                                                    top: text.y,
+                                                    transform: 'translate(-50%, -50%)',
+                                                    zIndex: selectedTextId === text.id ? 1000 : 10,
+                                                    cursor: isDragging ? 'grabbing' : 'grab',
+                                                    width: text.width || 'auto',
+                                                    minWidth: '100px'
+                                                }}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (!isEditingText) {
+                                                        setSelectedTextId(text.id);
+                                                    }
+                                                }}
+                                                onDoubleClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setIsEditingText(true);
+                                                    setSelectedTextId(text.id);
+                                                }}
+                                                onMouseDown={(e) => {
+                                                    if (selectedTextForResize || isEditingText) return;
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+
+                                                    if (!containerRef.current) return;
+
+                                                    const rect = containerRef.current.getBoundingClientRect();
+                                                    const offsetX = e.clientX - rect.left - text.x;
+                                                    const offsetY = e.clientY - rect.top - text.y;
+
+                                                    setDragOffset({ x: offsetX, y: offsetY });
+                                                    setMovingSignature(text);
+                                                    setIsDragging(true);
+                                                    setSelectedTextId(text.id);
+                                                }}
+                                            >
+                                                {selectedTextId === text.id && !isEditingText && (
+                                                    <>
+                                                        {/* Floating toolbar */}
+                                                        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg border flex items-center gap-1 p-1">
+                                                            <button
+                                                                className="p-1.5 hover:bg-gray-100 rounded"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    const newText = {
+                                                                        ...text,
+                                                                        id: Date.now(),
+                                                                        x: text.x + 20,
+                                                                        y: text.y + 20
+                                                                    };
+                                                                    setPlacedTexts(prev => [...prev, newText]);
+                                                                }}
+                                                            >
+                                                                <Copy className="w-4 h-4 text-gray-600" />
+                                                            </button>
+                                                            <div className="w-px h-4 bg-gray-200" />
+                                                            <button
+                                                                className="p-1.5 hover:bg-gray-100 rounded"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setPlacedTexts(prev =>
+                                                                        prev.filter(t => t.id !== text.id)
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <Trash className="w-4 h-4 text-gray-600" />
+                                                            </button>
+                                                        </div>
+
+                                                        {/* Selection border */}
+                                                        <div className="absolute inset-0 border-2 border-blue-500 pointer-events-none" />
+
+                                                        {/* Corner handles */}
+                                                        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-blue-500" />
+                                                        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-blue-500" />
+                                                        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-blue-500" />
+                                                        <div
+                                                            className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-blue-500 cursor-se-resize"
+                                                            onMouseDown={(e) => {
+                                                                e.stopPropagation();
+                                                                setSelectedTextForResize(text);
+                                                                setResizeDirection('bottom-right');
+                                                            }}
+                                                        />
+                                                    </>
+                                                )}
+                                                <input
+                                                    data-text-id={text.id}
+                                                    type="text"
+                                                    value={text.text}
+                                                    readOnly={selectedTextId !== text.id || !isEditingText}
+                                                    onChange={(e) => {
+                                                        setPlacedTexts(prev =>
+                                                            prev.map(t =>
+                                                                t.id === text.id ? { ...t, text: e.target.value } : t
+                                                            )
+                                                        );
+                                                    }}
+                                                    onFocus={(e) => {
+                                                        if (selectedTextId === text.id && isEditingText) {
+                                                            e.target.select();
+                                                        }
+                                                    }}
+                                                    onBlur={() => {
+                                                        setIsEditingText(false);
+                                                        setSelectedTextId(null);
+                                                    }}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        if (selectedTextId !== text.id) {
+                                                            setSelectedTextId(text.id);
+                                                        }
+                                                    }}
+                                                    onDoubleClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setSelectedTextId(text.id);
+                                                        setIsEditingText(true);
+                                                        e.target.select();
+                                                    }}
+                                                    className={`border-none bg-transparent focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 ${isEditingText && selectedTextId === text.id ? 'cursor-text' : 'cursor-grab'
+                                                        }`}
+                                                />
+                                            </div>
+                                        ))}
+
                                     {/* Render placed signatures */}
                                     {placedSignatures
                                         .filter(sig => sig.page === currentPage)
@@ -962,13 +1141,24 @@ const DocumentSigning = () => {
                                                         <div
                                                             className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-blue-500 cursor-se-resize"
                                                             onMouseDown={(e) => {
+                                                                e.preventDefault();
                                                                 e.stopPropagation();
                                                                 const signatureElement = e.currentTarget.parentElement.querySelector('img');
                                                                 if (signatureElement) {
+                                                                    const rect = containerRef.current.getBoundingClientRect();
+                                                                    const startMouseX = e.clientX - rect.left;
+                                                                    
+                                                                    // Get actual rendered dimensions from the image element
+                                                                    const actualWidth = signatureElement.getBoundingClientRect().width;
+                                                                    const actualHeight = signatureElement.getBoundingClientRect().height;
+                                                                    
                                                                     setSelectedSignatureForResize({
                                                                         ...signature,
-                                                                        originalWidth: signatureElement.naturalWidth,
-                                                                        originalHeight: signatureElement.naturalHeight
+                                                                        initialMouseX: startMouseX,
+                                                                        initialWidth: actualWidth,
+                                                                        initialHeight: actualHeight,
+                                                                        aspectRatio: actualWidth / actualHeight,
+                                                                        x: signature.x // Store position for boundary calculations
                                                                     });
                                                                 }
                                                                 setResizeDirection('bottom-right');
@@ -1299,9 +1489,42 @@ const DocumentSigning = () => {
                                             <span className="text-xs font-medium">Add Signature</span>
                                         </button>
                                         <button
+                                            onClick={() => {
+                                                setSelectedSignature(null);
+                                                setSelectedSignatureId(null);
+
+                                                const container = containerRef.current;
+                                                if (container) {
+                                                    const rect = container.getBoundingClientRect();
+                                                    const newTextId = Date.now();
+
+                                                    // Set editing state before adding text
+                                                    setIsEditingText(true);
+                                                    setSelectedTextId(newTextId);
+
+                                                    // Add new text with default text
+                                                    setPlacedTexts(prev => [...prev, {
+                                                        id: newTextId,
+                                                        text: 'Type here...',
+                                                        page: currentPage,
+                                                        x: rect.width / 2,
+                                                        y: rect.height / 2,
+                                                        width: 150
+                                                    }]);
+
+                                                    // Focus and select after DOM update
+                                                    setTimeout(() => {
+                                                        const input = document.querySelector(`input[data-text-id="${newTextId}"]`);
+                                                        if (input) {
+                                                            input.focus();
+                                                            input.select();
+                                                        }
+                                                    }, 0);
+                                                }
+                                            }}
                                             className={`p-3 rounded-lg transition-all flex flex-col items-center gap-2 border hover:border-blue-200 hover:bg-gray-50 hover:shadow-sm active:scale-95}`}
                                         >
-                                            <Type className={`w-5 h-5 text-gray-600`} />
+                                            <Type className="w-5 h-5 text-gray-600" />
                                             <span className="text-xs font-medium">Add Text</span>
                                         </button>
                                         <button

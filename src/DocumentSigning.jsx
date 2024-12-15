@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
     ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Download, Upload, Pen, Image, Calendar, Type, Check, X, Eye, EyeOff, Users, ZoomIn, ZoomOut, History, RotateCcw, Share2, FileText, Clock, PencilRuler,
-    AlertCircle, CheckCircle2, FileCheck, Shield, BookOpen
+    AlertCircle, CheckCircle2, FileCheck, Shield, BookOpen, Trash, Copy
 } from 'lucide-react';
 
 import { pdfjs } from 'react-pdf';
@@ -63,6 +63,7 @@ const DocumentSigning = () => {
 
     const [selectedSignatureForResize, setSelectedSignatureForResize] = useState(null);
     const [resizeDirection, setResizeDirection] = useState(null);
+    const [selectedSignatureId, setSelectedSignatureId] = useState(null);
 
     // Objects
     const fontOptions = [
@@ -204,6 +205,17 @@ const DocumentSigning = () => {
         };
     }, [isDragging, movingSignature, selectedSignatureForResize, dragOffset]);
 
+    useEffect(() => {
+        const handleDocumentClick = (e) => {
+            if (!e.target.closest('.signature-container')) {
+                setSelectedSignatureId(null);
+            }
+        };
+
+        document.addEventListener('click', handleDocumentClick);
+        return () => document.removeEventListener('click', handleDocumentClick);
+    }, []);
+
     // Functions
     const onDocumentLoadSuccess = ({ numPages }) => {
         setTotalPages(numPages);
@@ -239,6 +251,8 @@ const DocumentSigning = () => {
     };
 
     const handleMouseDown = (e, signature) => {
+        if (selectedSignatureForResize) return; // Don't start drag if resizing
+
         e.preventDefault();
         e.stopPropagation();
 
@@ -248,13 +262,10 @@ const DocumentSigning = () => {
         const offsetX = e.clientX - rect.left - signature.x;
         const offsetY = e.clientY - rect.top - signature.y;
 
-        // Store initial position for boundary checking
-        const initialX = signature.x;
-        const initialY = signature.y;
-
-        setDragOffset({ x: offsetX, y: offsetY, initialX, initialY });
+        setDragOffset({ x: offsetX, y: offsetY });
         setMovingSignature(signature);
         setIsDragging(true);
+        setSelectedSignatureId(signature.id);
     };
 
     const deleteSignature = (id) => {
@@ -365,9 +376,12 @@ const DocumentSigning = () => {
 
             ctx.beginPath();
             ctx.moveTo(x, y);
+            ctx.strokeStyle = '#000000'; // Black color for signature
             ctx.lineWidth = 2;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
+            // Make sure we're drawing with a source-over composition
+            ctx.globalCompositeOperation = 'source-over';
             setIsDrawing(true);
         };
 
@@ -395,40 +409,36 @@ const DocumentSigning = () => {
         const handleFileChange = (e) => {
             const file = e.target.files?.[0];
             if (!file) return;
-
+        
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     const img = document.createElement('img');
                     img.onload = () => {
-                        // Create canvas to normalize the image size
+                        // Create canvas with the exact image dimensions
                         const canvas = document.createElement('canvas');
-                        canvas.width = 500;
-                        canvas.height = 200;
+                        canvas.width = img.width;
+                        canvas.height = img.height;
                         const ctx = canvas.getContext('2d');
-
-                        // Calculate scaling to fit within canvas while maintaining aspect ratio
-                        const scale = Math.min(
-                            canvas.width / img.width,
-                            canvas.height / img.height
-                        ) * 0.8; // 80% of max size for margins
-
-                        // Calculate centered position
-                        const x = (canvas.width - img.width * scale) / 2;
-                        const y = (canvas.height - img.height * scale) / 2;
-
-                        // Draw image with calculated dimensions
-                        ctx.fillStyle = 'white';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.drawImage(
-                            img,
-                            x,
-                            y,
-                            img.width * scale,
-                            img.height * scale
-                        );
-
-                        // Save the normalized signature
+                        
+                        // Make background transparent
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        
+                        // Draw the image directly
+                        ctx.drawImage(img, 0, 0);
+                        
+                        // Make white pixels transparent
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const data = imageData.data;
+                        for (let i = 0; i < data.length; i += 4) {
+                            // If pixel is white or near white
+                            if (data[i] > 240 && data[i + 1] > 240 && data[i + 2] > 240) {
+                                data[i + 3] = 0; // Make it transparent
+                            }
+                        }
+                        ctx.putImageData(imageData, 0, 0);
+        
+                        // Save the signature with transparent background
                         saveSignature(canvas.toDataURL('image/png'));
                         onClose();
                     };
@@ -442,8 +452,63 @@ const DocumentSigning = () => {
 
         const handleSave = () => {
             if (activeTab === 'draw') {
-                const signatureData = canvasRef.current.toDataURL();
-                saveSignature(signatureData);
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext('2d');
+
+                // Get the bounding box of the signature
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const pixels = imageData.data;
+                let minX = canvas.width;
+                let minY = canvas.height;
+                let maxX = 0;
+                let maxY = 0;
+
+                // Find the bounds of the signature
+                for (let y = 0; y < canvas.height; y++) {
+                    for (let x = 0; x < canvas.width; x++) {
+                        const alpha = pixels[(y * canvas.width + x) * 4 + 3];
+                        if (alpha > 0) {
+                            minX = Math.min(minX, x);
+                            minY = Math.min(minY, y);
+                            maxX = Math.max(maxX, x);
+                            maxY = Math.max(maxY, y);
+                        }
+                    }
+                }
+
+                // Add padding around the signature
+                const padding = 10;
+                minX = Math.max(0, minX - padding);
+                minY = Math.max(0, minY - padding);
+                maxX = Math.min(canvas.width, maxX + padding);
+                maxY = Math.min(canvas.height, maxY + padding);
+
+                // Create a new canvas with just the signature
+                const signatureCanvas = document.createElement('canvas');
+                const signatureWidth = maxX - minX;
+                const signatureHeight = maxY - minY;
+
+                if (signatureWidth > 0 && signatureHeight > 0) {
+                    signatureCanvas.width = signatureWidth;
+                    signatureCanvas.height = signatureHeight;
+
+                    const signatureCtx = signatureCanvas.getContext('2d');
+                    // Make the background transparent
+                    signatureCtx.clearRect(0, 0, signatureWidth, signatureHeight);
+
+                    // Copy only the signature part
+                    signatureCtx.drawImage(
+                        canvas,
+                        minX, minY, signatureWidth, signatureHeight,
+                        0, 0, signatureWidth, signatureHeight
+                    );
+
+                    const signatureData = signatureCanvas.toDataURL('image/png');
+                    saveSignature(signatureData);
+                } else {
+                    // If no signature was drawn
+                    alert('Please draw a signature before saving');
+                }
             } else if (activeTab === 'type' && typedSignature.trim()) {
                 const canvas = document.createElement('canvas');
                 canvas.width = 500;
@@ -499,16 +564,19 @@ const DocumentSigning = () => {
                         <div className="mt-4">
                             {activeTab === 'draw' && (
                                 <div className="space-y-4">
-                                    <canvas
-                                        ref={canvasRef}
-                                        width={500}
-                                        height={200}
-                                        className="border-2 border-dashed border-gray-200 rounded-lg w-full"
-                                        onMouseDown={startDrawing}
-                                        onMouseMove={draw}
-                                        onMouseUp={stopDrawing}
-                                        onMouseLeave={stopDrawing}
-                                    />
+                                    <div className="relative border-2 border-dashed border-gray-200 rounded-lg w-full">
+                                        <div className="absolute inset-0 bg-gray-50 pointer-events-none" />
+                                        <canvas
+                                            ref={canvasRef}
+                                            width={500}
+                                            height={200}
+                                            className="w-full relative z-10 bg-transparent"
+                                            onMouseDown={startDrawing}
+                                            onMouseMove={draw}
+                                            onMouseUp={stopDrawing}
+                                            onMouseLeave={stopDrawing}
+                                        />
+                                    </div>
                                     <button
                                         onClick={clearCanvas}
                                         className="text-sm text-blue-600 hover:text-blue-700"
@@ -835,71 +903,90 @@ const DocumentSigning = () => {
                                         .map(signature => (
                                             <div
                                                 key={signature.id}
+                                                className="signature-container"
                                                 style={{
                                                     position: 'absolute',
                                                     left: signature.x,
                                                     top: signature.y,
                                                     transform: 'translate(-50%, -50%)',
-                                                    zIndex: 10,
+                                                    zIndex: selectedSignatureId === signature.id ? 1000 : 10,
                                                     cursor: isDragging ? 'grabbing' : 'grab'
+                                                }}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setSelectedSignatureId(signature.id);
                                                 }}
                                                 onMouseDown={(e) => handleMouseDown(e, signature)}
                                             >
-                                                <div className="group relative">
-                                                    <img
-                                                        src={signature.image}
-                                                        alt="Placed Signature"
-                                                        style={{
-                                                            width: signature.width || 'auto',
-                                                            height: signature.height || 'auto',
-                                                            maxWidth: '300px',
-                                                            maxHeight: '150px'
-                                                        }}
-                                                    />
-                                                    {/* Delete button */}
-                                                    <button
-                                                        className="absolute -top-3 -right-3 bg-white rounded-full p-1 shadow-lg border opacity-0 group-hover:opacity-100 transition-opacity"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setPlacedSignatures(prev =>
-                                                                prev.filter(sig => sig.id !== signature.id)
-                                                            );
-                                                        }}
-                                                    >
-                                                        <svg
-                                                            width="12"
-                                                            height="12"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            strokeWidth="2"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            className="text-red-600"
-                                                        >
-                                                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                                                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                                                        </svg>
-                                                    </button>
+                                                {/* Selection border and handles */}
+                                                {selectedSignatureId === signature.id && (
+                                                    <>
+                                                        {/* Floating toolbar */}
+                                                        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg border flex items-center gap-1 p-1">
+                                                            <button
+                                                                className="p-1.5 hover:bg-gray-100 rounded"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    const newSignature = {
+                                                                        ...signature,
+                                                                        id: Date.now(),
+                                                                        x: signature.x + 20,
+                                                                        y: signature.y + 20
+                                                                    };
+                                                                    setPlacedSignatures(prev => [...prev, newSignature]);
+                                                                }}
+                                                            >
+                                                                <Copy className="w-4 h-4 text-gray-600" />
+                                                            </button>
+                                                            <div className="w-px h-4 bg-gray-200" />
+                                                            <button
+                                                                className="p-1.5 hover:bg-gray-100 rounded"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setPlacedSignatures(prev =>
+                                                                        prev.filter(sig => sig.id !== signature.id)
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <Trash className="w-4 h-4 text-gray-600" />
+                                                            </button>
+                                                        </div>
 
-                                                    {/* Resize handles */}
-                                                    <div
-                                                        className="absolute bottom-0 right-0 w-4 h-4 bg-blue-500 cursor-se-resize opacity-0 group-hover:opacity-100 rounded-full"
-                                                        onMouseDown={(e) => {
-                                                            e.stopPropagation();
-                                                            // Get the current dimensions from the element itself
-                                                            const signatureElement = e.currentTarget.parentElement.querySelector('img');
-                                                            if (signatureElement) {
-                                                                setSelectedSignatureForResize({
-                                                                    ...signature,
-                                                                    originalWidth: signatureElement.naturalWidth,
-                                                                    originalHeight: signatureElement.naturalHeight
-                                                                });
-                                                            }
-                                                            setResizeDirection('bottom-right');
-                                                        }}
-                                                    />
-                                                </div>
+                                                        {/* Selection border */}
+                                                        <div className="absolute inset-0 border-2 border-blue-500 pointer-events-none" />
+
+                                                        {/* Corner handles */}
+                                                        <div className="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-blue-500" />
+                                                        <div className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-blue-500" />
+                                                        <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white border-2 border-blue-500" />
+                                                        <div
+                                                            className="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white border-2 border-blue-500 cursor-se-resize"
+                                                            onMouseDown={(e) => {
+                                                                e.stopPropagation();
+                                                                const signatureElement = e.currentTarget.parentElement.querySelector('img');
+                                                                if (signatureElement) {
+                                                                    setSelectedSignatureForResize({
+                                                                        ...signature,
+                                                                        originalWidth: signatureElement.naturalWidth,
+                                                                        originalHeight: signatureElement.naturalHeight
+                                                                    });
+                                                                }
+                                                                setResizeDirection('bottom-right');
+                                                            }}
+                                                        />
+                                                    </>
+                                                )}
+
+                                                <img
+                                                    src={signature.image}
+                                                    alt="Placed Signature"
+                                                    style={{
+                                                        width: signature.width || 'auto',
+                                                        height: signature.height || 'auto',
+                                                        maxWidth: '300px',
+                                                        maxHeight: '150px'
+                                                    }}
+                                                />
                                             </div>
                                         ))}
                                 </Document>
